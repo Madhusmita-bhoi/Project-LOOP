@@ -92,30 +92,30 @@ export default function SignUpPage() {
       <div className="absolute bottom-[-10%] right-[5%] w-[650px] h-[650px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
       {/* Wide 2-Column Split Grid Container */}
-      <div className="w-full max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10 py-4 px-4 sm:px-8 lg:px-12">
+      <div className="w-full max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10 py-2 px-2 sm:px-6 lg:px-8">
         
-        {/* LEFT COLUMN: Shifted Further Left & Compact Length */}
-        <div className="lg:col-span-7 space-y-4.5 text-left lg:pr-4">
+        {/* LEFT COLUMN: Wide Width + Vertically Compact Height */}
+        <div className="lg:col-span-7 space-y-3.5 text-left lg:pr-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-inner">
             <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
             <span>Multi-Tenant Enterprise Architecture</span>
           </div>
 
-          <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-black tracking-tight leading-tight text-white">
+          <div className="space-y-1.5">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.12] text-white">
               Launch Your Dedicated{" "}
               <span className="bg-gradient-to-r from-indigo-400 via-violet-300 to-indigo-200 bg-clip-text text-transparent">
                 Intelligence Workspace
               </span>
             </h1>
-            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xl">
+            <p className="text-sm text-gray-400 leading-relaxed max-w-2xl">
               Strict row-level multi-tenant isolation, automated sentiment clustering, and team-wide role-based access.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-            <div className="p-3.5 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
-              <div className="flex items-center justify-between mb-1.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-0.5">
+            <div className="py-2.5 px-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
+              <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                   <Layers className="h-3.5 w-3.5 text-indigo-400" />
                   Shared Data Stream
@@ -125,13 +125,13 @@ export default function SignUpPage() {
                 </span>
               </div>
               <div className="text-xl font-bold text-white tracking-tight">Admin & Analyst Sync</div>
-              <p className="text-[11px] text-gray-400 mt-1">
+              <p className="text-[11px] text-gray-400 mt-0.5">
                 Teammates share the same feedback and reports in real time.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
-              <div className="flex items-center justify-between mb-1.5">
+            <div className="py-2.5 px-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
+              <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
                   Row-Level Isolation
@@ -141,16 +141,16 @@ export default function SignUpPage() {
                 </span>
               </div>
               <div className="text-xl font-bold text-white tracking-tight">Enterprise Security</div>
-              <p className="text-[11px] text-gray-400 mt-1">
+              <p className="text-[11px] text-gray-400 mt-0.5">
                 Zero crosstalk across different company instances.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 pt-0.5">
+          <div className="flex flex-wrap items-center gap-5 text-xs text-gray-400 pt-0.5">
             <div className="flex items-center gap-1.5">
               <Activity className="h-3.5 w-3.5 text-emerald-400" />
-              <span>Multi-Source Ingestion</span>
+              <span>Multi-Source Ingestion Active</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Zap className="h-3.5 w-3.5 text-indigo-400" />

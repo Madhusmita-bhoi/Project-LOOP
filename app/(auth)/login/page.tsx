@@ -63,34 +63,34 @@ export default function LoginPage() {
       <div className="absolute bottom-[-10%] right-[5%] w-[650px] h-[650px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
       {/* Wide 2-Column Split Grid Container */}
-      <div className="w-full max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10 py-4 px-4 sm:px-8 lg:px-12">
+      <div className="w-full max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10 py-2 px-2 sm:px-6 lg:px-8">
         
-        {/* LEFT COLUMN: Shifted Further Left & Compact Length */}
-        <div className="lg:col-span-7 space-y-4.5 text-left lg:pr-4">
+        {/* LEFT COLUMN: Wide Width + Vertically Compact Height */}
+        <div className="lg:col-span-7 space-y-3.5 text-left lg:pr-4">
           {/* Top Pill */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-inner">
             <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
-            <span>AI-Powered Feedback Intelligence</span>
+            <span>AI-Powered Feedback Intelligence Platform</span>
           </div>
 
-          {/* Concise Hero Headline */}
-          <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-black tracking-tight leading-tight text-white">
-              Turn Customer Feedback into{" "}
+          {/* Restored Full-Width Hero Headline with Compact Height */}
+          <div className="space-y-1.5">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.12] text-white">
+              Turn Raw Customer Feedback into{" "}
               <span className="bg-gradient-to-r from-indigo-400 via-violet-300 to-indigo-200 bg-clip-text text-transparent">
                 Strategic Velocity
               </span>
             </h1>
-            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xl">
-              Unify tickets, reviews, and NPS surveys into real-time grounded themes and executive digests.
+            <p className="text-sm text-gray-400 leading-relaxed max-w-2xl">
+              Project LOOP unifies scattered support tickets, app store reviews, and NPS surveys into real-time sentiment alerts, clustered themes, and grounded VoC executive digests.
             </p>
           </div>
 
-          {/* Compact Feature Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+          {/* Full Width Compact Feature Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-0.5">
             {/* Card 1: Live CSAT */}
-            <div className="p-3.5 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
-              <div className="flex items-center justify-between mb-1.5">
+            <div className="py-2.5 px-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
+              <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                   <Activity className="h-3.5 w-3.5 text-emerald-400" />
                   Live CSAT Pulse
@@ -100,35 +100,35 @@ export default function LoginPage() {
                 </span>
               </div>
               <div className="text-2xl font-black text-white tracking-tight">94.2%</div>
-              <p className="text-[11px] text-gray-400 mt-1">
-                Multi-channel velocity across active touchpoints.
+              <p className="text-[11px] text-gray-400 mt-0.5">
+                Real-time multi-channel sentiment velocity across customer touchpoints.
               </p>
             </div>
 
-            {/* Card 2: Vector Search */}
-            <div className="p-3.5 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
-              <div className="flex items-center justify-between mb-1.5">
+            {/* Card 2: Grounded RAG AI Search */}
+            <div className="py-2.5 px-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
+              <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                   <Zap className="h-3.5 w-3.5 text-indigo-400" />
-                  Grounded RAG
+                  Vector RAG Speed
                 </span>
                 <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/60 px-1.5 py-0.5 rounded border border-indigo-800/50">
                   42ms
                 </span>
               </div>
               <div className="text-2xl font-black text-white tracking-tight">100% Grounded</div>
-              <p className="text-[11px] text-gray-400 mt-1">
-                Zero hallucinations with transparent citations.
+              <p className="text-[11px] text-gray-400 mt-0.5">
+                Zero hallucinations with transparent citation provenance.
               </p>
             </div>
           </div>
 
           {/* Compact Live Stream Pill */}
-          <div className="p-3 rounded-xl bg-[#0a0e1c]/90 border border-indigo-900/40 backdrop-blur-xl flex items-center justify-between gap-3 text-xs">
+          <div className="py-2 px-3.5 rounded-xl bg-[#0a0e1c]/90 border border-indigo-900/40 backdrop-blur-xl flex items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2 min-w-0">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
               <span className="text-gray-300 truncate font-medium">
-                Live Ingestion: Performance & speed themes updated across 162 items
+                Live Ingestion: Performance & speed themes active across 162 items
               </span>
             </div>
             <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/80 px-2 py-0.5 rounded border border-indigo-800/50 shrink-0">
@@ -137,14 +137,14 @@ export default function LoginPage() {
           </div>
 
           {/* Security & Team Collaboration Badges */}
-          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 pt-0.5">
+          <div className="flex flex-wrap items-center gap-5 text-xs text-gray-400 pt-0.5">
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-indigo-400" />
               <span>Multi-Tenant Row Isolation</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Layers className="h-3.5 w-3.5 text-violet-400" />
-              <span>Role-Based Access Control</span>
+              <span>Role-Based Access Control (Admin, Analyst, Viewer)</span>
             </div>
           </div>
         </div>
@@ -266,35 +266,35 @@ export default function LoginPage() {
                     </>
                   ) : (
                     <>
-                  <span>Sign In to Workspace</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </>
-              )}
-            </button>
-          </form>
+                      <span>Sign In to Workspace</span>
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </>
+                  )}
+                </button>
+              </form>
 
-          {/* Registration Link */}
-          <div className="pt-3 text-center text-xs text-gray-400 border-t border-gray-800/80">
-            <span>New organization? </span>
-            <Link
-              href="/signup"
-              className="font-semibold text-indigo-400 hover:text-indigo-300 transition"
-            >
-              Create company workspace
-            </Link>
+              {/* Registration Link */}
+              <div className="pt-3 text-center text-xs text-gray-400 border-t border-gray-800/80">
+                <span>New organization? </span>
+                <Link
+                  href="/signup"
+                  className="font-semibold text-indigo-400 hover:text-indigo-300 transition"
+                >
+                  Create company workspace
+                </Link>
+              </div>
+            </div>
+
+            {/* Security Subtext */}
+            <div className="mt-4 flex items-center justify-center space-x-2 text-[11px] text-gray-500">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+              <span>Encrypted Multi-Tenant Session</span>
+            </div>
           </div>
         </div>
 
-        {/* Security Subtext */}
-        <div className="mt-4 flex items-center justify-center space-x-2 text-[11px] text-gray-500">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-          <span>Encrypted Multi-Tenant Session</span>
-        </div>
       </div>
     </div>
-
-  </div>
-</div>
   );
 }
