@@ -338,7 +338,7 @@ export default function AskLoopPage() {
           e.preventDefault();
           handleAsk();
         }}
-        className="glass-panel p-2 rounded-2xl border border-gray-700/80 shadow-2xl flex items-center space-x-2 sticky bottom-4 z-20"
+        className="glass-panel p-2 rounded-2xl border border-gray-700/80 shadow-lg flex items-center space-x-2 mt-6"
       >
         <div className="relative flex-1">
           <Search className="h-4 w-4 absolute left-3.5 top-3.5 text-gray-400" />
@@ -355,7 +355,7 @@ export default function AskLoopPage() {
         <button
           type="submit"
           disabled={!question.trim() || loading}
-          className="p-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 disabled:opacity-40 transition flex items-center justify-center"
+          className="p-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 disabled:opacity-40 transition flex items-center justify-center cursor-pointer"
           title="Send Question"
         >
           <Send className="h-4 w-4" />
