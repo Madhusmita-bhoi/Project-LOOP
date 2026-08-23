@@ -85,9 +85,6 @@ export async function getAuthSession() {
   return await getServerSession(authOptions);
 }
 
-/**
- * Validates session and returns the verified tenant context
- */
 export async function getTenantContext() {
   const session = await getAuthSession();
   if (!session || !session.user) {
@@ -101,12 +98,42 @@ export async function getTenantContext() {
   }
 
   const user = session.user as unknown as UserSession;
+
+  // Dynamically ensure workspace and role are synchronized with database
+  let activeWorkspaceId = user.workspaceId;
+  let activeRole = user.role;
+  let activeUser = user;
+
+  if (user.email) {
+    try {
+      const dbUser = await prisma.user.findUnique({
+        where: { email: user.email.toLowerCase().trim() },
+        include: { workspace: true },
+      });
+
+      if (dbUser) {
+        activeWorkspaceId = dbUser.workspaceId;
+        activeRole = dbUser.role as Role;
+        activeUser = {
+          id: dbUser.id,
+          name: dbUser.name,
+          email: dbUser.email,
+          role: dbUser.role as Role,
+          workspaceId: dbUser.workspaceId,
+          workspaceName: dbUser.workspace.name,
+        };
+      }
+    } catch {
+      // fallback to session user
+    }
+  }
+
   return {
     authenticated: true,
-    userId: user.id,
-    workspaceId: user.workspaceId,
-    role: user.role as Role,
-    user,
+    userId: activeUser.id,
+    workspaceId: activeWorkspaceId,
+    role: activeRole,
+    user: activeUser,
   };
 }
 

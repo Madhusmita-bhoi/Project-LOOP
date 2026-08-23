@@ -99,6 +99,7 @@ async function main() {
   console.log("Creating demo workspace...");
   const workspace = await prisma.workspace.create({
     data: {
+      id: "ws_demo_acme_cloudscale",
       name: "Acme CloudScale Inc.",
       slug: "acme-cloudscale",
     },
@@ -109,6 +110,7 @@ async function main() {
 
   const adminUser = await prisma.user.create({
     data: {
+      id: "user_demo_admin",
       name: "Alex Rivera (Admin)",
       email: "admin@loop.dev",
       passwordHash,
@@ -119,6 +121,7 @@ async function main() {
 
   const analystUser = await prisma.user.create({
     data: {
+      id: "user_demo_analyst",
       name: "Jordan Lee (Analyst)",
       email: "analyst@loop.dev",
       passwordHash,
@@ -129,6 +132,7 @@ async function main() {
 
   const viewerUser = await prisma.user.create({
     data: {
+      id: "user_demo_viewer",
       name: "Taylor Smith (Viewer)",
       email: "viewer@loop.dev",
       passwordHash,
