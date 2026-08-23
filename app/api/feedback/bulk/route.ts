@@ -76,8 +76,10 @@ export async function POST(req: Request) {
 
         // Link themes
         for (const tName of classification.themes) {
-          let tId = themeMap.get(tName.toLowerCase());
-          if (!tId) {
+          const lowerName = tName.toLowerCase();
+          let targetThemeId = themeMap.get(lowerName);
+
+          if (!targetThemeId) {
             const newTheme = await prisma.theme.create({
               data: {
                 name: tName,
@@ -85,15 +87,15 @@ export async function POST(req: Request) {
                 workspaceId,
               },
             });
-            tId = newTheme.id;
-            themeMap.set(tName.toLowerCase(), tId);
+            targetThemeId = newTheme.id;
+            themeMap.set(lowerName, newTheme.id);
           }
 
-          if (tId) {
+          if (targetThemeId) {
             await prisma.feedbackTheme.create({
               data: {
                 feedbackId: feedback.id,
-                themeId: tId,
+                themeId: targetThemeId,
                 confidence: 0.9,
               },
             });
