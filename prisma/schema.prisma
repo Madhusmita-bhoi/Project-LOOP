@@ -1,0 +1,122 @@
+// Prisma schema for Project LOOP (AI Customer Feedback Intelligence Platform)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Workspace {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String?    @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  users       User[]
+  feedbacks   Feedback[]
+  themes      Theme[]
+  reports     Report[]
+  embeddings  Embedding[]
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         String    @default("ANALYST") // "ADMIN" | "ANALYST" | "VIEWER"
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  reports      Report[]
+
+  @@index([workspaceId])
+}
+
+model Feedback {
+  id             String          @id @default(cuid())
+  content        String
+  channel        String          // "Support ticket" | "App store review" | "NPS survey" | "Sales call note" | "Community post"
+  sourceRef      String?         // e.g., "TICK-4912", "APP-819", "NPS-202"
+  customerLabel  String?         // e.g., "Sarah M. (Enterprise)", "Tier-1 Pro User"
+  sentiment      String          @default("NEU") // "POS" | "NEU" | "NEG"
+  sentimentScore Float           @default(0.0)   // -1.0 to 1.0
+  status         String          @default("NEW") // "NEW" | "REVIEWED" | "ACTIONED"
+  featureArea    String?         // e.g. "Onboarding", "Billing", "Performance"
+  aiRationale    String?         // Short explanation from AI classifier
+  workspaceId    String
+  workspace      Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  themes         FeedbackTheme[]
+  embedding      Embedding?
+
+  @@index([workspaceId])
+  @@index([sentiment])
+  @@index([status])
+  @@index([channel])
+}
+
+model Theme {
+  id          String          @id @default(cuid())
+  name        String
+  description String?
+  color       String          @default("#6366f1") // Hex color badge
+  workspaceId String
+  workspace   Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  feedbacks   FeedbackTheme[]
+
+  @@index([workspaceId])
+  @@unique([workspaceId, name])
+}
+
+model FeedbackTheme {
+  id         String   @id @default(cuid())
+  feedbackId String
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  themeId    String
+  theme      Theme    @relation(fields: [themeId], references: [id], onDelete: Cascade)
+  confidence Float    @default(0.85) // 0.0 to 1.0
+
+  @@unique([feedbackId, themeId])
+  @@index([feedbackId])
+  @@index([themeId])
+}
+
+model Embedding {
+  id          String    @id @default(cuid())
+  feedbackId  String    @unique
+  feedback    Feedback  @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  vector      String    // JSON-serialized array of vector floats for semantic cosine similarity
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@index([workspaceId])
+  @@index([feedbackId])
+}
+
+model Report {
+  id            String    @id @default(cuid())
+  title         String
+  periodStart   DateTime
+  periodEnd     DateTime
+  contentJson   String    // Structured VoC analysis JSON (summary, metrics, top themes, quotes, recommendations)
+  workspaceId   String
+  workspace     Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  generatedById String
+  generatedBy   User      @relation(fields: [generatedById], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+
+  @@index([workspaceId])
+}
