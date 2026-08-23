@@ -91,9 +91,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-gray-100 flex flex-col md:flex-row">
+    <div className="h-screen w-full bg-[#0b0f19] text-gray-100 flex flex-col md:flex-row overflow-hidden">
       {/* Top Mobile Bar */}
-      <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-800/80 bg-[#111827]/90 backdrop-blur">
+      <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-800/80 bg-[#111827]/90 backdrop-blur shrink-0 z-50">
         <div className="flex items-center space-x-2.5">
           <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
             ∞
@@ -113,8 +113,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* Sidebar */}
       <aside
         className={`${
-          mobileMenuOpen ? "block" : "hidden"
-        } md:flex flex-col w-full md:w-64 border-r border-gray-800/70 bg-[#0f1422]/95 backdrop-blur shrink-0 z-40`}
+          mobileMenuOpen ? "flex" : "hidden"
+        } md:flex flex-col w-full md:w-64 h-full border-r border-gray-800/70 bg-[#0f1422]/95 backdrop-blur shrink-0 z-40 overflow-hidden select-none`}
       >
         {/* Workspace Brand Header */}
         <div className="p-5 border-b border-gray-800/70">
@@ -148,7 +148,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Navigation links */}
-        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto min-h-0">
           {navItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
             const Icon = item.icon;
@@ -266,9 +266,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         {/* Top Demo RBAC Bar */}
-        <header className="no-print bg-[#111827]/80 border-b border-gray-800/80 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <header className="no-print bg-[#111827]/80 border-b border-gray-800/80 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0 z-20">
           <div className="flex items-center space-x-2 text-gray-300">
             <UserCheck className="h-4 w-4 text-indigo-400" />
             <span className="text-gray-400">Quick Demo Switcher:</span>
@@ -318,7 +318,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          {children}
+        </main>
       </div>
     </div>
   );
