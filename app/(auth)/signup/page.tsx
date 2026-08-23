@@ -91,8 +91,8 @@ export default function SignUpPage() {
       <div className="absolute top-[12%] left-[5%] w-[850px] h-[850px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[10%] w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Left-Anchored Split Container: Left content stays hard-left, right card sits moved leftward */}
-      <div className="w-full max-w-[1540px] mx-auto flex flex-col lg:flex-row justify-start items-center relative z-10 py-6 px-4 sm:px-8 lg:px-12 gap-12 lg:gap-20 xl:gap-28">
+      {/* Split Container with Left Content Anchored Left & Right Card Positioned to the Right */}
+      <div className="w-full max-w-[1540px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-6 px-4 sm:px-8 lg:px-12 gap-10 lg:gap-14">
         
         {/* LEFT COLUMN: Pinned to the Left */}
         <div className="w-full lg:max-w-[620px] space-y-5 text-left shrink-0">
@@ -159,8 +159,8 @@ export default function SignUpPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Positioned Closer to the Left Content & Enlarged */}
-        <div className="w-full lg:max-w-[490px] animate-fadeIn shrink-0">
+        {/* RIGHT COLUMN: Positioned to the Right Side with Balanced Offset */}
+        <div className="w-full lg:max-w-[490px] animate-fadeIn shrink-0 lg:mr-6 xl:mr-12">
           <div className="text-center mb-5">
             <div className="relative inline-block mb-3.5">
               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl blur-lg opacity-60" />
