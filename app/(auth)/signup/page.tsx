@@ -91,11 +91,11 @@ export default function SignUpPage() {
       <div className="absolute top-[12%] left-[10%] w-[800px] h-[800px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[10%] w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Scaled-Up 2-Column Split Container */}
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center relative z-10 py-6 px-4 sm:px-6">
+      {/* Split Container with Left Showcase Shifted Farther Left */}
+      <div className="w-full max-w-[1360px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-6 px-4 sm:px-6 lg:px-10 gap-10 lg:gap-12">
         
-        {/* LEFT COLUMN: Scaled-Up Showcase */}
-        <div className="lg:col-span-7 space-y-5 text-left">
+        {/* LEFT COLUMN: Shifted Left with Exact Width & Height Preserved */}
+        <div className="w-full lg:max-w-[620px] space-y-5 text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-inner">
             <Sparkles className="h-4 w-4 text-indigo-400" />
             <span>Multi-Tenant Architecture</span>
@@ -159,8 +159,8 @@ export default function SignUpPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Scaled-Up Registration Card */}
-        <div className="lg:col-span-5 w-full max-w-[460px] mx-auto animate-fadeIn">
+        {/* RIGHT COLUMN: Registration Card */}
+        <div className="w-full lg:max-w-[460px] animate-fadeIn">
           <div className="text-center mb-5">
             <div className="relative inline-block mb-3">
               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl blur-lg opacity-60" />

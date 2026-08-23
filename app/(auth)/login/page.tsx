@@ -54,7 +54,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-4 sm:p-8 lg:p-12 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-12 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
       {/* High-Precision Architectural Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b18_1px,transparent_1px),linear-gradient(to_bottom,#1e293b18_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
@@ -62,18 +62,18 @@ export default function LoginPage() {
       <div className="absolute top-[12%] left-[10%] w-[800px] h-[800px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[10%] w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Scaled-Up 2-Column Split Container */}
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center relative z-10 py-6 px-4 sm:px-6">
+      {/* Split Container with Left Showcase Shifted Farther Left */}
+      <div className="w-full max-w-[1360px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-6 px-4 sm:px-6 lg:px-10 gap-10 lg:gap-12">
         
-        {/* LEFT COLUMN: Scaled-Up Showcase */}
-        <div className="lg:col-span-7 space-y-5 text-left">
+        {/* LEFT COLUMN: Shifted Left with Exact Width & Height Preserved */}
+        <div className="w-full lg:max-w-[620px] space-y-5 text-left">
           {/* Top Pill */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-inner">
             <Sparkles className="h-4 w-4 text-indigo-400" />
             <span>AI-Powered Feedback Intelligence Platform</span>
           </div>
 
-          {/* Scaled-Up Headline */}
+          {/* Headline */}
           <div className="space-y-3">
             <h1 className="text-4xl sm:text-5xl lg:text-[46px] font-black tracking-tight leading-[1.12] text-white">
               Turn Raw Customer Feedback into{" "}
@@ -86,7 +86,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Scaled-Up Feature Cards */}
+          {/* Feature Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
             {/* Card 1: Live CSAT */}
             <div className="p-4 sm:p-5 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-lg">
@@ -123,7 +123,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Scaled-Up Live Ingestion Stream */}
+          {/* Live Ingestion Stream */}
           <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0a0e1c]/90 border border-indigo-900/40 backdrop-blur-xl flex items-center justify-between gap-3 text-xs sm:text-sm shadow-md">
             <div className="flex items-center gap-2.5 min-w-0">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
@@ -149,9 +149,9 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Scaled-Up Login Card */}
-        <div className="lg:col-span-5 w-full max-w-[450px] mx-auto animate-fadeIn">
-          {/* Card Header & Medium-Large Logo */}
+        {/* RIGHT COLUMN: Login Card */}
+        <div className="w-full lg:max-w-[450px] animate-fadeIn">
+          {/* Card Header & Logo */}
           <div className="text-center mb-6">
             <div className="relative inline-block mb-3">
               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl blur-lg opacity-60" />
