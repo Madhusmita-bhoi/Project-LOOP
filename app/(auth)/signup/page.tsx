@@ -91,7 +91,7 @@ export default function SignUpPage() {
       <div className="absolute top-[12%] left-[5%] w-[850px] h-[850px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[10%] w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Split Container with Left Content Anchored Left & Right Card Positioned to the Right */}
+      {/* Split Container */}
       <div className="w-full max-w-[1540px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-6 px-4 sm:px-8 lg:px-12 gap-10 lg:gap-14">
         
         {/* LEFT COLUMN: Pinned to the Left */}
@@ -159,24 +159,24 @@ export default function SignUpPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Positioned to the Right Side with Balanced Offset */}
-        <div className="w-full lg:max-w-[490px] animate-fadeIn shrink-0 lg:mr-6 xl:mr-12">
-          <div className="text-center mb-5">
+        {/* RIGHT COLUMN: Enlarged Registration Card */}
+        <div className="w-full lg:max-w-[530px] animate-fadeIn shrink-0 lg:mr-4 xl:mr-8">
+          <div className="text-center mb-6">
             <div className="relative inline-block mb-3.5">
               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl blur-lg opacity-60" />
               <div className="relative inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-600 text-white font-black text-3xl shadow-xl shadow-indigo-500/30 ring-1 ring-indigo-400/40 ring-offset-4 ring-offset-[#050711] p-4">
                 ∞
               </div>
             </div>
-            <h2 className="text-3xl font-extrabold tracking-tight text-white">
+            <h2 className="text-3xl font-black tracking-tight text-white">
               Create Workspace
             </h2>
-            <p className="text-sm text-gray-400 mt-1 font-medium">
+            <p className="text-sm text-gray-400 mt-1.5 font-medium">
               Establish your dedicated feedback environment
             </p>
           </div>
 
-          <div className="bg-[#0b101e]/90 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/40 rounded-3xl p-8 sm:p-9 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.95),0_0_60px_-15px_rgba(99,102,241,0.25)] transition-all duration-300 space-y-4">
+          <div className="bg-[#0b101e]/90 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/40 rounded-3xl p-8 sm:p-10 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.95),0_0_60px_-15px_rgba(99,102,241,0.25)] transition-all duration-300 space-y-4.5">
             {error && (
               <div className="p-4 rounded-xl bg-rose-950/70 border border-rose-800/80 text-rose-300 text-sm flex items-center gap-3 animate-fadeIn">
                 <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
@@ -184,88 +184,88 @@ export default function SignUpPage() {
               </div>
             )}
 
-            <form onSubmit={handleSignUp} autoComplete="off" className="space-y-3.5">
+            <form onSubmit={handleSignUp} autoComplete="off" className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-300 mb-1">
+                <label className="block text-sm font-semibold text-gray-200 mb-1.5">
                   Company / Workspace Name
                 </label>
                 <div className="relative group">
-                  <Building className="h-4 w-4 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
+                  <Building className="h-4.5 w-4.5 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
                   <input
                     type="text"
                     required
                     value={workspaceName}
                     onChange={(e) => setWorkspaceName(e.target.value)}
                     placeholder="Acme CloudScale Inc."
-                    className="w-full pl-11 pr-4 py-3 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
+                    className="w-full pl-12 pr-4 py-3.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm sm:text-base text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-300 mb-1">
+                <label className="block text-sm font-semibold text-gray-200 mb-1.5">
                   Full Name
                 </label>
                 <div className="relative group">
-                  <User className="h-4 w-4 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
+                  <User className="h-4.5 w-4.5 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Alex Rivera"
-                    className="w-full pl-11 pr-4 py-3 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
+                    className="w-full pl-12 pr-4 py-3.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm sm:text-base text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-300 mb-1">
+                <label className="block text-sm font-semibold text-gray-200 mb-1.5">
                   Work Email Address
                 </label>
                 <div className="relative group">
-                  <Mail className="h-4 w-4 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
+                  <Mail className="h-4.5 w-4.5 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="alex@company.com"
-                    className="w-full pl-11 pr-4 py-3 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
+                    className="w-full pl-12 pr-4 py-3.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm sm:text-base text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-300 mb-1">
+                <label className="block text-sm font-semibold text-gray-200 mb-1.5">
                   Password
                 </label>
                 <div className="relative group">
-                  <Lock className="h-4 w-4 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
+                  <Lock className="h-4.5 w-4.5 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
                   <input
                     type={showPassword ? "text" : "password"}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full pl-11 pr-11 py-3 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
+                    className="w-full pl-12 pr-12 py-3.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm sm:text-base text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-3 text-gray-400 hover:text-gray-200 transition cursor-pointer p-0.5 rounded"
+                    className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-200 transition cursor-pointer p-0.5 rounded"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
                   </button>
                 </div>
               </div>
 
               {/* Role Selection */}
               <div>
-                <label className="block text-sm font-semibold text-gray-300 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-200 mb-2">
                   Initial Role
                 </label>
-                <div className="grid grid-cols-3 gap-2 p-1 bg-[#070a14] rounded-xl border border-gray-800">
+                <div className="grid grid-cols-3 gap-2.5 p-1 bg-[#070a14] rounded-xl border border-gray-800">
                   {roles.map((r) => {
                     const isActive = role === r.id;
                     return (
@@ -273,7 +273,7 @@ export default function SignUpPage() {
                         key={r.id}
                         type="button"
                         onClick={() => setRole(r.id as any)}
-                        className={`py-2 px-2 rounded-lg text-xs font-semibold transition cursor-pointer text-center ${
+                        className={`py-2 px-2.5 rounded-lg text-xs font-semibold transition cursor-pointer text-center ${
                           isActive
                             ? "bg-indigo-600 text-white shadow-sm"
                             : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
@@ -290,23 +290,23 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-sm font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 cursor-pointer mt-1"
+                className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-base font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 flex items-center justify-center gap-2.5 transition-all duration-200 disabled:opacity-50 cursor-pointer mt-2"
               >
                 {loading ? (
                   <>
-                    <RefreshCw className="h-4 w-4 animate-spin text-white" />
+                    <RefreshCw className="h-4.5 w-4.5 animate-spin text-white" />
                     <span>Creating Workspace...</span>
                   </>
                 ) : (
                   <>
                     <span>Create Workspace</span>
-                    <ArrowRight className="h-4 w-4" />
+                    <ArrowRight className="h-4.5 w-4.5" />
                   </>
                 )}
               </button>
             </form>
 
-            <div className="pt-3 text-center text-sm text-gray-400 border-t border-gray-800/80">
+            <div className="pt-4 text-center text-sm text-gray-400 border-t border-gray-800/80">
               <span>Already have an account? </span>
               <Link
                 href="/login"

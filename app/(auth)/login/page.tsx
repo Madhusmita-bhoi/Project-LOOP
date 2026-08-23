@@ -62,7 +62,7 @@ export default function LoginPage() {
       <div className="absolute top-[12%] left-[5%] w-[850px] h-[850px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[10%] w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Split Container with Left Content Anchored Left & Right Card Positioned to the Right */}
+      {/* Split Container */}
       <div className="w-full max-w-[1540px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-6 px-4 sm:px-8 lg:px-12 gap-10 lg:gap-14">
         
         {/* LEFT COLUMN: Pinned to the Left */}
@@ -149,8 +149,8 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Moved to the Right Side with Balanced Offset */}
-        <div className="w-full lg:max-w-[490px] animate-fadeIn shrink-0 lg:mr-6 xl:mr-12">
+        {/* RIGHT COLUMN: Enlarged Login Card */}
+        <div className="w-full lg:max-w-[530px] animate-fadeIn shrink-0 lg:mr-4 xl:mr-8">
           {/* Card Header & Larger Logo */}
           <div className="text-center mb-6">
             <div className="relative inline-block mb-3.5">
@@ -159,16 +159,16 @@ export default function LoginPage() {
                 ∞
               </div>
             </div>
-            <h2 className="text-3xl font-extrabold tracking-tight text-white">
+            <h2 className="text-3xl font-black tracking-tight text-white">
               Project LOOP
             </h2>
-            <p className="text-sm text-gray-400 mt-1 font-medium">
+            <p className="text-sm text-gray-400 mt-1.5 font-medium">
               Sign in to your organization workspace
             </p>
           </div>
 
           {/* Scaled-Up Glass Card */}
-          <div className="bg-[#0b101e]/90 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/40 rounded-3xl p-8 sm:p-10 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.95),0_0_60px_-15px_rgba(99,102,241,0.25)] transition-all duration-300 space-y-6">
+          <div className="bg-[#0b101e]/90 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/40 rounded-3xl p-8 sm:p-11 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.95),0_0_60px_-15px_rgba(99,102,241,0.25)] transition-all duration-300 space-y-6">
             {error && (
               <div className="p-4 rounded-xl bg-rose-950/70 border border-rose-800/80 text-rose-300 text-sm flex items-center gap-3 animate-fadeIn">
                 <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
@@ -177,17 +177,17 @@ export default function LoginPage() {
             )}
 
             {/* Login Form */}
-            <form onSubmit={handleLogin} autoComplete="off" className="space-y-4.5">
+            <form onSubmit={handleLogin} autoComplete="off" className="space-y-5">
               {/* Decoy fields to suppress aggressive browser autofill */}
               <input type="text" style={{ display: "none" }} tabIndex={-1} aria-hidden="true" />
               <input type="password" style={{ display: "none" }} tabIndex={-1} aria-hidden="true" />
 
               <div>
-                <label className="block text-sm font-semibold text-gray-300 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-200 mb-2">
                   Work Email Address
                 </label>
                 <div className="relative group">
-                  <Mail className="h-4 w-4 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
+                  <Mail className="h-4.5 w-4.5 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
                   <input
                     type="email"
                     name="auth_email_input"
@@ -197,19 +197,19 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@company.com"
-                    className="w-full pl-11 pr-4 py-3.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
+                    className="w-full pl-12 pr-4 py-3.5 sm:py-4 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm sm:text-base text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
                   />
                 </div>
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-sm font-semibold text-gray-300">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-semibold text-gray-200">
                     Password
                   </label>
                 </div>
                 <div className="relative group">
-                  <Lock className="h-4 w-4 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
+                  <Lock className="h-4.5 w-4.5 absolute left-4 top-4 text-gray-400 group-focus-within:text-indigo-400 transition" />
                   <input
                     type={showPassword ? "text" : "password"}
                     name="auth_password_input"
@@ -219,18 +219,18 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full pl-11 pr-11 py-3.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
+                    className="w-full pl-12 pr-12 py-3.5 sm:py-4 bg-[#070a14] border border-gray-800/90 rounded-xl text-sm sm:text-base text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner font-medium"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-3.5 text-gray-400 hover:text-gray-200 transition cursor-pointer p-0.5 rounded"
+                    className="absolute right-4 top-4 text-gray-400 hover:text-gray-200 transition cursor-pointer p-0.5 rounded"
                     title={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
+                      <EyeOff className="h-4.5 w-4.5" />
                     ) : (
-                      <Eye className="h-4 w-4" />
+                      <Eye className="h-4.5 w-4.5" />
                     )}
                   </button>
                 </div>
@@ -238,14 +238,14 @@ export default function LoginPage() {
 
               {/* Remember Me */}
               <div className="flex items-center justify-between text-sm pt-0.5">
-                <label className="flex items-center space-x-2 text-gray-400 cursor-pointer hover:text-gray-300 transition">
+                <label className="flex items-center space-x-2.5 text-gray-300 cursor-pointer hover:text-gray-100 transition">
                   <input
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded bg-gray-900 border-gray-800 text-indigo-600 focus:ring-indigo-500/30 h-4 w-4 cursor-pointer"
+                    className="rounded bg-gray-900 border-gray-800 text-indigo-600 focus:ring-indigo-500/30 h-4.5 w-4.5 cursor-pointer"
                   />
-                  <span>Remember workspace</span>
+                  <span className="font-medium">Remember workspace</span>
                 </label>
 
                 <span className="text-xs font-semibold text-indigo-400">
@@ -256,24 +256,24 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-sm font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 cursor-pointer mt-1"
+                className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-base font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 flex items-center justify-center gap-2.5 transition-all duration-200 disabled:opacity-50 cursor-pointer mt-2"
               >
                 {loading ? (
                   <>
-                    <RefreshCw className="h-4 w-4 animate-spin text-white" />
+                    <RefreshCw className="h-4.5 w-4.5 animate-spin text-white" />
                     <span>Authenticating...</span>
                   </>
                 ) : (
                   <>
                     <span>Sign In to Workspace</span>
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-0.5" />
                   </>
                 )}
               </button>
             </form>
 
             {/* Registration Link */}
-            <div className="pt-4 text-center text-sm text-gray-400 border-t border-gray-800/80">
+            <div className="pt-5 text-center text-sm text-gray-400 border-t border-gray-800/80">
               <span>New organization? </span>
               <Link
                 href="/signup"
@@ -285,7 +285,7 @@ export default function LoginPage() {
           </div>
 
           {/* Security Subtext */}
-          <div className="mt-5 flex items-center justify-center space-x-2 text-xs text-gray-500">
+          <div className="mt-6 flex items-center justify-center space-x-2 text-xs text-gray-500">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <ShieldCheck className="h-4 w-4 text-emerald-400" />
             <span>Encrypted Multi-Tenant Session</span>
