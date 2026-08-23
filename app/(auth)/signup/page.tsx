@@ -83,19 +83,19 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-10 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
       {/* High-Precision Architectural Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b18_1px,transparent_1px),linear-gradient(to_bottom,#1e293b18_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
       {/* Layered Atmospheric Ambient Glows */}
-      <div className="absolute top-[12%] left-[10%] w-[800px] h-[800px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-[12%] left-[5%] w-[850px] h-[850px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[10%] w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Balanced 2-Column Split Container */}
-      <div className="w-full max-w-[1320px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-6 px-4 sm:px-8 lg:px-10 gap-10 lg:gap-14">
+      {/* Left-Anchored Split Container: Left content stays hard-left, right card sits moved leftward */}
+      <div className="w-full max-w-[1540px] mx-auto flex flex-col lg:flex-row justify-start items-center relative z-10 py-6 px-4 sm:px-8 lg:px-12 gap-12 lg:gap-20 xl:gap-28">
         
-        {/* LEFT COLUMN: Showcase */}
-        <div className="w-full lg:max-w-[580px] space-y-5 text-left">
+        {/* LEFT COLUMN: Pinned to the Left */}
+        <div className="w-full lg:max-w-[620px] space-y-5 text-left shrink-0">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-inner">
             <Sparkles className="h-4 w-4 text-indigo-400" />
             <span>Multi-Tenant Architecture</span>
@@ -159,8 +159,8 @@ export default function SignUpPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Scaled-Up Registration Card */}
-        <div className="w-full lg:max-w-[490px] animate-fadeIn">
+        {/* RIGHT COLUMN: Positioned Closer to the Left Content & Enlarged */}
+        <div className="w-full lg:max-w-[490px] animate-fadeIn shrink-0">
           <div className="text-center mb-5">
             <div className="relative inline-block mb-3.5">
               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl blur-lg opacity-60" />
