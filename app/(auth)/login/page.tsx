@@ -80,6 +80,10 @@ export default function LoginPage() {
 
           {/* Form */}
           <form onSubmit={handleLogin} autoComplete="off" className="space-y-4">
+            {/* Hidden dummy fields to prevent aggressive browser autofill */}
+            <input type="text" style={{ display: "none" }} tabIndex={-1} aria-hidden="true" />
+            <input type="password" style={{ display: "none" }} tabIndex={-1} aria-hidden="true" />
+
             <div>
               <label className="block text-xs font-medium text-gray-300 mb-1.5">
                 Work Email Address
@@ -88,8 +92,10 @@ export default function LoginPage() {
                 <Mail className="h-4 w-4 absolute left-3.5 top-3 text-gray-400" />
                 <input
                   type="email"
+                  name="auth_email_input"
+                  id="auth_email_input"
                   required
-                  autoComplete="email"
+                  autoComplete="off"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
@@ -108,8 +114,10 @@ export default function LoginPage() {
                 <Lock className="h-4 w-4 absolute left-3.5 top-3 text-gray-400" />
                 <input
                   type={showPassword ? "text" : "password"}
+                  name="auth_password_input"
+                  id="auth_password_password"
                   required
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
