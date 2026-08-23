@@ -62,7 +62,7 @@ export async function POST(req: Request) {
       where: { workspaceId },
       select: { id: true, name: true },
     });
-    const themeNames = existingThemes.map((t) => t.name);
+    const themeNames = existingThemes.map((t: { id: string; name: string }) => t.name);
 
     const insertedItems = [];
 
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
       // Link themes
       for (const tName of classification.themes) {
         let themeRecord = existingThemes.find(
-          (t) => t.name.toLowerCase() === tName.toLowerCase()
+          (t: { id: string; name: string }) => t.name.toLowerCase() === tName.toLowerCase()
         );
         if (!themeRecord) {
           themeRecord = await prisma.theme.create({

@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       select: { id: true, name: true },
     });
     const themeMap = new Map<string, string>();
-    existingThemes.forEach((t) => themeMap.set(t.name.toLowerCase(), t.id));
+    existingThemes.forEach((t: { id: string; name: string }) => themeMap.set(t.name.toLowerCase(), t.id));
 
     let importedCount = 0;
     let failedCount = 0;
