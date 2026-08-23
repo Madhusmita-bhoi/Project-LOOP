@@ -89,13 +89,15 @@ export async function POST(req: Request) {
             themeMap.set(tName.toLowerCase(), tId);
           }
 
-          await prisma.feedbackTheme.create({
-            data: {
-              feedbackId: feedback.id,
-              themeId: tId,
-              confidence: 0.9,
-            },
-          });
+          if (tId) {
+            await prisma.feedbackTheme.create({
+              data: {
+                feedbackId: feedback.id,
+                themeId: tId,
+                confidence: 0.9,
+              },
+            });
+          }
         }
 
         // Store embedding
