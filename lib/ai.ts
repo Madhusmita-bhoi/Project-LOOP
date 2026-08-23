@@ -260,98 +260,68 @@ function synthesizeGroundedLocalAnswer(question: string, citations: AskLoopCitat
   const isOnboardingQuery = /onboard|setup|invite|team member|get started|first time|checklist/i.test(qLower);
   const isPerformanceQuery = /speed|slow|fast|lag|load|performance|latency|timeout|rendering/i.test(qLower);
 
-  const getRef = (condition: (c: AskLoopCitation) => boolean, fallbackIdx = 0): string => {
-    const idx = citations.findIndex(condition);
-    const targetIdx = idx >= 0 ? idx + 1 : (fallbackIdx % total) + 1;
-    return `[#${targetIdx}]`;
-  };
-
   // 1. Onboarding & Team Invites
   if (isOnboardingQuery) {
-    const tourRef = getRef((c) => /interactive|tour|slick|10 minutes/i.test(c.content), 1);
-    const inviteRef = getRef((c) => /invite|figure out|where/i.test(c.content), 0);
-    const modalRef = getRef((c) => /modal|closed|reopen/i.test(c.content), 2);
-    const progressRef = getRef((c) => /progress|80%|stuck/i.test(c.content), 3);
-    const csvRef = getRef((c) => /bulk|csv|50/i.test(c.content), 4);
-
     return [
-      `Based on recent customer feedback, users experience a mixed onboarding journey. While the initial product tour receives strong praise for getting teams configured in under 10 minutes ${tourRef}, the team invitation and configuration steps are the primary source of user friction.`,
+      `Based on recent customer feedback, users experience a mixed onboarding journey. While the initial product tour receives strong praise for getting teams configured in under 10 minutes, the team invitation and configuration steps are the primary source of user friction.`,
       `Several key issues have been highlighted across support tickets and sales notes:\n` +
-        `- **Team invite discoverability**: New workspace administrators report difficulty locating where and how to invite colleagues during initial setup ${inviteRef}, and those who accidentally dismiss the setup modal cannot easily find a way to reopen the team invitation wizard ${modalRef}.\n` +
-        `- **Checklist completion glitch**: Users report that the onboarding checklist progress bar gets stuck at 80% completion despite finishing all required steps ${progressRef}.\n` +
-        `- **Bulk CSV ingestion**: Larger organizations note significant friction because there is currently no bulk CSV invite capability during onboarding, requiring manual entry for each user ${csvRef}.`,
+        `- **Team invite discoverability**: New workspace administrators report difficulty locating where and how to invite colleagues during initial setup, and those who accidentally dismiss the setup modal cannot easily find a way to reopen the team invitation wizard.\n` +
+        `- **Checklist completion glitch**: Users report that the onboarding checklist progress bar gets stuck at 80% completion despite finishing all required steps.\n` +
+        `- **Bulk CSV ingestion**: Larger organizations note significant friction because there is currently no bulk CSV invite capability during onboarding, requiring manual entry for each user.`,
       `To resolve the top drivers of onboarding friction, the team should introduce a persistent team invitation button in the primary navigation, resolve the checklist progress calculation bug, and add CSV bulk invitation support.`,
     ].join("\n\n");
   }
 
   // 2. Billing & Invoices
   if (isBillingQuery) {
-    const timeoutRef = getRef((c) => /timeout|504|download/i.test(c.content), 0);
-    const timeoutRef2 = getRef((c) => /504|gateway/i.test(c.content), 1);
-    const silentRef = getRef((c) => /silent|charge failed|credit card/i.test(c.content), 3);
-    const vatRef = getRef((c) => /vat|tax id|reverse/i.test(c.content), 5);
-    const currencyRef = getRef((c) => /multi-currency|eur|gbp/i.test(c.content), 2);
-
     return [
       `Customer feedback regarding billing reveals four distinct friction points concentrated around payment reliability and invoicing compliance:`,
-      `- **Invoice PDF download latency**: Users frequently encounter 504 gateway timeout errors when attempting to download historical PDF invoices directly from the billing tab ${timeoutRef}${timeoutRef !== timeoutRef2 ? ` ${timeoutRef2}` : ""}.\n` +
-        `- **Silent payment failures**: Account administrators note that failed credit card renewals happen silently without trigger notification emails to account owners ${silentRef}.\n` +
-        `- **International tax compliance**: European customers have requested automated support for VAT reverse-charge registration numbers on monthly billing receipts ${vatRef}.\n` +
-        `- **Multi-currency invoicing**: Global clients express frustration over mandatory USD conversion fees and are requesting native billing in EUR and GBP ${currencyRef}.`,
+      `- **Invoice PDF download latency**: Users frequently encounter 504 gateway timeout errors when attempting to download historical PDF invoices directly from the billing tab.\n` +
+        `- **Silent payment failures**: Account administrators note that failed credit card renewals happen silently without trigger notification emails to account owners.\n` +
+        `- **International tax compliance**: European customers have requested automated support for VAT reverse-charge registration numbers on monthly billing receipts.\n` +
+        `- **Multi-currency invoicing**: Global clients express frustration over mandatory USD conversion fees and are requesting native billing in EUR and GBP.`,
       `Resolving the invoice PDF timeout via asynchronous background generation and configuring automated email alerts for failed card renewals will address the primary volume of billing support tickets.`,
     ].join("\n\n");
   }
 
   // 3. Enterprise Features & Security
   if (isEnterpriseQuery) {
-    const ssoRef = getRef((c) => /sso|okta|saml/i.test(c.content), 0);
-    const soc2Ref = getRef((c) => /soc2|compliance/i.test(c.content), 1);
-    const authRef = getRef((c) => /2fa|two-factor|security/i.test(c.content), 2);
-
     return [
       `Enterprise prospects and account buyers have raised critical requirements around authentication, access control, and compliance that directly influence deal velocity:`,
-      `- **SAML 2.0 and Okta SSO**: Multiple enterprise pipeline prospects have cited single sign-on support as a mandatory requirement before finalizing annual contracts ${ssoRef}.\n` +
-        `- **SOC2 Type II compliance**: Security and procurement teams require official SOC2 audit validation to approve expanded seat allocations ${soc2Ref}.\n` +
-        `- **Two-factor authentication**: Security leads appreciate the workspace-wide 2FA enforcement, which has facilitated security review approvals ${authRef}.`,
+      `- **SAML 2.0 and Okta SSO**: Multiple enterprise pipeline prospects have cited single sign-on support as a mandatory requirement before finalizing annual contracts.\n` +
+        `- **SOC2 Type II compliance**: Security and procurement teams require official SOC2 audit validation to approve expanded seat allocations.\n` +
+        `- **Two-factor authentication**: Security leads appreciate the workspace-wide 2FA enforcement, which has facilitated security review approvals.`,
       `Delivering native SAML 2.0 Okta integration is the highest-leverage priority to unblock pending enterprise deals.`,
     ].join("\n\n");
   }
 
   // 4. Speed & Performance
   if (isPerformanceQuery) {
-    const filterRef = getRef((c) => /filtering|fast|blazingly/i.test(c.content), 0);
-    const scrollRef = getRef((c) => /stutter|scrolling|500 rows/i.test(c.content), 1);
-    const uploadRef = getRef((c) => /502|5mb|4,000/i.test(c.content), 2);
-
     return [
       `Customer sentiment around platform performance is generally positive for daily search and analytics, with isolated latency reported during large-scale operations:`,
-      `- **Query and filtering speed**: Users consistently praise the responsiveness and speed of the search and filter engine across large feedback datasets ${filterRef}.\n` +
-        `- **High-volume table scrolling**: Users observe rendering lag and stutter when rapidly scrolling through tables containing over 500 rows ${scrollRef}.\n` +
-        `- **Large CSV upload limits**: Ingesting large files (5MB+ CSVs with thousands of records) occasionally triggers 502 Bad Gateway responses ${uploadRef}.`,
+      `- **Query and filtering speed**: Users consistently praise the responsiveness and speed of the search and filter engine across large feedback datasets.\n` +
+        `- **High-volume table scrolling**: Users observe rendering lag and stutter when rapidly scrolling through tables containing over 500 rows.\n` +
+        `- **Large CSV upload limits**: Ingesting large files (5MB+ CSVs with thousands of records) occasionally triggers 502 Bad Gateway responses.`,
       `Implementing virtualized windowing for large table datasets and chunked streaming for CSV imports will eliminate the remaining performance friction.`,
     ].join("\n\n");
   }
 
   // 5. Mobile & iOS
   if (isMobileQuery) {
-    const pushRef = getRef((c) => /push alerts|on-call/i.test(c.content), 0);
-    const tabletRef = getRef((c) => /ipad|tablet|portrait/i.test(c.content), 1);
-    const crashRef = getRef((c) => /crash|ios/i.test(c.content), 2);
-
     return [
       `Feedback from mobile and tablet users highlights a clear contrast between notification utility and layout responsiveness:`,
-      `- **Real-time push alerts**: On-call engineering managers praise the timely push alerts for critical negative sentiment spikes ${pushRef}.\n` +
-        `- **Tablet viewport clipping**: iPad users in portrait orientation report that analytics charts and table columns clip off-screen ${tabletRef}.\n` +
-        `- **iOS drill-down stability**: Intermittent crashes have been reported on iOS when navigating high-density chart drill-down views ${crashRef}.`,
+      `- **Real-time push alerts**: On-call engineering managers praise the timely push alerts for critical negative sentiment spikes.\n` +
+        `- **Tablet viewport clipping**: iPad users in portrait orientation report that analytics charts and table columns clip off-screen.\n` +
+        `- **iOS drill-down stability**: Intermittent crashes have been reported on iOS when navigating high-density chart drill-down views.`,
       `Prioritizing responsive portrait breakpoints for tablet viewports and optimizing memory allocation on chart drill-downs will resolve mobile user friction.`,
     ].join("\n\n");
   }
 
   // 6. Generic / Ad-Hoc Queries
-  const bulletItems = citations.slice(0, 4).map((c, i) => {
+  const bulletItems = citations.slice(0, 4).map((c) => {
     const cleanContent = c.content.replace(/^\[Rating:\s*\d\/\d\]\s*/i, "").trim();
     const prefix = c.sentiment === "NEG" ? "Reported issue" : c.sentiment === "POS" ? "Positive feedback" : "Customer observation";
-    return `- **${prefix}** (${c.channel}): "${cleanContent}" [#${i + 1}]`;
+    return `- **${prefix}** (${c.channel}): "${cleanContent}"`;
   });
 
   return [

@@ -33,34 +33,20 @@ interface ChatMessage {
   timestamp: string;
 }
 
-function FormattedAnswer({
-  text,
-  onCitationClick,
-}: {
-  text: string;
-  onCitationClick?: (num: string) => void;
-}) {
-  const paragraphs = text.split("\n\n").filter(Boolean);
+function FormattedAnswer({ text }: { text: string }) {
+  // Strip any inline [#N] or [N] bracket tokens completely
+  const cleanText = text
+    .replace(/\[#?\d+\]/g, "")
+    .replace(/\s+([.,;:])/g, "$1")
+    .trim();
+
+  const paragraphs = cleanText.split("\n\n").filter(Boolean);
 
   const renderInline = (str: string) => {
-    // Clean up spacing around punctuation
-    const cleanStr = str.replace(/\s+([.,;:])/g, "$1");
-    const parts = cleanStr.split(/(\[#\d+\]|\*\*.*?\*\*)/g);
+    const parts = str.split(/(\*\*.*?\*\*)/g);
 
     return parts.map((part, i) => {
-      if (/^\[#\d+\]$/.test(part)) {
-        const num = part.replace(/[^\d]/g, "");
-        return (
-          <button
-            key={i}
-            onClick={() => onCitationClick && onCitationClick(num)}
-            className="inline-flex items-center justify-center mx-1 px-1.5 py-0.2 rounded text-[11px] font-mono font-bold bg-indigo-950/70 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/40 transition cursor-pointer align-baseline shadow-xs"
-            title={`View cited source #${num}`}
-          >
-            {num}
-          </button>
-        );
-      } else if (part.startsWith("**") && part.endsWith("**")) {
+      if (part.startsWith("**") && part.endsWith("**")) {
         return (
           <strong key={i} className="font-semibold text-white">
             {part.slice(2, -2)}
@@ -79,7 +65,7 @@ function FormattedAnswer({
 
         if (isBulletList) {
           return (
-            <ul key={pIdx} className="space-y-2 my-2.5 pl-1">
+            <ul key={pIdx} className="space-y-2 my-2 pl-1">
               {lines.map((line, lIdx) => {
                 const trimmed = line.trim();
                 if (trimmed.startsWith("-") || trimmed.startsWith("•")) {
