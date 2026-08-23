@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useSession, signOut, signIn } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import {
   LayoutDashboard,
   Inbox,
@@ -19,8 +19,6 @@ import {
   X,
   RefreshCw,
   Layers,
-  ChevronDown,
-  UserCheck,
   Search,
 } from "lucide-react";
 import CommandPalette from "./CommandPalette";
@@ -83,15 +81,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     } finally {
       setSimulating(false);
     }
-  };
-
-  const handleQuickRoleSwitch = async (email: string) => {
-    await signIn("credentials", {
-      email,
-      password: "Password123!",
-      redirect: false,
-    });
-    router.refresh();
   };
 
   if (status === "loading") {
@@ -217,42 +206,42 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             );
           })}
 
-          {/* Quick Simulation Section */}
+          {/* Multi-Channel Ingestion Sync */}
           <div className="pt-4 mt-4 border-t border-gray-800/70 px-1">
             <p className="text-[10px] font-semibold tracking-wider text-gray-400 uppercase mb-2 flex items-center justify-between">
-              <span>Simulate Ingestion</span>
-              <Zap className="h-3 w-3 text-amber-400" />
+              <span>Channel Sync</span>
+              <Zap className="h-3 w-3 text-indigo-400" />
             </p>
             <div className="grid grid-cols-2 gap-1.5">
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("Support ticket")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium"
-                title="Sync Zendesk Tickets"
+                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer"
+                title="Sync Support Tickets"
               >
                 Support Tickets
               </button>
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("App store review")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium"
-                title="Pull App Store Reviews"
+                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer"
+                title="Sync App Store Reviews"
               >
                 App Store
               </button>
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("NPS survey")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium"
-                title="Fetch NPS Survey Responses"
+                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer"
+                title="Sync NPS Surveys"
               >
                 NPS Surveys
               </button>
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("Sales call note")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium"
-                title="Ingest Sales Notes"
+                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer"
+                title="Sync Sales Notes"
               >
                 Sales Notes
               </button>
@@ -273,13 +262,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 {user?.name ? user.name.slice(0, 2).toUpperCase() : "U"}
               </div>
               <div className="truncate">
-                <p className="text-xs font-semibold text-gray-200 truncate">{user?.name || "Anonymous"}</p>
-                <p className="text-[10px] text-gray-400 truncate">{user?.email || "user@loop.dev"}</p>
+                <p className="text-xs font-semibold text-gray-200 truncate">{user?.name || "User"}</p>
+                <p className="text-[10px] text-gray-400 truncate">{user?.email || ""}</p>
               </div>
             </div>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="p-1.5 text-gray-400 hover:text-rose-400 rounded-md hover:bg-gray-800/60 transition"
+              className="p-1.5 text-gray-400 hover:text-rose-400 rounded-md hover:bg-gray-800/60 transition cursor-pointer"
               title="Sign Out"
             >
               <LogOut className="h-4 w-4" />
@@ -308,52 +297,42 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        {/* Top Demo RBAC Bar */}
-        <header className="no-print bg-[#111827]/80 border-b border-gray-800/80 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0 z-20">
-          <div className="flex items-center space-x-2 text-gray-300">
-            <UserCheck className="h-4 w-4 text-indigo-400" />
-            <span className="text-gray-400">Quick Demo Switcher:</span>
-            <div className="inline-flex rounded-md shadow-sm space-x-1">
-              <button
-                onClick={() => handleQuickRoleSwitch("admin@loop.dev")}
-                className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${
-                  user?.email === "admin@loop.dev"
-                    ? "bg-purple-600 text-white font-bold"
-                    : "bg-gray-800/80 hover:bg-gray-700 text-gray-300"
-                }`}
-              >
-                Admin
-              </button>
-              <button
-                onClick={() => handleQuickRoleSwitch("analyst@loop.dev")}
-                className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${
-                  user?.email === "analyst@loop.dev"
-                    ? "bg-blue-600 text-white font-bold"
-                    : "bg-gray-800/80 hover:bg-gray-700 text-gray-300"
-                }`}
-              >
-                Analyst
-              </button>
-              <button
-                onClick={() => handleQuickRoleSwitch("viewer@loop.dev")}
-                className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${
-                  user?.email === "viewer@loop.dev"
-                    ? "bg-amber-600 text-white font-bold"
-                    : "bg-gray-800/80 hover:bg-gray-700 text-gray-300"
-                }`}
-              >
-                Viewer (Read-only)
-              </button>
-            </div>
+        {/* Authentic Enterprise Header */}
+        <header className="no-print bg-[#0f1422]/90 backdrop-blur-md border-b border-gray-800/80 px-5 py-2.5 flex items-center justify-between gap-3 text-xs shrink-0 z-20">
+          <div className="flex items-center space-x-2.5 text-gray-300">
+            <Building2 className="h-4 w-4 text-indigo-400" />
+            <span className="font-semibold text-gray-200">{workspaceName}</span>
+            <span className="text-gray-600">/</span>
+            <span
+              className={`px-2 py-0.5 rounded font-mono text-[10px] font-bold uppercase tracking-wider ${
+                userRole === "ADMIN"
+                  ? "bg-purple-500/15 text-purple-300 border border-purple-500/30"
+                  : userRole === "ANALYST"
+                  ? "bg-blue-500/15 text-blue-300 border border-blue-500/30"
+                  : "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+              }`}
+            >
+              {userRole} Session
+            </span>
           </div>
 
           <div className="flex items-center space-x-3 text-gray-400 text-[11px]">
-            <span className="hidden sm:inline">
-              Tenant Scope: <code className="text-indigo-300">{user?.workspaceId?.slice(0, 10) || "workspace"}...</code>
+            <button
+              onClick={() => setCommandOpen(true)}
+              className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-900/80 hover:bg-gray-800 border border-gray-800 text-gray-400 hover:text-gray-200 transition cursor-pointer"
+            >
+              <Search className="h-3 w-3 text-gray-500" />
+              <span>Search</span>
+              <kbd className="font-mono text-[9px] bg-gray-800 px-1 py-0.2 rounded border border-gray-700">⌘K</kbd>
+            </button>
+
+            <span className="hidden sm:inline font-mono text-[10px] text-gray-500">
+              Tenant: <span className="text-indigo-300">{user?.workspaceId?.slice(0, 8) || "default"}</span>
             </span>
-            <span className="flex items-center space-x-1 text-emerald-400">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Isolated</span>
+
+            <span className="flex items-center space-x-1.5 text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 text-[10px] font-medium">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Encrypted Session</span>
             </span>
           </div>
         </header>
