@@ -83,18 +83,18 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-4 sm:p-8 lg:p-12 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
       {/* High-Precision Architectural Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b18_1px,transparent_1px),linear-gradient(to_bottom,#1e293b18_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
       {/* Layered Atmospheric Ambient Glows */}
-      <div className="absolute top-[12%] left-[10%] w-[800px] h-[800px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[10%] w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-[12%] left-[5%] w-[850px] h-[850px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[5%] w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Split Container with Left Showcase Shifted Farther Left */}
-      <div className="w-full max-w-[1360px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-6 px-4 sm:px-6 lg:px-10 gap-10 lg:gap-12">
+      {/* Expanded Split Container Pushing Content Farther Left */}
+      <div className="w-full max-w-[1520px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-6 px-4 sm:px-8 lg:px-12 gap-8 lg:gap-12">
         
-        {/* LEFT COLUMN: Shifted Left with Exact Width & Height Preserved */}
+        {/* LEFT COLUMN: Anchored More to the Left */}
         <div className="w-full lg:max-w-[620px] space-y-5 text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-inner">
             <Sparkles className="h-4 w-4 text-indigo-400" />
