@@ -12,6 +12,10 @@ import {
   Tag,
   ArrowRight,
   Info,
+  AlertTriangle,
+  CheckCircle2,
+  Lightbulb,
+  Zap,
 } from "lucide-react";
 
 interface Citation {
@@ -39,16 +43,17 @@ function FormattedAnswer({ text }: { text: string }) {
     const el = document.getElementById(`citation-${num}`);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
-      el.classList.add("ring-2", "ring-indigo-400");
+      el.classList.add("ring-2", "ring-indigo-400", "scale-[1.02]");
       setTimeout(() => {
-        el.classList.remove("ring-2", "ring-indigo-400");
+        el.classList.remove("ring-2", "ring-indigo-400", "scale-[1.02]");
       }, 2000);
     }
   };
 
   const renderInline = (str: string) => {
-    // Replace citations like [#1], [#2] with interactive badges
-    const parts = str.split(/(\[#\d+\]|\*\*.*?\*\*)/g);
+    // Clean up spacing around punctuation
+    const cleanStr = str.replace(/\s+([.,;:])/g, "$1");
+    const parts = cleanStr.split(/(\[#\d+\]|\*\*.*?\*\*)/g);
 
     return parts.map((part, i) => {
       if (/^\[#\d+\]$/.test(part)) {
@@ -57,7 +62,7 @@ function FormattedAnswer({ text }: { text: string }) {
           <button
             key={i}
             onClick={() => scrollToCitation(num)}
-            className="inline-flex items-center mx-1 px-1.5 py-0.2 rounded bg-indigo-900/60 hover:bg-indigo-700/80 border border-indigo-500/40 text-indigo-200 text-[10px] font-mono font-bold transition hover:scale-105 cursor-pointer shadow-sm"
+            className="inline-flex items-center mx-1 px-1.5 py-0.5 rounded bg-indigo-950/90 hover:bg-indigo-700/90 border border-indigo-500/50 text-indigo-300 text-[10px] font-mono font-bold transition hover:scale-105 cursor-pointer shadow-sm align-middle"
             title={`Jump to Citation #${num}`}
           >
             #{num}
@@ -65,7 +70,7 @@ function FormattedAnswer({ text }: { text: string }) {
         );
       } else if (part.startsWith("**") && part.endsWith("**")) {
         return (
-          <strong key={i} className="font-semibold text-indigo-100">
+          <strong key={i} className="font-semibold text-indigo-200">
             {part.slice(2, -2)}
           </strong>
         );
@@ -75,32 +80,135 @@ function FormattedAnswer({ text }: { text: string }) {
   };
 
   return (
-    <div className="space-y-3">
-      {paragraphs.map((p, pIdx) => {
-        const lines = p.split("\n");
+    <div className="space-y-4">
+      {paragraphs.map((paragraph, pIdx) => {
+        const lines = paragraph.split("\n").filter(Boolean);
 
-        if (lines.length > 1 && lines.some((l) => l.trim().startsWith("•") || l.trim().startsWith("-"))) {
+        // Check if paragraph is an Actionable / Recommendation block
+        if (
+          paragraph.startsWith("**Product Recommendation:**") ||
+          paragraph.startsWith("**Strategic Recommendation:**") ||
+          paragraph.startsWith("**Engineering Priority:**") ||
+          paragraph.startsWith("**Strategic Impact:**") ||
+          paragraph.startsWith("**Mobile Roadmap:**") ||
+          paragraph.startsWith("**Performance Optimization:**") ||
+          paragraph.startsWith("**Actionable Takeaway:**")
+        ) {
+          const colonIdx = paragraph.indexOf(":");
+          const title = paragraph.slice(2, colonIdx).replace(/\*/g, "");
+          const body = paragraph.slice(colonIdx + 1).trim();
+
           return (
-            <div key={pIdx} className="space-y-1.5">
+            <div
+              key={pIdx}
+              className="p-4 rounded-xl bg-gradient-to-r from-indigo-950/60 via-purple-950/40 to-indigo-950/50 border border-indigo-500/30 shadow-md space-y-1.5 my-2"
+            >
+              <div className="flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-wider">
+                <Lightbulb className="h-4 w-4 text-indigo-400 shrink-0" />
+                <span>{title}</span>
+              </div>
+              <div className="text-xs text-gray-200 leading-relaxed font-sans pl-6">
+                {renderInline(body)}
+              </div>
+            </div>
+          );
+        }
+
+        // Check if paragraph is a Section Header
+        if (
+          lines.length === 1 &&
+          lines[0].startsWith("**") &&
+          lines[0].endsWith("**")
+        ) {
+          const headerText = lines[0].slice(2, -2);
+          const isFrictionHeader = /friction|pain|root cause|issues|problems/i.test(headerText);
+          const isPraiseHeader = /positive|highlights|strengths|satisfaction/i.test(headerText);
+
+          return (
+            <div key={pIdx} className="pt-2 pb-1 border-b border-gray-800/80 flex items-center gap-2">
+              {isFrictionHeader ? (
+                <AlertTriangle className="h-4 w-4 text-rose-400 shrink-0" />
+              ) : isPraiseHeader ? (
+                <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+              ) : (
+                <Zap className="h-4 w-4 text-indigo-400 shrink-0" />
+              )}
+              <h3
+                className={`text-xs font-bold uppercase tracking-wider ${
+                  isFrictionHeader
+                    ? "text-rose-300"
+                    : isPraiseHeader
+                    ? "text-emerald-300"
+                    : "text-indigo-300"
+                }`}
+              >
+                {headerText}
+              </h3>
+            </div>
+          );
+        }
+
+        // Check if paragraph is a list (numbered 1. 2. or bulleted • -)
+        const isList = lines.some(
+          (l) =>
+            /^\s*\d+\.\s*/.test(l) ||
+            /^\s*[•\-]\s*/.test(l)
+        );
+
+        if (isList) {
+          return (
+            <div key={pIdx} className="space-y-2.5 my-1">
               {lines.map((line, lIdx) => {
                 const trimmed = line.trim();
+
+                // Numbered list item: 1. **Title**: Body
+                const numMatch = trimmed.match(/^(\d+)\.\s*(.*)/);
+                if (numMatch) {
+                  const num = numMatch[1];
+                  const content = numMatch[2];
+
+                  return (
+                    <div
+                      key={lIdx}
+                      className="p-3 rounded-xl bg-gray-900/70 border border-gray-800/80 flex items-start gap-3 hover:border-gray-700/80 transition"
+                    >
+                      <div className="h-5 w-5 rounded-md bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-[11px] font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">
+                        {num}
+                      </div>
+                      <div className="text-xs text-gray-200 leading-relaxed font-sans flex-1">
+                        {renderInline(content)}
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Bulleted list item: • **Title**: Body
                 if (trimmed.startsWith("•") || trimmed.startsWith("-")) {
                   const itemText = trimmed.replace(/^[•\-]\s*/, "");
                   return (
-                    <div key={lIdx} className="flex items-start gap-2 text-gray-300">
-                      <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" />
-                      <div className="leading-relaxed">{renderInline(itemText)}</div>
+                    <div
+                      key={lIdx}
+                      className="p-3 rounded-xl bg-gray-900/70 border border-gray-800/80 flex items-start gap-3 hover:border-gray-700/80 transition"
+                    >
+                      <div className="h-2 w-2 rounded-full bg-emerald-400 shrink-0 mt-1.5" />
+                      <div className="text-xs text-gray-200 leading-relaxed font-sans flex-1">
+                        {renderInline(itemText)}
+                      </div>
                     </div>
                   );
-                } else if (trimmed.startsWith("**") && trimmed.endsWith("**")) {
+                }
+
+                // Subtitle inside list
+                if (trimmed.startsWith("**") && trimmed.endsWith("**")) {
                   return (
-                    <p key={lIdx} className="font-bold text-xs uppercase tracking-wider text-indigo-300 mt-2">
+                    <p key={lIdx} className="font-bold text-xs uppercase tracking-wider text-indigo-300 pt-1">
                       {trimmed.slice(2, -2)}
                     </p>
                   );
                 }
+
                 return (
-                  <p key={lIdx} className="text-gray-200 leading-relaxed">
+                  <p key={lIdx} className="text-xs text-gray-200 leading-relaxed">
                     {renderInline(line)}
                   </p>
                 );
@@ -109,9 +217,10 @@ function FormattedAnswer({ text }: { text: string }) {
           );
         }
 
+        // Standard narrative paragraph (Executive Lead / Context)
         return (
-          <p key={pIdx} className="text-gray-200 leading-relaxed">
-            {renderInline(p)}
+          <p key={pIdx} className="text-xs text-gray-200 leading-relaxed font-sans">
+            {renderInline(paragraph)}
           </p>
         );
       })}
