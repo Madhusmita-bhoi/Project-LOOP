@@ -32,6 +32,93 @@ interface ChatMessage {
   timestamp: string;
 }
 
+function FormattedAnswer({ text }: { text: string }) {
+  const paragraphs = text.split("\n\n").filter(Boolean);
+
+  const scrollToCitation = (num: string) => {
+    const el = document.getElementById(`citation-${num}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.classList.add("ring-2", "ring-indigo-400");
+      setTimeout(() => {
+        el.classList.remove("ring-2", "ring-indigo-400");
+      }, 2000);
+    }
+  };
+
+  const renderInline = (str: string) => {
+    // Replace citations like [#1], [#2] with interactive badges
+    const parts = str.split(/(\[#\d+\]|\*\*.*?\*\*)/g);
+
+    return parts.map((part, i) => {
+      if (/^\[#\d+\]$/.test(part)) {
+        const num = part.replace(/[^\d]/g, "");
+        return (
+          <button
+            key={i}
+            onClick={() => scrollToCitation(num)}
+            className="inline-flex items-center mx-1 px-1.5 py-0.2 rounded bg-indigo-900/60 hover:bg-indigo-700/80 border border-indigo-500/40 text-indigo-200 text-[10px] font-mono font-bold transition hover:scale-105 cursor-pointer shadow-sm"
+            title={`Jump to Citation #${num}`}
+          >
+            #{num}
+          </button>
+        );
+      } else if (part.startsWith("**") && part.endsWith("**")) {
+        return (
+          <strong key={i} className="font-semibold text-indigo-100">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
+  return (
+    <div className="space-y-3">
+      {paragraphs.map((p, pIdx) => {
+        const lines = p.split("\n");
+
+        if (lines.length > 1 && lines.some((l) => l.trim().startsWith("•") || l.trim().startsWith("-"))) {
+          return (
+            <div key={pIdx} className="space-y-1.5">
+              {lines.map((line, lIdx) => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith("•") || trimmed.startsWith("-")) {
+                  const itemText = trimmed.replace(/^[•\-]\s*/, "");
+                  return (
+                    <div key={lIdx} className="flex items-start gap-2 text-gray-300">
+                      <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" />
+                      <div className="leading-relaxed">{renderInline(itemText)}</div>
+                    </div>
+                  );
+                } else if (trimmed.startsWith("**") && trimmed.endsWith("**")) {
+                  return (
+                    <p key={lIdx} className="font-bold text-xs uppercase tracking-wider text-indigo-300 mt-2">
+                      {trimmed.slice(2, -2)}
+                    </p>
+                  );
+                }
+                return (
+                  <p key={lIdx} className="text-gray-200 leading-relaxed">
+                    {renderInline(line)}
+                  </p>
+                );
+              })}
+            </div>
+          );
+        }
+
+        return (
+          <p key={pIdx} className="text-gray-200 leading-relaxed">
+            {renderInline(p)}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function AskLoopPage() {
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
@@ -180,8 +267,8 @@ export default function AskLoopPage() {
             </div>
 
             {/* Formatted Markdown/Text Body */}
-            <div className="text-xs text-gray-200 space-y-2 leading-relaxed whitespace-pre-line font-sans">
-              {msg.content}
+            <div className="text-xs text-gray-200 leading-relaxed font-sans space-y-2">
+              <FormattedAnswer text={msg.content} />
             </div>
 
             {/* Grounded Citation Source Cards */}
@@ -195,12 +282,15 @@ export default function AskLoopPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                   {msg.citations.map((c, cIdx) => (
                     <div
+                      id={`citation-${cIdx + 1}`}
                       key={c.id}
-                      className="p-3 rounded-xl bg-gray-900/90 border border-gray-800 space-y-2 hover:border-gray-700 transition"
+                      className="p-3 rounded-xl bg-gray-900/90 border border-gray-800 space-y-2 hover:border-indigo-500/50 hover:bg-gray-850 transition"
                     >
                       <div className="flex items-center justify-between text-[10px]">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-indigo-400">#{cIdx + 1}</span>
+                          <span className="font-bold text-indigo-400 bg-indigo-950/70 border border-indigo-500/30 px-1.5 py-0.5 rounded">
+                            #{cIdx + 1}
+                          </span>
                           <span className="px-1.5 py-0.5 rounded bg-gray-800 text-gray-300 font-medium">
                             {c.channel}
                           </span>
@@ -218,13 +308,13 @@ export default function AskLoopPage() {
                         </span>
                       </div>
 
-                      <p className="text-gray-300 text-[11px] leading-relaxed line-clamp-3">
+                      <p className="text-gray-300 text-[11px] leading-relaxed">
                         "{c.content}"
                       </p>
 
                       <div className="flex items-center justify-between text-[10px] text-gray-500 pt-1 border-t border-gray-800/60 font-mono">
                         <span className="truncate">{c.customerLabel || "Customer"}</span>
-                        <span>Match: {Math.round(c.similarityScore * 100)}%</span>
+                        <span>Relevance: {Math.round(c.similarityScore * 100)}%</span>
                       </div>
                     </div>
                   ))}

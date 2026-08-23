@@ -228,26 +228,65 @@ async function main() {
     { content: "Scheduled email digest should have an option to include positive customer testimonial quotes.", channel: "Community post", customer: "Marketing Director", sentiment: "POS", score: 0.7, area: "Reporting", theme: "Export & Reporting", status: "ACTIONED", daysAgo: 27 },
   ];
 
-  // Expand with additional realistic variations to reach 130+ items
+  // Expand with 35+ unique realistic templates across all themes
   const channels = ["Support ticket", "App store review", "NPS survey", "Sales call note", "Community post"];
-  const companies = ["TechCorp", "CloudBase", "DataPulse", "Nexora", "Veritas Health", "StripeShop", "Apex Logistics", "OmniAI", "BlueShift", "AeroDynamics"];
+  const companies = ["TechCorp", "CloudBase", "DataPulse", "Nexora", "Veritas Health", "StripeShop", "Apex Logistics", "OmniAI", "BlueShift", "AeroDynamics", "Zenith FinTech", "Quantum SaaS", "PulseMedia", "Nordic Retail", "Beacon Security"];
   
   const additionalTemplates = [
-    { text: "The speed of the query engine when filtering by channel is blazingly fast.", sent: "POS", score: 0.8, area: "Performance", theme: "Performance & Speed" },
-    { text: "Cannot invite external contractors without giving them full billing visibility.", sent: "NEG", score: -0.7, area: "Onboarding", theme: "Onboarding & Setup" },
+    // Billing & Invoicing
     { text: "Our finance team requires annual upfront invoicing with net-30 payment terms.", sent: "NEU", score: 0.0, area: "Billing", theme: "Billing & Invoicing" },
-    { text: "Search across 10,000 feedback records works seamlessly with the AI query bar.", sent: "POS", score: 0.88, area: "UI/UX", theme: "UI/UX Navigation" },
-    { text: "Mobile web dashboard is hard to navigate on portrait tablet view.", sent: "NEG", score: -0.4, area: "Mobile", theme: "Mobile Experience" },
-    { text: "API documentation for the ingestion endpoint is clear with ready-to-use curl examples.", sent: "POS", score: 0.82, area: "Integrations", theme: "Integration & API" },
-    { text: "We need SAML Okta integration before our enterprise compliance team can sign off.", sent: "NEG", score: -0.65, area: "Enterprise", theme: "Enterprise SSO" },
-    { text: "The weekly AI executive report digest is fantastic for our Monday standup.", sent: "POS", score: 0.92, area: "Reporting", theme: "Export & Reporting" },
-    { text: "Received an 502 Bad Gateway error when uploading a 5MB CSV with 4,000 rows.", sent: "NEG", score: -0.85, area: "Performance", theme: "Performance & Speed" },
-    { text: "Color-coded sentiment pills make it so easy to prioritize critical bug reports.", sent: "POS", score: 0.78, area: "UI/UX", theme: "UI/UX Navigation" },
+    { text: "Getting a 504 gateway timeout whenever I click download past invoices from the billing tab.", sent: "NEG", score: -0.9, area: "Billing", theme: "Billing & Invoicing" },
+    { text: "Please add European VAT reverse-charge number support to our monthly invoice receipts.", sent: "NEG", score: -0.6, area: "Billing", theme: "Billing & Invoicing" },
+    { text: "Upgraded our workspace from Starter to Growth tier instantly with zero plan sync interruption.", sent: "POS", score: 0.85, area: "Billing", theme: "Billing & Invoicing" },
+    { text: "Credit card charge failed silently without sending a notification email to our billing admin.", sent: "NEG", score: -0.75, area: "Billing", theme: "Billing & Invoicing" },
+    { text: "Need multi-currency billing in EUR and GBP instead of mandatory USD conversion fees.", sent: "NEU", score: -0.2, area: "Billing", theme: "Billing & Invoicing" },
+
+    // Onboarding & Setup
+    { text: "Team member invitation links expire after only 24 hours, causing repeated admin resends.", sent: "NEG", score: -0.65, area: "Onboarding", theme: "Onboarding & Setup" },
+    { text: "The initial workspace setup checklist was super intuitive and guided us in under 5 minutes.", sent: "POS", score: 0.9, area: "Onboarding", theme: "Onboarding & Setup" },
+    { text: "Accidentally closed the onboarding modal and cannot find a way to reopen the team invite step.", sent: "NEG", score: -0.55, area: "Onboarding", theme: "Onboarding & Setup" },
+    { text: "Would love a CSV bulk invite option for adding 50+ engineers to our organization at once.", sent: "POS", score: 0.6, area: "Onboarding", theme: "Onboarding & Setup" },
+    { text: "Cannot invite external agency reviewers without giving them full organization access.", sent: "NEG", score: -0.7, area: "Onboarding", theme: "Onboarding & Setup" },
+
+    // Performance & Speed
+    { text: "The speed of the query engine when filtering by channel and sentiment is blazingly fast.", sent: "POS", score: 0.8, area: "Performance", theme: "Performance & Speed" },
+    { text: "Received a 502 Bad Gateway error when uploading a 5MB CSV file containing 4,000 feedback rows.", sent: "NEG", score: -0.85, area: "Performance", theme: "Performance & Speed" },
+    { text: "Analytics dashboard loads in under 300ms even with 10,000 feedback points loaded.", sent: "POS", score: 0.92, area: "Performance", theme: "Performance & Speed" },
+    { text: "The live table view stutters when rapidly scrolling through more than 500 rows.", sent: "NEG", score: -0.6, area: "Performance", theme: "Performance & Speed" },
+    { text: "Instant search autocomplete makes finding relevant customer tickets effortless.", sent: "POS", score: 0.85, area: "Performance", theme: "Performance & Speed" },
+
+    // Enterprise SSO & Security
+    { text: "We need SAML 2.0 Okta single sign-on integration before our enterprise compliance team can sign.", sent: "NEG", score: -0.7, area: "Enterprise", theme: "Enterprise SSO" },
+    { text: "SOC2 Type II compliance certification is a strict requirement for our annual enterprise contract.", sent: "NEU", score: 0.0, area: "Enterprise", theme: "Enterprise SSO" },
+    { text: "Enforced two-factor authentication (2FA) across our workspace without any user friction.", sent: "POS", score: 0.88, area: "Enterprise", theme: "Enterprise SSO" },
+    { text: "We require granular IP allowlisting for our remote analyst and admin team members.", sent: "NEU", score: 0.1, area: "Enterprise", theme: "Enterprise SSO" },
+    { text: "Audit log does not record who downloaded the Voice-of-Customer PDF report.", sent: "NEG", score: -0.5, area: "Enterprise", theme: "Enterprise SSO" },
+
+    // Mobile Experience
+    { text: "Mobile web dashboard is hard to navigate on portrait tablet and iPad screens.", sent: "NEG", score: -0.45, area: "Mobile", theme: "Mobile Experience" },
+    { text: "Loving the iOS mobile app; push alerts for critical negative spikes notify our on-call team.", sent: "POS", score: 0.9, area: "Mobile", theme: "Mobile Experience" },
+    { text: "App crashes intermittently on iOS 17 when opening high-resolution chart drill-downs.", sent: "NEG", score: -0.8, area: "Mobile", theme: "Mobile Experience" },
+    { text: "Mobile dark mode looks sleek and saves battery life during triage sessions.", sent: "POS", score: 0.82, area: "Mobile", theme: "Mobile Experience" },
+
+    // Integrations & API
+    { text: "API documentation for the feedback ingestion endpoint is crystal clear with ready curl samples.", sent: "POS", score: 0.84, area: "Integrations", theme: "Integration & API" },
+    { text: "Zendesk webhook sync failed silently during yesterday's maintenance window.", sent: "NEG", score: -0.75, area: "Integrations", theme: "Integration & API" },
+    { text: "Would love automated Slack channel alerts whenever customer negative sentiment exceeds 30%.", sent: "POS", score: 0.7, area: "Integrations", theme: "Integration & API" },
+    { text: "Rate limit of 60 requests per minute is too restrictive for our historical data sync script.", sent: "NEG", score: -0.55, area: "Integrations", theme: "Integration & API" },
+
+    // Export & Reporting
+    { text: "The weekly AI executive report digest is fantastic for our Monday executive leadership standup.", sent: "POS", score: 0.95, area: "Reporting", theme: "Export & Reporting" },
+    { text: "Exported CSV does not include the AI theme categorization confidence column.", sent: "NEG", score: -0.4, area: "Reporting", theme: "Export & Reporting" },
+    { text: "PDF export layout is clean and ready for executive presentations without reformatting.", sent: "POS", score: 0.9, area: "Reporting", theme: "Export & Reporting" },
+
+    // UI/UX Navigation
+    { text: "Color-coded sentiment pills make it so easy to prioritize and triage critical bug reports.", sent: "POS", score: 0.8, area: "UI/UX", theme: "UI/UX Navigation" },
+    { text: "Keyboard shortcut navigation between inbox rows would make triaging 5x faster.", sent: "POS", score: 0.65, area: "UI/UX", theme: "UI/UX Navigation" },
+    { text: "Search filter reset button is too small and easily missed in the filter toolbar.", sent: "NEG", score: -0.35, area: "UI/UX", theme: "UI/UX Navigation" },
   ];
 
   const fullFeedbackList: any[] = [...rawFeedbackItems];
 
-  let idCounter = 100;
   for (let i = 0; i < 90; i++) {
     const template = additionalTemplates[i % additionalTemplates.length];
     const ch = channels[i % channels.length];
@@ -256,9 +295,8 @@ async function main() {
     const statuses: Array<"NEW" | "REVIEWED" | "ACTIONED"> = ["NEW", "REVIEWED", "ACTIONED"];
     const status = statuses[i % 3];
 
-    idCounter++;
     fullFeedbackList.push({
-      content: `${template.text} (Ref: ${comp} feedback #${idCounter})`,
+      content: template.text,
       channel: ch,
       customer: `${comp} User #${(i % 15) + 1}`,
       sentiment: template.sent,

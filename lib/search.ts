@@ -185,9 +185,24 @@ export async function searchRelevantFeedback(
   // Sort descending by similarity score
   scoredItems.sort((a, b) => b.similarityScore - a.similarityScore);
 
-  // Return top matches, prioritizing items with score >= 0.25 if available
-  const relevantMatches = scoredItems.filter(item => item.similarityScore >= 0.20);
-  const resultPool = relevantMatches.length >= 2 ? relevantMatches : scoredItems;
+  // Deduplicate near-identical content to guarantee diverse customer insights
+  const uniqueCitations: AskLoopCitation[] = [];
+  const seenPrefixes = new Set<string>();
 
-  return resultPool.slice(0, topK);
+  for (const item of scoredItems) {
+    // Normalize content by stripping common noise and taking base signature
+    const cleanStr = item.content.toLowerCase().replace(/\(ref:.*?\)/g, "").replace(/[^a-z0-9]/g, "");
+    const signature = cleanStr.slice(0, 32);
+
+    if (!seenPrefixes.has(signature)) {
+      seenPrefixes.add(signature);
+      uniqueCitations.push(item);
+    }
+
+    if (uniqueCitations.length >= topK) {
+      break;
+    }
+  }
+
+  return uniqueCitations;
 }
