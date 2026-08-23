@@ -100,7 +100,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <CommandPalette isOpen={commandOpen} onClose={() => setCommandOpen(false)} />
 
       {/* Top Mobile Bar */}
-      <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-800/80 bg-[#111827]/90 backdrop-blur shrink-0 z-50">
+      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-800/80 bg-[#111827]/90 backdrop-blur shrink-0 z-50">
         <div className="flex items-center space-x-2.5">
           <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
             ∞
@@ -135,29 +135,29 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {/* Workspace Brand Header */}
         <div className="p-4 border-b border-gray-800/70 space-y-3">
           <div className="flex items-center space-x-3">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/30">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/30 shrink-0">
               ∞
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center space-x-1.5">
-                <span className="text-lg font-bold tracking-tight text-white">LOOP</span>
-                <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                <span className="text-base font-bold tracking-tight text-white">LOOP</span>
+                <span className="text-[10px] uppercase font-semibold px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                   AI v1.0
                 </span>
               </div>
-              <p className="text-xs text-gray-400">Customer Feedback Intel</p>
+              <p className="text-[11px] text-gray-400 truncate">Customer Feedback Intel</p>
             </div>
           </div>
 
           {/* Active Tenant / Workspace Card */}
-          <div className="flex items-center justify-between p-2 rounded-lg bg-gray-800/40 border border-gray-700/50">
-            <div className="flex items-center space-x-2 truncate">
-              <Building2 className="h-4 w-4 text-indigo-400 shrink-0" />
+          <div className="h-9 px-2.5 rounded-xl bg-gray-900/60 border border-gray-800/80 flex items-center justify-between">
+            <div className="flex items-center space-x-2 truncate min-w-0">
+              <Building2 className="h-3.5 w-3.5 text-indigo-400 shrink-0" />
               <span className="text-xs font-semibold text-gray-200 truncate">
                 {workspaceName}
               </span>
             </div>
-            <span className="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+            <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 shrink-0">
               Active
             </span>
           </div>
@@ -165,7 +165,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           {/* Quick Search / Command Bar Trigger */}
           <button
             onClick={() => setCommandOpen(true)}
-            className="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 text-xs text-gray-400 hover:text-gray-200 transition group cursor-pointer"
+            className="w-full h-9 px-3 rounded-xl bg-gray-900/90 hover:bg-gray-800/90 border border-gray-800 hover:border-gray-700 text-xs text-gray-400 hover:text-gray-200 transition group flex items-center justify-between cursor-pointer"
           >
             <div className="flex items-center gap-2">
               <Search className="h-3.5 w-3.5 text-gray-500 group-hover:text-indigo-400 transition" />
@@ -187,18 +187,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
+                className={`h-9.5 px-3 rounded-xl text-xs font-medium transition-all flex items-center justify-between ${
                   isActive
-                    ? "bg-indigo-600/15 text-indigo-400 border border-indigo-500/30 shadow-sm"
+                    ? "bg-indigo-600/15 text-indigo-400 border border-indigo-500/30 shadow-sm font-semibold"
                     : "text-gray-400 hover:text-gray-100 hover:bg-gray-800/50"
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <Icon className={`h-4 w-4 ${isActive ? "text-indigo-400" : "text-gray-400"}`} />
+                  <Icon className={`h-4 w-4 shrink-0 ${isActive ? "text-indigo-400" : "text-gray-400"}`} />
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
-                  <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-sm">
+                  <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-sm">
                     {item.badge}
                   </span>
                 )}
@@ -207,16 +207,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           })}
 
           {/* Multi-Channel Ingestion Sync */}
-          <div className="pt-4 mt-4 border-t border-gray-800/70 px-1">
-            <p className="text-[10px] font-semibold tracking-wider text-gray-400 uppercase mb-2 flex items-center justify-between">
-              <span>Channel Sync</span>
+          <div className="pt-3.5 mt-3.5 border-t border-gray-800/70 px-1">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">
+                Channel Sync
+              </span>
               <Zap className="h-3 w-3 text-indigo-400" />
-            </p>
+            </div>
             <div className="grid grid-cols-2 gap-1.5">
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("Support ticket")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer"
+                className="h-8 text-[11px] px-2.5 rounded-lg bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer flex items-center"
                 title="Sync Support Tickets"
               >
                 Support Tickets
@@ -224,7 +226,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("App store review")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer"
+                className="h-8 text-[11px] px-2.5 rounded-lg bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer flex items-center"
                 title="Sync App Store Reviews"
               >
                 App Store
@@ -232,7 +234,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("NPS survey")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer"
+                className="h-8 text-[11px] px-2.5 rounded-lg bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer flex items-center"
                 title="Sync NPS Surveys"
               >
                 NPS Surveys
@@ -240,7 +242,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("Sales call note")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer"
+                className="h-8 text-[11px] px-2.5 rounded-lg bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium cursor-pointer flex items-center"
                 title="Sync Sales Notes"
               >
                 Sales Notes
@@ -256,29 +258,29 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* User profile & RBAC pill */}
         <div className="p-3.5 border-t border-gray-800/70 bg-[#0c101c]">
-          <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2.5 min-w-0">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xs text-white shrink-0">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xs text-white shrink-0 shadow-md">
                 {user?.name ? user.name.slice(0, 2).toUpperCase() : "U"}
               </div>
-              <div className="truncate">
+              <div className="truncate min-w-0">
                 <p className="text-xs font-semibold text-gray-200 truncate">{user?.name || "User"}</p>
                 <p className="text-[10px] text-gray-400 truncate">{user?.email || ""}</p>
               </div>
             </div>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="p-1.5 text-gray-400 hover:text-rose-400 rounded-md hover:bg-gray-800/60 transition cursor-pointer"
+              className="p-1.5 text-gray-400 hover:text-rose-400 rounded-lg hover:bg-gray-800/60 transition cursor-pointer"
               title="Sign Out"
             >
               <LogOut className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="flex items-center justify-between pt-1 text-[11px]">
-            <div className="flex items-center space-x-1.5">
+          <div className="flex items-center justify-between pt-2 border-t border-gray-800/50 text-[11px]">
+            <div className="flex items-center space-x-1.5 text-gray-400">
               <Shield className="h-3.5 w-3.5 text-indigo-400" />
-              <span className="text-gray-400">Role:</span>
+              <span>Role:</span>
             </div>
             <span
               className={`px-2 py-0.5 rounded font-mono text-[10px] font-bold uppercase tracking-wider ${
@@ -298,13 +300,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         {/* Authentic Enterprise Header */}
-        <header className="no-print bg-[#0f1422]/90 backdrop-blur-md border-b border-gray-800/80 px-5 py-2.5 flex items-center justify-between gap-3 text-xs shrink-0 z-20">
-          <div className="flex items-center space-x-2.5 text-gray-300">
-            <Building2 className="h-4 w-4 text-indigo-400" />
-            <span className="font-semibold text-gray-200">{workspaceName}</span>
+        <header className="no-print bg-[#0f1422]/90 backdrop-blur-md border-b border-gray-800/80 px-6 py-2.5 h-13 flex items-center justify-between gap-4 text-xs shrink-0 z-20">
+          <div className="flex items-center space-x-2.5 text-gray-300 min-w-0">
+            <Building2 className="h-4 w-4 text-indigo-400 shrink-0" />
+            <span className="font-semibold text-gray-200 truncate">{workspaceName}</span>
             <span className="text-gray-600">/</span>
             <span
-              className={`px-2 py-0.5 rounded font-mono text-[10px] font-bold uppercase tracking-wider ${
+              className={`px-2.5 py-0.5 rounded font-mono text-[10px] font-bold uppercase tracking-wider ${
                 userRole === "ADMIN"
                   ? "bg-purple-500/15 text-purple-300 border border-purple-500/30"
                   : userRole === "ANALYST"
@@ -316,21 +318,21 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </span>
           </div>
 
-          <div className="flex items-center space-x-3 text-gray-400 text-[11px]">
+          <div className="flex items-center space-x-3 text-gray-400 text-[11px] shrink-0">
             <button
               onClick={() => setCommandOpen(true)}
-              className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-900/80 hover:bg-gray-800 border border-gray-800 text-gray-400 hover:text-gray-200 transition cursor-pointer"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gray-900/90 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 text-gray-400 hover:text-gray-200 transition cursor-pointer"
             >
               <Search className="h-3 w-3 text-gray-500" />
               <span>Search</span>
-              <kbd className="font-mono text-[9px] bg-gray-800 px-1 py-0.2 rounded border border-gray-700">⌘K</kbd>
+              <kbd className="font-mono text-[9px] bg-gray-800 px-1.5 py-0.2 rounded border border-gray-700">⌘K</kbd>
             </button>
 
-            <span className="hidden sm:inline font-mono text-[10px] text-gray-500">
-              Tenant: <span className="text-indigo-300">{user?.workspaceId?.slice(0, 8) || "default"}</span>
+            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-lg bg-gray-900/60 border border-gray-800 font-mono text-[10px] text-gray-400">
+              Tenant: <span className="text-indigo-300 ml-1">{user?.workspaceId?.slice(0, 8) || "default"}</span>
             </span>
 
-            <span className="flex items-center space-x-1.5 text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 text-[10px] font-medium">
+            <span className="flex items-center space-x-1.5 text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 text-[10px] font-medium">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span>Encrypted Session</span>
             </span>
