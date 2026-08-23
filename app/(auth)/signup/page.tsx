@@ -20,6 +20,7 @@ import {
   Sparkles,
   Layers,
 } from "lucide-react";
+import LoopLogo from "@/components/LoopLogo";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -162,11 +163,8 @@ export default function SignUpPage() {
         {/* RIGHT COLUMN: Scaled-Up Non-Scrollable Registration Card */}
         <div className="w-full lg:max-w-[510px] animate-fadeIn shrink-0 lg:mr-4 xl:mr-8">
           <div className="text-center mb-3">
-            <div className="relative inline-block mb-1.5">
-              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl blur-md opacity-60" />
-              <div className="relative inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-600 text-white font-black text-2xl shadow-xl shadow-indigo-500/30 ring-1 ring-indigo-400/40 ring-offset-4 ring-offset-[#050711] p-3">
-                ∞
-              </div>
+            <div className="mb-2">
+              <LoopLogo size="lg" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
               Create Workspace

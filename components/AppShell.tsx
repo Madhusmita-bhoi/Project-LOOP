@@ -22,6 +22,7 @@ import {
   Search,
 } from "lucide-react";
 import CommandPalette from "./CommandPalette";
+import LoopLogo from "./LoopLogo";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -102,9 +103,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* Top Mobile Bar */}
       <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-800/80 bg-[#111827]/90 backdrop-blur shrink-0 z-50">
         <div className="flex items-center space-x-2.5">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
-            ∞
-          </div>
+          <LoopLogo size="sm" />
           <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-gray-200 to-indigo-300 bg-clip-text text-transparent">
             LOOP
           </span>
@@ -135,9 +134,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {/* Workspace Brand Header */}
         <div className="p-4 border-b border-gray-800/70 space-y-3">
           <div className="flex items-center space-x-3">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/30">
-              ∞
-            </div>
+            <LoopLogo size="md" />
             <div>
               <div className="flex items-center space-x-1.5">
                 <span className="text-lg font-bold tracking-tight text-white">LOOP</span>
