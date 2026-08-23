@@ -13,38 +13,15 @@ import {
   EyeOff,
   RefreshCw,
   ShieldCheck,
-  Users,
 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@loop.dev");
-  const [password, setPassword] = useState("Password123!");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [activeRole, setActiveRole] = useState<string>("ADMIN");
   const [error, setError] = useState<string | null>(null);
-
-  const preconfiguredAccounts = [
-    {
-      id: "ADMIN",
-      label: "Admin",
-      email: "admin@loop.dev",
-      permission: "Full Control (Ingestion, Settings & AI)",
-    },
-    {
-      id: "ANALYST",
-      label: "Analyst",
-      email: "analyst@loop.dev",
-      permission: "Feedback Triage, Ask LOOP & VoC Digests",
-    },
-    {
-      id: "VIEWER",
-      label: "Viewer",
-      email: "viewer@loop.dev",
-      permission: "Read-Only Dashboard & Insights Audit",
-    },
-  ];
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,13 +48,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleSelectAccount = (account: typeof preconfiguredAccounts[0]) => {
-    setActiveRole(account.id);
-    setEmail(account.email);
-    setPassword("Password123!");
-    setError(null);
-  };
-
   return (
     <div className="min-h-screen bg-[#070913] text-gray-100 flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
       {/* Ambient Gradient Mesh */}
@@ -85,7 +55,7 @@ export default function LoginPage() {
       <div className="absolute bottom-10 right-1/4 w-[350px] h-[350px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Main Center Auth Card */}
-      <div className="w-full max-w-[440px] relative z-10 animate-fadeIn">
+      <div className="w-full max-w-[420px] relative z-10 animate-fadeIn">
         {/* Brand Header */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white font-black text-2xl shadow-xl shadow-indigo-500/25 ring-1 ring-white/20 mb-3.5">
@@ -100,44 +70,7 @@ export default function LoginPage() {
         </div>
 
         {/* Auth Glass Panel */}
-        <div className="bg-[#0e1322]/90 backdrop-blur-xl border border-gray-800/80 rounded-2xl p-6 sm:p-7 shadow-2xl shadow-black/80 space-y-5">
-          {/* Quick Account Role Selector */}
-          <div>
-            <div className="flex items-center justify-between text-[11px] text-gray-400 mb-2">
-              <span className="font-semibold uppercase tracking-wider text-gray-300 flex items-center gap-1.5">
-                <Users className="h-3.5 w-3.5 text-indigo-400" />
-                Select Account Role
-              </span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-1.5 p-1 bg-gray-900/90 rounded-xl border border-gray-800">
-              {preconfiguredAccounts.map((account) => {
-                const isActive = activeRole === account.id;
-                return (
-                  <button
-                    key={account.id}
-                    type="button"
-                    onClick={() => handleSelectAccount(account)}
-                    className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition cursor-pointer text-center ${
-                      isActive
-                        ? "bg-indigo-600 text-white shadow-sm"
-                        : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
-                    }`}
-                  >
-                    {account.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Active Account Permission Description */}
-            <div className="mt-2 text-center">
-              <span className="text-[11px] font-medium text-indigo-300 bg-indigo-950/60 px-2.5 py-1 rounded-md border border-indigo-900/50 inline-block">
-                {preconfiguredAccounts.find((a) => a.id === activeRole)?.permission}
-              </span>
-            </div>
-          </div>
-
+        <div className="bg-[#0e1322]/90 backdrop-blur-xl border border-gray-800/80 rounded-2xl p-6 sm:p-7 shadow-2xl shadow-black/80 space-y-4">
           {error && (
             <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-800/60 text-rose-300 text-xs flex items-center gap-2">
               <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
@@ -157,13 +90,7 @@ export default function LoginPage() {
                   type="email"
                   required
                   value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    const matching = preconfiguredAccounts.find(
-                      (a) => a.email.toLowerCase() === e.target.value.toLowerCase().trim()
-                    );
-                    setActiveRole(matching ? matching.id : "");
-                  }}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
                   className="w-full pl-10 pr-4 py-2.5 bg-gray-900/90 border border-gray-750 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition"
                 />
@@ -209,7 +136,7 @@ export default function LoginPage() {
               {loading ? (
                 <>
                   <RefreshCw className="h-4 w-4 animate-spin text-white" />
-                  <span>Authenticating Credentials...</span>
+                  <span>Signing In...</span>
                 </>
               ) : (
                 <>
@@ -235,7 +162,7 @@ export default function LoginPage() {
         {/* Security Subtext */}
         <div className="mt-5 flex items-center justify-center space-x-2 text-[11px] text-gray-500">
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-          <span>Role-Based Access Control • Encrypted Multi-Tenant Session</span>
+          <span>Role-Based Access Control • Encrypted Session</span>
         </div>
       </div>
     </div>
