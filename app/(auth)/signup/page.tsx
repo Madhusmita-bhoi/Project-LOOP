@@ -15,6 +15,7 @@ import {
   Eye,
   EyeOff,
   RefreshCw,
+  Users,
 } from "lucide-react";
 
 export default function SignUpPage() {
@@ -23,9 +24,16 @@ export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [workspaceName, setWorkspaceName] = useState("");
+  const [role, setRole] = useState<"ADMIN" | "ANALYST" | "VIEWER">("ADMIN");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const roles = [
+    { id: "ADMIN", label: "Admin", desc: "Full Control" },
+    { id: "ANALYST", label: "Analyst", desc: "Triage & Insights" },
+    { id: "VIEWER", label: "Viewer", desc: "Read-Only" },
+  ];
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,9 +46,10 @@ export default function SignUpPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
-          email,
+          email: email.toLowerCase().trim(),
           password,
           workspaceName,
+          role,
         }),
       });
 
@@ -50,9 +59,9 @@ export default function SignUpPage() {
         throw new Error(data.error || "Failed to create account");
       }
 
-      // Automatically sign in with the new admin account
+      // Automatically sign in with the new account
       const signInRes = await signIn("credentials", {
-        email,
+        email: email.toLowerCase().trim(),
         password,
         redirect: false,
       });
@@ -77,17 +86,17 @@ export default function SignUpPage() {
       <div className="absolute bottom-10 right-1/4 w-[350px] h-[350px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Main Center Card */}
-      <div className="w-full max-w-[420px] relative z-10 animate-fadeIn">
+      <div className="w-full max-w-[440px] relative z-10 animate-fadeIn">
         {/* Brand Header */}
-        <div className="text-center mb-7">
+        <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white font-black text-2xl shadow-xl shadow-indigo-500/25 ring-1 ring-white/20 mb-3.5">
             ∞
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white">
-            Create Workspace
+            Register Workspace
           </h1>
           <p className="text-xs text-gray-400 mt-1">
-            Establish your private customer intelligence hub
+            Establish your dedicated customer intelligence environment
           </p>
         </div>
 
@@ -120,7 +129,7 @@ export default function SignUpPage() {
 
             <div>
               <label className="block text-xs font-medium text-gray-300 mb-1">
-                Admin Full Name
+                Full Name
               </label>
               <div className="relative">
                 <User className="h-4 w-4 absolute left-3.5 top-3 text-gray-400" />
@@ -154,7 +163,7 @@ export default function SignUpPage() {
 
             <div>
               <label className="block text-xs font-medium text-gray-300 mb-1">
-                Admin Password
+                Password
               </label>
               <div className="relative">
                 <Lock className="h-4 w-4 absolute left-3.5 top-3 text-gray-400" />
@@ -176,6 +185,33 @@ export default function SignUpPage() {
               </div>
             </div>
 
+            {/* Role Selection */}
+            <div>
+              <label className="block text-xs font-medium text-gray-300 mb-1.5">
+                Initial Account Role
+              </label>
+              <div className="grid grid-cols-3 gap-1.5 p-1 bg-gray-900/90 rounded-xl border border-gray-800">
+                {roles.map((r) => {
+                  const isActive = role === r.id;
+                  return (
+                    <button
+                      key={r.id}
+                      type="button"
+                      onClick={() => setRole(r.id as any)}
+                      className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition cursor-pointer text-center ${
+                        isActive
+                          ? "bg-indigo-600 text-white shadow-sm"
+                          : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
+                      }`}
+                    >
+                      <div>{r.label}</div>
+                      <div className="text-[9px] font-normal opacity-80">{r.desc}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <button
               type="submit"
               disabled={loading}
@@ -184,11 +220,11 @@ export default function SignUpPage() {
               {loading ? (
                 <>
                   <RefreshCw className="h-4 w-4 animate-spin text-white" />
-                  <span>Provisioning Workspace...</span>
+                  <span>Creating Account...</span>
                 </>
               ) : (
                 <>
-                  <span>Create Workspace & Sign In</span>
+                  <span>Create Account & Sign In</span>
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
@@ -209,7 +245,7 @@ export default function SignUpPage() {
         {/* Security Subtext */}
         <div className="mt-5 flex items-center justify-center space-x-2 text-[11px] text-gray-500">
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-          <span>Encrypted Multi-Tenant Session • SOC2 Ready</span>
+          <span>Role-Based Access Control • Encrypted Multi-Tenant Session</span>
         </div>
       </div>
     </div>

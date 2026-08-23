@@ -5,6 +5,7 @@ export const SignUpSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   workspaceName: z.string().min(2, "Workspace name must be at least 2 characters"),
+  role: z.enum(["ADMIN", "ANALYST", "VIEWER"]).optional().default("ADMIN"),
 });
 
 export const LoginSchema = z.object({

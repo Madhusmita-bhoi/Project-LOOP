@@ -13,8 +13,7 @@ import {
   EyeOff,
   RefreshCw,
   ShieldCheck,
-  Sparkles,
-  UserCheck,
+  Users,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -23,27 +22,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState("Password123!");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [activePersona, setActivePersona] = useState<string>("admin");
+  const [activeRole, setActiveRole] = useState<string>("ADMIN");
   const [error, setError] = useState<string | null>(null);
 
-  const personas = [
+  const preconfiguredAccounts = [
     {
-      id: "admin",
+      id: "ADMIN",
       label: "Admin",
       email: "admin@loop.dev",
-      badge: "Full Workspace Access",
+      permission: "Full Control (Ingestion, Settings & AI)",
     },
     {
-      id: "analyst",
+      id: "ANALYST",
       label: "Analyst",
       email: "analyst@loop.dev",
-      badge: "Triage & Reporting",
+      permission: "Feedback Triage, Ask LOOP & VoC Digests",
     },
     {
-      id: "viewer",
+      id: "VIEWER",
       label: "Viewer",
       email: "viewer@loop.dev",
-      badge: "Read-Only Audit",
+      permission: "Read-Only Dashboard & Insights Audit",
     },
   ];
 
@@ -54,27 +53,27 @@ export default function LoginPage() {
 
     try {
       const res = await signIn("credentials", {
-        email,
+        email: email.toLowerCase().trim(),
         password,
         redirect: false,
       });
 
       if (res?.error) {
-        setError(res.error || "Invalid credentials");
+        setError(res.error || "Invalid email or password");
       } else {
         router.push("/dashboard");
         router.refresh();
       }
     } catch (err: any) {
-      setError(err.message || "Failed to log in");
+      setError(err.message || "Authentication failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSelectPersona = (p: typeof personas[0]) => {
-    setActivePersona(p.id);
-    setEmail(p.email);
+  const handleSelectAccount = (account: typeof preconfiguredAccounts[0]) => {
+    setActiveRole(account.id);
+    setEmail(account.email);
     setPassword("Password123!");
     setError(null);
   };
@@ -85,10 +84,10 @@ export default function LoginPage() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-indigo-600/15 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-[350px] h-[350px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Main Center Card */}
-      <div className="w-full max-w-[420px] relative z-10 animate-fadeIn">
+      {/* Main Center Auth Card */}
+      <div className="w-full max-w-[440px] relative z-10 animate-fadeIn">
         {/* Brand Header */}
-        <div className="text-center mb-7">
+        <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white font-black text-2xl shadow-xl shadow-indigo-500/25 ring-1 ring-white/20 mb-3.5">
             ∞
           </div>
@@ -102,40 +101,39 @@ export default function LoginPage() {
 
         {/* Auth Glass Panel */}
         <div className="bg-[#0e1322]/90 backdrop-blur-xl border border-gray-800/80 rounded-2xl p-6 sm:p-7 shadow-2xl shadow-black/80 space-y-5">
-          {/* Segmented Persona Switcher */}
+          {/* Quick Account Role Selector */}
           <div>
             <div className="flex items-center justify-between text-[11px] text-gray-400 mb-2">
-              <span className="font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                <UserCheck className="h-3.5 w-3.5 text-indigo-400" />
-                Select Persona:
+              <span className="font-semibold uppercase tracking-wider text-gray-300 flex items-center gap-1.5">
+                <Users className="h-3.5 w-3.5 text-indigo-400" />
+                Select Account Role
               </span>
-              <span className="font-mono text-gray-500">Demo Mode</span>
             </div>
 
             <div className="grid grid-cols-3 gap-1.5 p-1 bg-gray-900/90 rounded-xl border border-gray-800">
-              {personas.map((p) => {
-                const isActive = activePersona === p.id;
+              {preconfiguredAccounts.map((account) => {
+                const isActive = activeRole === account.id;
                 return (
                   <button
-                    key={p.id}
+                    key={account.id}
                     type="button"
-                    onClick={() => handleSelectPersona(p)}
+                    onClick={() => handleSelectAccount(account)}
                     className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition cursor-pointer text-center ${
                       isActive
                         ? "bg-indigo-600 text-white shadow-sm"
                         : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
                     }`}
                   >
-                    {p.label}
+                    {account.label}
                   </button>
                 );
               })}
             </div>
 
-            {/* Persona Permission Badge */}
+            {/* Active Account Permission Description */}
             <div className="mt-2 text-center">
-              <span className="text-[11px] font-mono text-indigo-300 bg-indigo-950/60 px-2 py-0.5 rounded-md border border-indigo-900/50">
-                {personas.find((p) => p.id === activePersona)?.badge}
+              <span className="text-[11px] font-medium text-indigo-300 bg-indigo-950/60 px-2.5 py-1 rounded-md border border-indigo-900/50 inline-block">
+                {preconfiguredAccounts.find((a) => a.id === activeRole)?.permission}
               </span>
             </div>
           </div>
@@ -151,7 +149,7 @@ export default function LoginPage() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-gray-300 mb-1.5">
-                Work Email
+                Work Email Address
               </label>
               <div className="relative">
                 <Mail className="h-4 w-4 absolute left-3.5 top-3 text-gray-400" />
@@ -161,7 +159,10 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
-                    setActivePersona("");
+                    const matching = preconfiguredAccounts.find(
+                      (a) => a.email.toLowerCase() === e.target.value.toLowerCase().trim()
+                    );
+                    setActiveRole(matching ? matching.id : "");
                   }}
                   placeholder="name@company.com"
                   className="w-full pl-10 pr-4 py-2.5 bg-gray-900/90 border border-gray-750 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition"
@@ -174,7 +175,6 @@ export default function LoginPage() {
                 <label className="block text-xs font-medium text-gray-300">
                   Password
                 </label>
-                <span className="text-[10px] text-gray-500">Password123!</span>
               </div>
               <div className="relative">
                 <Lock className="h-4 w-4 absolute left-3.5 top-3 text-gray-400" />
@@ -209,11 +209,11 @@ export default function LoginPage() {
               {loading ? (
                 <>
                   <RefreshCw className="h-4 w-4 animate-spin text-white" />
-                  <span>Signing In...</span>
+                  <span>Authenticating Credentials...</span>
                 </>
               ) : (
                 <>
-                  <span>Sign In to Workspace</span>
+                  <span>Sign In</span>
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
@@ -222,12 +222,12 @@ export default function LoginPage() {
 
           {/* Links & Switcher */}
           <div className="pt-2 text-center text-xs text-gray-400 border-t border-gray-800/80">
-            <span>New organization? </span>
+            <span>Don't have an account? </span>
             <Link
               href="/signup"
               className="font-semibold text-indigo-400 hover:text-indigo-300 transition"
             >
-              Create workspace
+              Register new workspace
             </Link>
           </div>
         </div>
@@ -235,7 +235,7 @@ export default function LoginPage() {
         {/* Security Subtext */}
         <div className="mt-5 flex items-center justify-center space-x-2 text-[11px] text-gray-500">
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-          <span>Encrypted Multi-Tenant Session • SOC2 Ready</span>
+          <span>Role-Based Access Control • Encrypted Multi-Tenant Session</span>
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { name, email, password, workspaceName } = parsed.data;
+    const { name, email, password, workspaceName, role = "ADMIN" } = parsed.data;
 
     // Check if email already exists
     const existingUser = await prisma.user.findUnique({
@@ -41,13 +41,13 @@ export async function POST(req: Request) {
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Create Admin user
+    // Create user with specified role (or default ADMIN)
     const user = await prisma.user.create({
       data: {
         name,
         email: email.toLowerCase().trim(),
         passwordHash,
-        role: "ADMIN",
+        role,
         workspaceId: workspace.id,
       },
     });
