@@ -6,7 +6,7 @@ import { generateVoCReportNarrative } from "./lib/ai";
 
 async function runTests() {
   console.log("=================================================");
-  console.log("🧪 RUNNING PROJECT LOOP COMPREHENSIVE TEST SUITE");
+  console.log("[TEST] RUNNING PROJECT LOOP COMPREHENSIVE TEST SUITE");
   console.log("=================================================\n");
 
   let passed = 0;
@@ -14,10 +14,10 @@ async function runTests() {
 
   function assert(condition: boolean, testName: string) {
     if (condition) {
-      console.log(`✅ [PASS] ${testName}`);
+      console.log(`[PASS] ${testName}`);
       passed++;
     } else {
-      console.error(`❌ [FAIL] ${testName}`);
+      console.error(`[FAIL] ${testName}`);
       failed++;
     }
   }
@@ -120,7 +120,7 @@ async function runTests() {
   assert(vocReport.strategicActionItems.length > 0, "Strategic recommendations generated");
 
   console.log("\n=================================================");
-  console.log(`🏁 TEST RESULTS: ${passed} PASSED, ${failed} FAILED`);
+  console.log(`TEST RESULTS: ${passed} PASSED, ${failed} FAILED`);
   console.log("=================================================");
 
   if (failed > 0) {

@@ -388,9 +388,9 @@ export default function InboxPage() {
               className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
               <option value="ALL">All Sentiments</option>
-              <option value="POS">🟢 Positive</option>
-              <option value="NEU">⚪ Neutral</option>
-              <option value="NEG">🔴 Negative</option>
+              <option value="POS">Positive</option>
+              <option value="NEU">Neutral</option>
+              <option value="NEG">Negative</option>
             </select>
           </div>
 
@@ -405,9 +405,9 @@ export default function InboxPage() {
               className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
               <option value="ALL">All Statuses</option>
-              <option value="NEW">🆕 NEW</option>
-              <option value="REVIEWED">👀 REVIEWED</option>
-              <option value="ACTIONED">✅ ACTIONED</option>
+              <option value="NEW">NEW</option>
+              <option value="REVIEWED">REVIEWED</option>
+              <option value="ACTIONED">ACTIONED</option>
             </select>
           </div>
 
@@ -578,9 +578,9 @@ export default function InboxPage() {
                             : "bg-amber-950/50 text-amber-300 border-amber-700/50"
                         }`}
                       >
-                        <option value="NEW">🆕 NEW</option>
-                        <option value="REVIEWED">👀 REVIEWED</option>
-                        <option value="ACTIONED">✅ ACTIONED</option>
+                        <option value="NEW">NEW</option>
+                        <option value="REVIEWED">REVIEWED</option>
+                        <option value="ACTIONED">ACTIONED</option>
                       </select>
                     </td>
 

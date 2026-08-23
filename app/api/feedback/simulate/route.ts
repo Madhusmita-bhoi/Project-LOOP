@@ -28,11 +28,11 @@ export async function POST(req: Request) {
         "We are receiving duplicate webhook events for feedback status transitions.",
       ],
       "App store review": [
-        "⭐⭐⭐⭐⭐ The latest speed update is incredible! Everything loads instantly now on iOS.",
-        "⭐⭐ The iPad dashboard view clips the right-hand charts in portrait mode. Please fix.",
-        "⭐⭐⭐⭐ Great app for tracking customer sentiment on the go, but please add dark mode widget.",
-        "⭐ App crashed twice while reviewing high-priority support tickets on iPhone 15 Pro.",
-        "⭐⭐⭐⭐⭐ Loving the instant AI question answering feature, saves our product team hours.",
+        "[Rating: 5/5] The latest speed update is incredible! Everything loads instantly now on iOS.",
+        "[Rating: 2/5] The iPad dashboard view clips the right-hand charts in portrait mode. Please fix.",
+        "[Rating: 4/5] Great app for tracking customer sentiment on the go, but please add dark mode widget.",
+        "[Rating: 1/5] App crashed twice while reviewing high-priority support tickets on iPhone 15 Pro.",
+        "[Rating: 5/5] Loving the instant AI question answering feature, saves our product team hours.",
       ],
       "NPS survey": [
         "Score: 9/10 — Best feedback aggregation tool our SaaS team has used this year.",

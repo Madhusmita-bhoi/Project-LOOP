@@ -98,7 +98,7 @@ export default function LoginPage() {
                 onClick={() => handleDemoLogin("admin@loop.dev")}
                 className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/30 text-purple-200 text-xs font-semibold transition group"
               >
-                <span>👑 Admin</span>
+                <span>Admin</span>
                 <span className="text-[10px] text-purple-400 font-normal">Full Control</span>
               </button>
               <button
@@ -106,7 +106,7 @@ export default function LoginPage() {
                 onClick={() => handleDemoLogin("analyst@loop.dev")}
                 className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-blue-950/40 hover:bg-blue-900/60 border border-blue-500/30 text-blue-200 text-xs font-semibold transition group"
               >
-                <span>🔬 Analyst</span>
+                <span>Analyst</span>
                 <span className="text-[10px] text-blue-400 font-normal">Manage & Triage</span>
               </button>
               <button
@@ -114,7 +114,7 @@ export default function LoginPage() {
                 onClick={() => handleDemoLogin("viewer@loop.dev")}
                 className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/30 text-amber-200 text-xs font-semibold transition group"
               >
-                <span>👁️ Viewer</span>
+                <span>Viewer</span>
                 <span className="text-[10px] text-amber-400 font-normal">Read Only</span>
               </button>
             </div>

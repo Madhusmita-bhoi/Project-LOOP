@@ -186,39 +186,39 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("Support ticket")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition"
+                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium"
                 title="Sync Zendesk Tickets"
               >
-                🎫 Support
+                Support Tickets
               </button>
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("App store review")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition"
+                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium"
                 title="Pull App Store Reviews"
               >
-                ⭐ App Store
+                App Store
               </button>
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("NPS survey")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition"
+                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium"
                 title="Fetch NPS Survey Responses"
               >
-                📊 NPS Survey
+                NPS Surveys
               </button>
               <button
                 disabled={simulating || userRole === "VIEWER"}
                 onClick={() => handleSimulateSync("Sales call note")}
-                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition"
+                className="text-[11px] p-1.5 rounded bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 text-gray-300 hover:text-white disabled:opacity-40 text-left truncate transition font-medium"
                 title="Ingest Sales Notes"
               >
-                💼 Sales Note
+                Sales Notes
               </button>
             </div>
             {simMessage && (
               <p className="mt-2 text-[11px] text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 p-1.5 rounded animate-pulse">
-                ✓ {simMessage}
+                {simMessage}
               </p>
             )}
           </div>
@@ -281,7 +281,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                     : "bg-gray-800/80 hover:bg-gray-700 text-gray-300"
                 }`}
               >
-                👑 Admin
+                Admin
               </button>
               <button
                 onClick={() => handleQuickRoleSwitch("analyst@loop.dev")}
@@ -291,7 +291,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                     : "bg-gray-800/80 hover:bg-gray-700 text-gray-300"
                 }`}
               >
-                🔬 Analyst
+                Analyst
               </button>
               <button
                 onClick={() => handleQuickRoleSwitch("viewer@loop.dev")}
@@ -301,7 +301,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                     : "bg-gray-800/80 hover:bg-gray-700 text-gray-300"
                 }`}
               >
-                👁️ Viewer (Read-only)
+                Viewer (Read-only)
               </button>
             </div>
           </div>

@@ -85,7 +85,7 @@ function generateEmbeddingVector(text: string): number[] {
 }
 
 async function main() {
-  console.log("🌱 Starting database seeding for Project LOOP...");
+  console.log("[SEED] Starting database seeding for Project LOOP...");
 
   // Clean existing data
   await prisma.embedding.deleteMany();
@@ -325,7 +325,7 @@ async function main() {
     insertedCount++;
   }
 
-  console.log(`✅ Successfully seeded ${insertedCount} feedback items with embeddings and theme associations.`);
+  console.log(`[SEED] Successfully seeded ${insertedCount} feedback items with embeddings and theme associations.`);
 
   console.log("Generating demo Voice-of-Customer report...");
   const reportStartDate = new Date();
@@ -435,12 +435,12 @@ async function main() {
     },
   });
 
-  console.log("🎉 Database seeding completed successfully!");
+  console.log("[SEED] Database seeding completed successfully!");
 }
 
 main()
   .catch((e) => {
-    console.error("❌ Seed error:", e);
+    console.error("[SEED ERROR]", e);
     process.exit(1);
   })
   .finally(async () => {

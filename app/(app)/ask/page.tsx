@@ -90,7 +90,7 @@ export default function AskLoopPage() {
         ...prev,
         {
           role: "assistant",
-          content: `⚠️ Error: ${err.message || "Failed to process query"}`,
+          content: `Error: ${err.message || "Failed to process query"}`,
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
@@ -172,7 +172,7 @@ export default function AskLoopPage() {
                 </span>
                 {msg.groundedCount !== undefined && msg.groundedCount > 0 && (
                   <span className="text-[10px] font-medium bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                    ✓ Grounded in {msg.groundedCount} feedback items
+                    Grounded in {msg.groundedCount} feedback items
                   </span>
                 )}
               </div>

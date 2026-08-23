@@ -5,14 +5,14 @@
 
 ---
 
-## 🌟 Key Features & Capabilities
+## Key Features & Capabilities
 
 ### 1. Multi-Tenant Architecture & Role-Based Access Control (RBAC)
 - **Tenant Isolation**: Every database entity (`Feedback`, `Theme`, `Embedding`, `Report`, `User`) is strictly scoped by `workspaceId`. Cross-tenant data leakage is prevented at every API boundary.
 - **3 Distinct Roles**:
-  - **👑 Admin**: Full organizational control — manage members, assign roles, configure settings, ingest/triage feedback, and delete reports.
-  - **🔬 Analyst**: Triage & ingestion — single entry, bulk CSV import, simulated channel sync, status workflow transitions (`NEW` → `REVIEWED` → `ACTIONED`), manual AI re-classification, and VoC report generation.
-  - **👁️ Viewer**: Read-only access — explore live dashboards, view filtered inbox, browse theme trends, ask questions via Ask LOOP, and read VoC reports. (403 Forbidden is enforced server-side for any mutation attempt).
+  - **Admin**: Full organizational control — manage members, assign roles, configure settings, ingest/triage feedback, and delete reports.
+  - **Analyst**: Triage & ingestion — single entry, bulk CSV import, simulated channel sync, status workflow transitions (`NEW` → `REVIEWED` → `ACTIONED`), manual AI re-classification, and VoC report generation.
+  - **Viewer**: Read-only access — explore live dashboards, view filtered inbox, browse theme trends, ask questions via Ask LOOP, and read VoC reports. (403 Forbidden is enforced server-side for any mutation attempt).
 
 ### 2. Multi-Channel Feedback Ingestion
 - **Single Feedback Entry**: Real-time entry with metadata (channel, customer label, source ref).
@@ -34,7 +34,7 @@
 
 ### 5. Theme Clustering & Spike Detection
 - Automated theme grouping with count velocity calculations vs. prior periods.
-- **Spike Warning Badges** (`🔥 +60% Spike`): Early detection of emerging customer complaints and issues.
+- **Spike Warning Indicators** (`+60% Spike`): Early detection of emerging customer complaints and issues.
 - **Theme Drill-Down**: Click any theme cluster to inspect all underlying customer quotes with sentiment scores and AI rationales.
 
 ### 6. "Ask LOOP" Retrieval-Grounded Q&A (RAG)
@@ -54,21 +54,21 @@
 
 ---
 
-## 🔐 Demo Credentials Checklist
+## Demo Credentials Checklist
 
 For instant testing of RBAC and tenant functionality, the database is pre-seeded with three demo accounts:
 
 | Role | Email | Password | Permissions |
 | :--- | :--- | :--- | :--- |
-| **👑 Admin** | `admin@loop.dev` | `Password123!` | Full workspace administration & management |
-| **🔬 Analyst** | `analyst@loop.dev` | `Password123!` | Ingestion, triage, re-classify, report generation |
-| **👁️ Viewer** | `viewer@loop.dev` | `Password123!` | Read-only access to dashboards, inbox, & reports |
+| **Admin** | `admin@loop.dev` | `Password123!` | Full workspace administration & management |
+| **Analyst** | `analyst@loop.dev` | `Password123!` | Ingestion, triage, re-classify, report generation |
+| **Viewer** | `viewer@loop.dev` | `Password123!` | Read-only access to dashboards, inbox, & reports |
 
 > **Quick Switcher**: Use the 1-Click Demo Login buttons on the `/login` page or the role selector in the top navigation bar to seamlessly test permissions without retyping credentials.
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Layer | Technology | Purpose |
 | :--- | :--- | :--- |
@@ -84,7 +84,7 @@ For instant testing of RBAC and tenant functionality, the database is pre-seeded
 
 ---
 
-## 📐 System Architecture
+## System Architecture
 
 ```
 Client Browser (Next.js 14 React Server & Client Components)
@@ -103,7 +103,7 @@ API Route Handlers (/api/*)
 
 ---
 
-## 🚀 Getting Started & Local Setup
+## Getting Started & Local Setup
 
 ### 1. Prerequisites
 - **Node.js**: v18.0.0 or newer (v20+ recommended)
@@ -150,7 +150,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🧪 Automated Test Suite
+## Automated Test Suite
 
 Run the comprehensive test suite verifying database models, RBAC role guards, tenant isolation, AI classification, semantic vector retrieval, and VoC report generation:
 
@@ -162,7 +162,7 @@ All 17 automated tests will execute and report status.
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 ├── app/
@@ -213,7 +213,7 @@ All 17 automated tests will execute and report status.
 
 ---
 
-## 🚢 Production Deployment
+## Production Deployment
 
 ### Deploy to Vercel
 1. Push your repository to GitHub.

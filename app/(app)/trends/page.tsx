@@ -165,7 +165,7 @@ export default function TrendsPage() {
                     onClick={() => handleDrillDown(st)}
                     className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-100 text-xs font-semibold flex items-center gap-1.5 transition"
                   >
-                    <span>🔥 {st.name}</span>
+                    <span>{st.name}</span>
                     <span className="text-[10px] font-mono font-bold bg-amber-900/60 px-1 rounded">
                       +{st.growthRate}%
                     </span>

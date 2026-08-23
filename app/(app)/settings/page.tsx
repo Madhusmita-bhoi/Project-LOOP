@@ -206,7 +206,7 @@ export default function SettingsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
           <div className="p-4 rounded-xl bg-purple-950/20 border border-purple-500/30 space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-purple-300">👑 ADMIN</span>
+              <span className="font-bold text-purple-300">ADMIN</span>
               <span className="text-[10px] font-mono bg-purple-900/60 text-purple-200 px-1.5 py-0.5 rounded">
                 Full Access
               </span>
@@ -218,7 +218,7 @@ export default function SettingsPage() {
 
           <div className="p-4 rounded-xl bg-blue-950/20 border border-blue-500/30 space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-blue-300">🔬 ANALYST</span>
+              <span className="font-bold text-blue-300">ANALYST</span>
               <span className="text-[10px] font-mono bg-blue-900/60 text-blue-200 px-1.5 py-0.5 rounded">
                 Ingest & Triage
               </span>
@@ -230,7 +230,7 @@ export default function SettingsPage() {
 
           <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-500/30 space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-amber-300">👁️ VIEWER</span>
+              <span className="font-bold text-amber-300">VIEWER</span>
               <span className="text-[10px] font-mono bg-amber-900/60 text-amber-200 px-1.5 py-0.5 rounded">
                 Read-Only
               </span>

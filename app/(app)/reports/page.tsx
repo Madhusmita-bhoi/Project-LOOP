@@ -301,7 +301,7 @@ export default function ReportsPage() {
                           <span className="font-bold text-gray-100">{t.name}</span>
                           {t.isSpiking ? (
                             <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                              🔥 Spike (+{t.spikePercentage || 50}%)
+                              Spike (+{t.spikePercentage || 50}%)
                             </span>
                           ) : (
                             <span className="text-[10px] text-gray-400 font-mono">{t.count} mentions</span>
