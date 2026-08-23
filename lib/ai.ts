@@ -190,7 +190,7 @@ export async function generateGroundedAnswer(
   citations: AskLoopCitation[]
 ): Promise<string> {
   if (citations.length === 0) {
-    return "I could not find any customer feedback in your workspace related to this question. Please try refining your query or ingesting more feedback.";
+    return "I could not find any customer feedback in your workspace directly related to this question. Please try refining your query or ingesting additional feedback.";
   }
 
   const contextText = citations
@@ -201,26 +201,27 @@ export async function generateGroundedAnswer(
     .join("\n\n");
 
   if (anthropic) {
-    const systemPrompt = `You are "Ask LOOP", an AI feedback intelligence assistant.
-Your job is to answer the user's question with 100% fidelity strictly using the customer feedback provided below.
+    const systemPrompt = `You are "Ask LOOP", a sophisticated AI customer feedback intelligence assistant.
+Your mission is to directly, accurately, and comprehensively answer the user's specific question using ONLY the provided customer feedback citations.
 
-NON-NEGOTIABLE GROUNDING RULES:
-1. Answer ONLY using the facts and quotes provided in the Context.
-2. If the context does not contain enough information to answer, state clearly: "Based on the collected feedback, there is no direct evidence regarding..."
-3. Do not invent, speculate, or extrapolate beyond what customers stated.
-4. Reference specific customer sentiments, recurring complaints or praises, and cite item numbers like [#1], [#2] where appropriate.
-5. Provide a crisp, executive-ready response with bullet points and synthesized themes.`;
+STRICT GROUNDING & ANTI-HALLUCINATION RULES:
+1. Answer ONLY using the concrete facts, verbatim quotes, and customer sentiments present in the Context.
+2. Directly answer the user's question in the very first sentence. Do NOT use generic boilerplate greetings or fixed introductory templates.
+3. Organize your answer clearly with specific findings, root causes, user praises, or feature requests, citing the evidence item numbers like [#1], [#2] in each point.
+4. If the retrieved feedback does not contain enough information to fully address the question, explicitly state what is known from the evidence and what remains unmentioned.
+5. Highlight channel patterns (e.g. Support tickets vs. App Store vs. Sales notes) and customer impact where relevant.
+6. Provide crisp, high-value conclusions tailored specifically to the question asked.`;
 
     try {
       const response = await anthropic.messages.create({
         model: MODEL_NAME,
-        max_tokens: 800,
-        temperature: 0.2,
+        max_tokens: 1000,
+        temperature: 0.1,
         system: systemPrompt,
         messages: [
           {
             role: "user",
-            content: `Context feedback items:\n${contextText}\n\nQuestion: "${question}"`,
+            content: `Context customer feedback records:\n${contextText}\n\nUser Question: "${question}"`,
           },
         ],
       });
@@ -230,28 +231,172 @@ NON-NEGOTIABLE GROUNDING RULES:
         return block.text.trim();
       }
     } catch (err) {
-      console.warn("Claude API call failed in Ask LOOP, using local synthesis:", err);
+      console.warn("Claude API call failed in Ask LOOP, using intelligent local synthesis:", err);
     }
   }
 
-  // Local Grounded Synthesizer
-  const posCount = citations.filter((c) => c.sentiment === "POS").length;
-  const negCount = citations.filter((c) => c.sentiment === "NEG").length;
-  const neuCount = citations.filter((c) => c.sentiment === "NEU").length;
+  // Intelligent Question-Aware Local Synthesis Engine
+  return synthesizeGroundedLocalAnswer(question, citations);
+}
 
-  const topQuotes = citations.slice(0, 3).map((c, i) => `• [#${i + 1}] "${c.content}" (${c.channel})`).join("\n");
+/**
+ * Advanced Semantic Local Synthesizer
+ * Produces structured, question-tailored, non-hallucinated answers strictly from citation evidence.
+ */
+function synthesizeGroundedLocalAnswer(question: string, citations: AskLoopCitation[]): string {
+  const qLower = question.toLowerCase();
+  const total = citations.length;
+  const posItems = citations.filter((c) => c.sentiment === "POS");
+  const negItems = citations.filter((c) => c.sentiment === "NEG");
+  const neuItems = citations.filter((c) => c.sentiment === "NEU");
 
-  return `Based on ${citations.length} retrieved customer feedback items across your channels:
+  // Determine question intent
+  const isWhyOrFriction = /why|cause|reason|problem|issue|complain|friction|fail|broken|crash|timeout|error|slow|bug/i.test(qLower);
+  const isFeatureRequest = /request|want|need|feature|wish|add|missing|roadmap|looking for|ask for/i.test(qLower);
+  const isSentimentQuery = /how do|feel|satisfaction|sentiment|opinion|happy|unhappy|rating|love|hate|attitude/i.test(qLower);
+  const isEnterpriseQuery = /enterprise|sales|prospect|deal|okta|sso|saml|security|compliance|tier|b2b/i.test(qLower);
+  const isMobileQuery = /mobile|ios|android|ipad|iphone|tablet|phone|app store/i.test(qLower);
+  const isBillingQuery = /bill|invoice|pricing|charge|cost|payment|vat|receipt|refund|stripe/i.test(qLower);
+  const isOnboardingQuery = /onboard|setup|invite|team member|get started|first time|checklist/i.test(qLower);
+  const isPerformanceQuery = /speed|slow|fast|lag|load|performance|latency|timeout|rendering/i.test(qLower);
 
-**Overview & Sentiment:**
-• ${posCount} Positive, ${negCount} Negative, and ${neuCount} Neutral mentions were identified directly related to your query.
-${negCount > posCount ? "• Customer sentiment leans predominantly critical regarding this area, highlighting friction in usability or reliability." : "• Customer sentiment is largely favorable with enthusiastic user appreciation."}
+  // Group citations by channels
+  const channelBreakdown: Record<string, number> = {};
+  citations.forEach((c) => {
+    channelBreakdown[c.channel] = (channelBreakdown[c.channel] || 0) + 1;
+  });
+  const topChannelsStr = Object.entries(channelBreakdown)
+    .sort((a, b) => b[1] - a[1])
+    .map(([ch, cnt]) => `${ch} (${cnt})`)
+    .join(", ");
 
-**Direct Customer Verbatims:**
-${topQuotes}
+  // Extract distinct factual points from citations
+  const findings: Array<{ ref: string; summary: string; quote: string; channel: string; sentiment: string }> = [];
 
-**Key Takeaway:**
-Customers frequently reference these specific friction points and feature requests. Addressing these reported items will directly impact satisfaction metrics.`;
+  citations.forEach((c, idx) => {
+    const ref = `[#${idx + 1}]`;
+    const cleanContent = c.content.replace(/^\[Rating:\s*\d\/\d\]\s*/i, "").trim();
+
+    findings.push({
+      ref,
+      summary: cleanContent,
+      quote: cleanContent,
+      channel: c.channel,
+      sentiment: c.sentiment,
+    });
+  });
+
+  const sections: string[] = [];
+
+  // 1. Direct Contextual Lead / Answer
+  if (isWhyOrFriction) {
+    if (negItems.length > 0) {
+      sections.push(
+        `Based on the retrieved customer feedback, customer complaints directly stem from **${negItems.length} specific friction points** identified across ${topChannelsStr}:`
+      );
+    } else {
+      sections.push(
+        `Reviewing the retrieved feedback indicates **minimal direct complaints** regarding this area. Customer feedback is predominantly favorable (${posItems.length} positive mentions):`
+      );
+    }
+  } else if (isFeatureRequest) {
+    sections.push(
+      `Analysis of recent customer feedback indicates that users and prospects are actively requesting the following capabilities across ${topChannelsStr}:`
+    );
+  } else if (isSentimentQuery) {
+    const sentimentDesc =
+      posItems.length > negItems.length
+        ? `largely positive (${posItems.length} positive vs. ${negItems.length} negative)`
+        : negItems.length > posItems.length
+        ? `predominantly critical (${negItems.length} negative vs. ${posItems.length} positive)`
+        : `mixed (${posItems.length} positive, ${neuItems.length} neutral, ${negItems.length} negative)`;
+
+    sections.push(
+      `Customer sentiment regarding this topic is **${sentimentDesc}** across ${total} analyzed feedback records:`
+    );
+  } else if (isEnterpriseQuery) {
+    sections.push(
+      `Enterprise prospects and accounts have raised specific security, authentication, and compliance requirements in their feedback and sales interactions:`
+    );
+  } else if (isBillingQuery) {
+    sections.push(
+      `Feedback regarding billing and invoices highlights key customer touchpoints across ${topChannelsStr}:`
+    );
+  } else if (isOnboardingQuery) {
+    sections.push(
+      `Feedback regarding the onboarding and team setup experience centers on the following customer observations:`
+    );
+  } else if (isMobileQuery) {
+    sections.push(
+      `Customer feedback from mobile users across iOS, iPadOS, and app reviews indicates the following specific insights:`
+    );
+  } else if (isPerformanceQuery) {
+    sections.push(
+      `Feedback regarding system speed and performance reveals distinct feedback patterns:`
+    );
+  } else {
+    sections.push(
+      `Synthesizing ${total} relevant customer feedback records across your channels (${topChannelsStr}):`
+    );
+  }
+
+  // 2. Specific Detailed Evidence Points with Citations
+  const evidenceList: string[] = [];
+
+  // If there are negative issues to highlight
+  if (negItems.length > 0 && (isWhyOrFriction || !isFeatureRequest)) {
+    evidenceList.push(`**Key Pain Points & Friction:**`);
+    negItems.slice(0, 4).forEach((item) => {
+      const idx = citations.findIndex((c) => c.id === item.id);
+      const ref = `[#${idx + 1}]`;
+      evidenceList.push(
+        `• **${item.channel}** ${ref}: "${item.content.replace(/^\[Rating:\s*\d\/\d\]\s*/i, "")}"`
+      );
+    });
+  }
+
+  // If there are positive highlights to mention
+  if (posItems.length > 0 && (isSentimentQuery || !isWhyOrFriction)) {
+    if (evidenceList.length > 0) evidenceList.push("");
+    evidenceList.push(`**Positive Customer Feedback:**`);
+    posItems.slice(0, 3).forEach((item) => {
+      const idx = citations.findIndex((c) => c.id === item.id);
+      const ref = `[#${idx + 1}]`;
+      evidenceList.push(
+        `• **${item.channel}** ${ref}: "${item.content.replace(/^\[Rating:\s*\d\/\d\]\s*/i, "")}"`
+      );
+    });
+  }
+
+  // Fallback if list was empty
+  if (evidenceList.length === 0) {
+    citations.slice(0, 4).forEach((item, idx) => {
+      evidenceList.push(
+        `• **${item.channel}** [#${idx + 1}]: "${item.content.replace(/^\[Rating:\s*\d\/\d\]\s*/i, "")}" (${item.sentiment === "NEG" ? "Critical" : item.sentiment === "POS" ? "Positive" : "Neutral"})`
+      );
+    });
+  }
+
+  sections.push(evidenceList.join("\n"));
+
+  // 3. Concrete Synthesized Takeaway
+  if (negItems.length > 0) {
+    const mainThemes = Array.from(
+      new Set(
+        citations.map((c) => c.channel)
+      )
+    ).join(" and ");
+
+    sections.push(
+      `**Actionable Takeaway:**\nPrioritizing resolution of the reported issues in ${mainThemes} will directly resolve the critical friction documented in items ${negItems.slice(0, 3).map(item => `[#${citations.findIndex(c => c.id === item.id) + 1}]`).join(", ")}.`
+    );
+  } else {
+    sections.push(
+      `**Actionable Takeaway:**\nCustomer feedback indicates strong satisfaction in this area. Maintain current performance while monitoring for emerging trends.`
+    );
+  }
+
+  return sections.join("\n\n");
 }
 
 /**

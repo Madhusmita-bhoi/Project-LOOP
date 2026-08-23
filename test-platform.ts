@@ -90,7 +90,14 @@ async function runTests() {
   assert(searchResults.length > 0, `Retrieved relevant feedback items (Actual: ${searchResults.length})`);
   assert(searchResults[0].similarityScore > 0.3, `Similarity score is high (Top match score: ${searchResults[0].similarityScore})`);
 
-  // 5. Voice-of-Customer (VoC) Generation Test
+  const { generateGroundedAnswer } = await import("./lib/ai");
+  const billingAnswer = await generateGroundedAnswer("Why are users complaining about billing invoices?", searchResults);
+  assert(billingAnswer.includes("[#1]"), "Ask LOOP answer cites evidence items with [#1]");
+  assert(billingAnswer.length > 100, "Ask LOOP answer provides detailed, grounded briefing");
+
+  const ssoResults = await searchRelevantFeedback(ws.id, "What are enterprise prospects requesting regarding SSO and Okta?", 5);
+  const ssoAnswer = await generateGroundedAnswer("What are enterprise prospects requesting regarding SSO and Okta?", ssoResults);
+  assert(ssoAnswer !== billingAnswer, "Answers to different questions are distinct and question-specific");
   console.log("\n--- 5. VoC Report Generator Test ---");
   const vocReport = await generateVoCReportNarrative({
     total: feedbackCount,
