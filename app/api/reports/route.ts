@@ -108,7 +108,7 @@ export async function POST(req: Request) {
     let scoreSum = 0;
 
     const themeCountMap: Record<string, { count: number; negCount: number; name: string }> = {};
-    themes.forEach((t) => (themeCountMap[t.id] = { count: 0, negCount: 0, name: t.name }));
+    themes.forEach((t: { id: string; name: string }) => (themeCountMap[t.id] = { count: 0, negCount: 0, name: t.name }));
 
     for (const f of currentFeedbacks) {
       if (f.sentiment === "POS") posCount++;
@@ -131,7 +131,7 @@ export async function POST(req: Request) {
     // Sentiment delta vs previous period
     const currentAvgScore = Number((scoreSum / total).toFixed(2));
     let prevScoreSum = 0;
-    prevFeedbacks.forEach((pf) => (prevScoreSum += pf.sentimentScore));
+    prevFeedbacks.forEach((pf: { sentiment: string; sentimentScore: number }) => (prevScoreSum += pf.sentimentScore));
     const prevAvgScore = prevFeedbacks.length > 0 ? Number((prevScoreSum / prevFeedbacks.length).toFixed(2)) : 0;
     const sentimentDelta = Number((currentAvgScore - prevAvgScore).toFixed(2));
 
@@ -151,12 +151,12 @@ export async function POST(req: Request) {
     // Representative verbatim quotes
     const topQuotes = currentFeedbacks
       .slice(0, 6)
-      .map((f) => ({
+      .map((f: any) => ({
         quote: f.content,
         channel: f.channel,
         customerLabel: f.customerLabel || undefined,
         sentiment: f.sentiment as "POS" | "NEU" | "NEG",
-        theme: f.themes[0]?.theme.name || "General",
+        theme: f.themes[0]?.theme?.name || "General",
       }));
 
     const periodLabel = `Period (${periodStart.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${periodEnd.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })})`;

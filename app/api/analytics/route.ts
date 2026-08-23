@@ -96,7 +96,7 @@ export async function GET(req: Request) {
 
     // Theme frequency in current period
     const themeCounts: Record<string, { name: string; count: number; color: string; negCount: number }> = {};
-    themes.forEach((t) => {
+    themes.forEach((t: { id: string; name: string; color: string }) => {
       themeCounts[t.id] = { name: t.name, count: 0, color: t.color, negCount: 0 };
     });
 

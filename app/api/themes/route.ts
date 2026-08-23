@@ -40,7 +40,7 @@ export async function GET(req: Request) {
       orderBy: { name: "asc" },
     });
 
-    const enrichedThemes = themes.map((theme) => {
+    const enrichedThemes = themes.map((theme: any) => {
       let currentPeriodCount = 0;
       let prevPeriodCount = 0;
       let posCount = 0;
@@ -95,7 +95,7 @@ export async function GET(req: Request) {
     });
 
     // Sort themes by highest count first
-    enrichedThemes.sort((a, b) => b.count - a.count);
+    enrichedThemes.sort((a: any, b: any) => b.count - a.count);
 
     return NextResponse.json({ data: enrichedThemes });
   } catch (error: any) {

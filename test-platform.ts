@@ -31,9 +31,9 @@ async function runTests() {
   const users = await prisma.user.findMany({ where: { workspaceId: ws.id } });
   assert(users.length >= 3, "At least 3 demo users exist");
 
-  const admin = users.find((u) => u.role === "ADMIN");
-  const analyst = users.find((u) => u.role === "ANALYST");
-  const viewer = users.find((u) => u.role === "VIEWER");
+  const admin = users.find((u: { role: string }) => u.role === "ADMIN");
+  const analyst = users.find((u: { role: string }) => u.role === "ANALYST");
+  const viewer = users.find((u: { role: string }) => u.role === "VIEWER");
   assert(!!admin && !!analyst && !!viewer, "Three distinct RBAC roles exist (Admin, Analyst, Viewer)");
 
   const passwordOk = await bcrypt.compare("Password123!", admin?.passwordHash || "");
@@ -76,7 +76,7 @@ async function runTests() {
   const testSample = "Billing invoice download keeps failing with 504 error. Very frustrating!";
   const classification = await classifyFeedback(
     testSample,
-    themes.map((t) => t.name)
+    themes.map((t: { name: string }) => t.name)
   );
 
   assert(classification.sentiment === "NEG", `Sentiment classification is NEG (Actual: ${classification.sentiment})`);
@@ -101,7 +101,7 @@ async function runTests() {
     neuPct: 15,
     negPct: 31,
     sentimentDelta: 3.5,
-    topThemes: themes.slice(0, 4).map((t) => ({
+    topThemes: themes.slice(0, 4).map((t: { name: string }) => ({
       name: t.name,
       count: 25,
       sentimentSummary: "Active feedback",

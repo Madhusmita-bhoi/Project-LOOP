@@ -144,7 +144,7 @@ export async function POST(req: Request) {
       select: { id: true, name: true },
     });
 
-    const themeNames = existingThemes.map((t) => t.name);
+    const themeNames = existingThemes.map((t: { id: string; name: string }) => t.name);
 
     // Run AI classification
     const classification = await classifyFeedback(content, themeNames);
@@ -172,7 +172,7 @@ export async function POST(req: Request) {
     // Link matched themes (or create new theme if suggested)
     for (const themeName of classification.themes) {
       let themeRecord = existingThemes.find(
-        (t) => t.name.toLowerCase() === themeName.toLowerCase()
+        (t: { id: string; name: string }) => t.name.toLowerCase() === themeName.toLowerCase()
       );
 
       if (!themeRecord) {
