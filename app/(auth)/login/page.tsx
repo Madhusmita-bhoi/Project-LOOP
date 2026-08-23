@@ -65,31 +65,31 @@ export default function LoginPage() {
       {/* Wide 2-Column Split Grid Container */}
       <div className="w-full max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10 py-2 px-2 sm:px-6 lg:px-8">
         
-        {/* LEFT COLUMN: Wide Width + Vertically Compact Height */}
-        <div className="lg:col-span-7 space-y-3.5 text-left lg:pr-4">
+        {/* LEFT COLUMN: Decreased Width + Same Compact Height */}
+        <div className="lg:col-span-7 max-w-[540px] space-y-3.5 text-left">
           {/* Top Pill */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-inner">
             <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
             <span>AI-Powered Feedback Intelligence Platform</span>
           </div>
 
-          {/* Restored Full-Width Hero Headline with Compact Height */}
+          {/* Headline Constrained to Decreased Width */}
           <div className="space-y-1.5">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.12] text-white">
+            <h1 className="text-3xl sm:text-4xl lg:text-[38px] font-black tracking-tight leading-tight text-white max-w-[500px]">
               Turn Raw Customer Feedback into{" "}
               <span className="bg-gradient-to-r from-indigo-400 via-violet-300 to-indigo-200 bg-clip-text text-transparent">
                 Strategic Velocity
               </span>
             </h1>
-            <p className="text-sm text-gray-400 leading-relaxed max-w-2xl">
+            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-[480px]">
               Project LOOP unifies scattered support tickets, app store reviews, and NPS surveys into real-time sentiment alerts, clustered themes, and grounded VoC executive digests.
             </p>
           </div>
 
-          {/* Full Width Compact Feature Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-0.5">
+          {/* Compact Feature Cards with Decreased Width */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5 max-w-[540px]">
             {/* Card 1: Live CSAT */}
-            <div className="py-2.5 px-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
+            <div className="py-2.5 px-3.5 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                   <Activity className="h-3.5 w-3.5 text-emerald-400" />
@@ -101,12 +101,12 @@ export default function LoginPage() {
               </div>
               <div className="text-2xl font-black text-white tracking-tight">94.2%</div>
               <p className="text-[11px] text-gray-400 mt-0.5">
-                Real-time multi-channel sentiment velocity across customer touchpoints.
+                Real-time multi-channel sentiment velocity.
               </p>
             </div>
 
             {/* Card 2: Grounded RAG AI Search */}
-            <div className="py-2.5 px-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
+            <div className="py-2.5 px-3.5 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                   <Zap className="h-3.5 w-3.5 text-indigo-400" />
@@ -118,16 +118,16 @@ export default function LoginPage() {
               </div>
               <div className="text-2xl font-black text-white tracking-tight">100% Grounded</div>
               <p className="text-[11px] text-gray-400 mt-0.5">
-                Zero hallucinations with transparent citation provenance.
+                Zero hallucinations with transparent citations.
               </p>
             </div>
           </div>
 
-          {/* Compact Live Stream Pill */}
-          <div className="py-2 px-3.5 rounded-xl bg-[#0a0e1c]/90 border border-indigo-900/40 backdrop-blur-xl flex items-center justify-between gap-3 text-xs">
+          {/* Compact Live Stream Pill with Decreased Width */}
+          <div className="py-2 px-3.5 rounded-xl bg-[#0a0e1c]/90 border border-indigo-900/40 backdrop-blur-xl flex items-center justify-between gap-3 text-xs max-w-[540px]">
             <div className="flex items-center gap-2 min-w-0">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-              <span className="text-gray-300 truncate font-medium">
+              <span className="text-gray-300 truncate font-medium text-[11px]">
                 Live Ingestion: Performance & speed themes active across 162 items
               </span>
             </div>
@@ -137,14 +137,14 @@ export default function LoginPage() {
           </div>
 
           {/* Security & Team Collaboration Badges */}
-          <div className="flex flex-wrap items-center gap-5 text-xs text-gray-400 pt-0.5">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 pt-0.5 max-w-[540px]">
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-indigo-400" />
               <span>Multi-Tenant Row Isolation</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Layers className="h-3.5 w-3.5 text-violet-400" />
-              <span>Role-Based Access Control (Admin, Analyst, Viewer)</span>
+              <span>Role-Based Access Control</span>
             </div>
           </div>
         </div>

@@ -94,27 +94,27 @@ export default function SignUpPage() {
       {/* Wide 2-Column Split Grid Container */}
       <div className="w-full max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10 py-2 px-2 sm:px-6 lg:px-8">
         
-        {/* LEFT COLUMN: Wide Width + Vertically Compact Height */}
-        <div className="lg:col-span-7 space-y-3.5 text-left lg:pr-4">
+        {/* LEFT COLUMN: Decreased Width + Same Compact Height */}
+        <div className="lg:col-span-7 max-w-[540px] space-y-3.5 text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-inner">
             <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
             <span>Multi-Tenant Enterprise Architecture</span>
           </div>
 
           <div className="space-y-1.5">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.12] text-white">
+            <h1 className="text-3xl sm:text-4xl lg:text-[38px] font-black tracking-tight leading-tight text-white max-w-[500px]">
               Launch Your Dedicated{" "}
               <span className="bg-gradient-to-r from-indigo-400 via-violet-300 to-indigo-200 bg-clip-text text-transparent">
                 Intelligence Workspace
               </span>
             </h1>
-            <p className="text-sm text-gray-400 leading-relaxed max-w-2xl">
+            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-[480px]">
               Strict row-level multi-tenant isolation, automated sentiment clustering, and team-wide role-based access.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-0.5">
-            <div className="py-2.5 px-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5 max-w-[540px]">
+            <div className="py-2.5 px-3.5 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                   <Layers className="h-3.5 w-3.5 text-indigo-400" />
@@ -130,7 +130,7 @@ export default function SignUpPage() {
               </p>
             </div>
 
-            <div className="py-2.5 px-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
+            <div className="py-2.5 px-3.5 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
@@ -147,7 +147,7 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-5 text-xs text-gray-400 pt-0.5">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 pt-0.5 max-w-[540px]">
             <div className="flex items-center gap-1.5">
               <Activity className="h-3.5 w-3.5 text-emerald-400" />
               <span>Multi-Source Ingestion Active</span>
