@@ -17,7 +17,6 @@ import {
   RefreshCw,
   Zap,
   Activity,
-  Sparkles,
 } from "lucide-react";
 
 export default function SignUpPage() {
@@ -98,17 +97,17 @@ export default function SignUpPage() {
       <div className="absolute top-[-10%] left-[-10%] w-[550px] h-[550px] bg-indigo-700/15 rounded-full blur-[150px] pointer-events-none" />
 
       {/* Main Center Card */}
-      <div className="w-full max-w-[480px] relative z-10 animate-fadeIn">
-        {/* Brand Header & Large Glowing Logo */}
+      <div className="w-full max-w-[460px] relative z-10 animate-fadeIn">
+        {/* Brand Header & Medium Balanced Logo */}
         <div className="text-center mb-7">
-          <div className="relative inline-block mb-4">
-            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-3xl blur-xl opacity-60 animate-pulse" />
-            <div className="relative inline-flex items-center justify-center h-18 w-18 rounded-3xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-600 text-white font-black text-3xl shadow-2xl shadow-indigo-500/40 ring-2 ring-indigo-400/50 ring-offset-4 ring-offset-[#050711] transition-transform hover:scale-105 duration-300">
+          <div className="relative inline-block mb-3.5">
+            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl blur-lg opacity-50" />
+            <div className="relative inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-600 text-white font-black text-2xl shadow-xl shadow-indigo-500/30 ring-1 ring-indigo-400/40 ring-offset-4 ring-offset-[#050711] transition-transform hover:scale-105 duration-300">
               ∞
             </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-100 to-indigo-200 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-100 to-indigo-200 bg-clip-text text-transparent">
             Create Workspace
           </h1>
           <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400/90 mt-1">
@@ -155,7 +154,7 @@ export default function SignUpPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Alex Rivera"
-                  className="w-full pl-10 pr-4 py-2.5 bg-[#070b14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
                 />
               </div>
             </div>
@@ -172,7 +171,7 @@ export default function SignUpPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="alex@company.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-[#070b14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
                 />
               </div>
             </div>
@@ -231,7 +230,7 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 cursor-pointer mt-2"
+              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 cursor-pointer mt-2"
             >
               {loading ? (
                 <>
@@ -259,7 +258,7 @@ export default function SignUpPage() {
         </div>
 
         {/* Status Indicators */}
-        <div className="mt-7 grid grid-cols-3 gap-2">
+        <div className="mt-6 grid grid-cols-3 gap-2">
           {featurePills.map((pill, i) => {
             const Icon = pill.icon;
             return (

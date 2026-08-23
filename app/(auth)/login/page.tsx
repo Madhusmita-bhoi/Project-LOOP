@@ -15,9 +15,6 @@ import {
   ShieldCheck,
   Zap,
   Activity,
-  Layers,
-  Sparkles,
-  HelpCircle,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -28,7 +25,6 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showHelp, setShowHelp] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,21 +68,21 @@ export default function LoginPage() {
       <div className="absolute top-[-10%] left-[-10%] w-[550px] h-[550px] bg-indigo-700/15 rounded-full blur-[150px] pointer-events-none" />
 
       {/* Main Center Auth Container */}
-      <div className="w-full max-w-[480px] relative z-10 animate-fadeIn">
-        {/* Prominent Brand Header & Large Glowing Logo */}
-        <div className="text-center mb-8">
-          <div className="relative inline-block mb-5">
-            {/* Outer Aura Glow */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-3xl blur-xl opacity-60 animate-pulse" />
+      <div className="w-full max-w-[460px] relative z-10 animate-fadeIn">
+        {/* Brand Header & Medium Balanced Logo */}
+        <div className="text-center mb-7">
+          <div className="relative inline-block mb-3.5">
+            {/* Outer Soft Glow */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl blur-lg opacity-50" />
             
-            {/* Large Emblem Icon */}
-            <div className="relative inline-flex items-center justify-center h-20 w-20 rounded-3xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-600 text-white font-black text-4xl shadow-2xl shadow-indigo-500/40 ring-2 ring-indigo-400/50 ring-offset-4 ring-offset-[#050711] transition-transform hover:scale-105 duration-300">
+            {/* Medium Balanced Emblem Icon */}
+            <div className="relative inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-600 text-white font-black text-2xl shadow-xl shadow-indigo-500/30 ring-1 ring-indigo-400/40 ring-offset-4 ring-offset-[#050711] transition-transform hover:scale-105 duration-300">
               ∞
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-100 to-indigo-200 bg-clip-text text-transparent">
+          <div className="space-y-1">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-100 to-indigo-200 bg-clip-text text-transparent">
               Project LOOP
             </h1>
             <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400/90">
@@ -96,33 +92,14 @@ export default function LoginPage() {
         </div>
 
         {/* Premium Frosted Glass Card */}
-        <div className="bg-[#0b101e]/90 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/40 rounded-3xl p-8 sm:p-10 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.95),0_0_60px_-15px_rgba(99,102,241,0.25)] transition-all duration-300 space-y-6">
+        <div className="bg-[#0b101e]/90 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/40 rounded-3xl p-8 sm:p-9 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.95),0_0_60px_-15px_rgba(99,102,241,0.25)] transition-all duration-300 space-y-6">
           {/* Card Header */}
-          <div className="flex items-center justify-between border-b border-gray-800/80 pb-4">
-            <div>
-              <h2 className="text-lg font-bold text-white tracking-tight">Sign In to Workspace</h2>
-              <p className="text-xs text-gray-400 mt-0.5">
-                Access your organization's feedback intelligence feed
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowHelp(!showHelp)}
-              className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-300 hover:bg-gray-800/60 transition cursor-pointer"
-              title="Authentication help"
-            >
-              <HelpCircle className="h-4 w-4" />
-            </button>
+          <div className="border-b border-gray-800/80 pb-4">
+            <h2 className="text-base font-bold text-white tracking-tight">Sign in to your workspace</h2>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Enter your corporate credentials to access intelligence feeds
+            </p>
           </div>
-
-          {showHelp && (
-            <div className="p-3.5 rounded-xl bg-indigo-950/50 border border-indigo-500/30 text-indigo-200 text-xs leading-relaxed animate-fadeIn">
-              <p className="font-semibold text-white mb-1">Corporate Access & Roles:</p>
-              <p className="text-[11px] text-gray-300">
-                Log in with your company email. Permissions (Admin, Analyst, or Viewer) are automatically assigned by your organization administrator.
-              </p>
-            </div>
-          )}
 
           {error && (
             <div className="p-3.5 rounded-xl bg-rose-950/70 border border-rose-800/80 text-rose-300 text-xs flex items-center gap-2.5 animate-fadeIn">
@@ -152,7 +129,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
-                  className="w-full pl-10 pr-4 py-3 bg-[#070a14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
                 />
               </div>
             </div>
@@ -174,7 +151,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full pl-10 pr-10 py-3 bg-[#070a14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
+                  className="w-full pl-10 pr-10 py-2.5 bg-[#070a14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
                 />
                 <button
                   type="button"
@@ -211,7 +188,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 cursor-pointer mt-2"
+              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 cursor-pointer mt-1"
             >
               {loading ? (
                 <>
@@ -240,7 +217,7 @@ export default function LoginPage() {
         </div>
 
         {/* Interactive System Intelligence Status Indicators */}
-        <div className="mt-7 grid grid-cols-3 gap-2">
+        <div className="mt-6 grid grid-cols-3 gap-2">
           {featurePills.map((pill, i) => {
             const Icon = pill.icon;
             return (
