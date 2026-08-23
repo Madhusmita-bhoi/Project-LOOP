@@ -80,23 +80,23 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060810] text-gray-100 flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
-      {/* High-Tech Background Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+    <div className="min-h-screen w-full bg-[#070a14] text-gray-100 flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
+      {/* High-Precision Architectural Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b18_1px,transparent_1px),linear-gradient(to_bottom,#1e293b18_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none" />
 
-      {/* Layered Atmospheric Glow Orbs */}
-      <div className="absolute top-[15%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-[450px] h-[450px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-[-10%] left-[-5%] w-[400px] h-[400px] bg-indigo-700/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Layered Atmospheric Ambient Glows */}
+      <div className="absolute top-[18%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-15%] right-[-10%] w-[550px] h-[550px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-700/10 rounded-full blur-[140px] pointer-events-none" />
 
       {/* Main Center Card */}
-      <div className="w-full max-w-[440px] relative z-10 animate-fadeIn">
+      <div className="w-full max-w-[460px] relative z-10 animate-fadeIn">
         {/* Brand Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 text-white font-black text-2xl shadow-xl shadow-indigo-500/30 ring-1 ring-indigo-400/40 ring-offset-4 ring-offset-[#060810] mb-4 transition-transform hover:scale-105 duration-300">
+        <div className="text-center mb-7">
+          <div className="inline-flex items-center justify-center h-15 w-15 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 text-white font-black text-2xl shadow-xl shadow-indigo-500/30 ring-1 ring-indigo-400/40 ring-offset-4 ring-offset-[#070a14] mb-4 transition-transform hover:scale-105 duration-300">
             ∞
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-100 to-indigo-200 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-100 to-indigo-200 bg-clip-text text-transparent">
             Create Workspace
           </h1>
           <p className="text-xs font-medium text-gray-400 mt-1.5 tracking-wide">
@@ -105,11 +105,11 @@ export default function SignUpPage() {
         </div>
 
         {/* Auth Glass Panel */}
-        <div className="bg-[#0b0f1a]/85 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/30 rounded-3xl p-6 sm:p-8 shadow-[0_0_60px_-15px_rgba(79,70,229,0.25)] transition-all duration-300 space-y-4">
+        <div className="bg-[#0b101d]/90 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/40 rounded-3xl p-8 sm:p-9 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.9),0_0_50px_-10px_rgba(99,102,241,0.2)] transition-all duration-300 space-y-4">
           {error && (
             <div className="p-3.5 rounded-xl bg-rose-950/70 border border-rose-800/80 text-rose-300 text-xs flex items-center gap-2.5 animate-fadeIn">
               <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
-              <span>{error}</span>
+              <span className="font-medium">{error}</span>
             </div>
           )}
 
@@ -126,7 +126,7 @@ export default function SignUpPage() {
                   value={workspaceName}
                   onChange={(e) => setWorkspaceName(e.target.value)}
                   placeholder="Acme CloudScale Inc."
-                  className="w-full pl-10 pr-4 py-2.5 bg-[#070b14] border border-gray-800 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 transition shadow-inner"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#070b14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
                 />
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function SignUpPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Alex Rivera"
-                  className="w-full pl-10 pr-4 py-2.5 bg-[#070b14] border border-gray-800 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 transition shadow-inner"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#070b14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
                 />
               </div>
             </div>
@@ -160,7 +160,7 @@ export default function SignUpPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="alex@company.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-[#070b14] border border-gray-800 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 transition shadow-inner"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#070b14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
                 />
               </div>
             </div>
@@ -177,7 +177,7 @@ export default function SignUpPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 bg-[#070b14] border border-gray-800 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 transition shadow-inner"
+                  className="w-full pl-10 pr-10 py-2.5 bg-[#070b14] border border-gray-800/90 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition shadow-inner"
                 />
                 <button
                   type="button"
