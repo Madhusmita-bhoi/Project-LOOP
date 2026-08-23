@@ -112,58 +112,56 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Live Feature Preview Card */}
-          <div className="p-5 rounded-2xl bg-gray-900/90 border border-gray-800 space-y-3.5 shadow-2xl shadow-black/60 max-w-lg">
-            <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center space-x-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="font-semibold text-gray-300">Live AI Classification Stream</span>
-              </div>
-              <span className="font-mono text-[10px] text-gray-500">Auto-Tagged in 42ms</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-[#090d16] border border-gray-800 text-xs text-gray-300 space-y-2">
-              <p className="italic text-gray-200">
-                "Billing page keeps timing out with 504 Gateway error when downloading invoice PDFs."
-              </p>
-              <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                <span className="px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 border border-rose-500/30 font-mono text-[10px] font-bold">
-                  NEG -0.84
-                </span>
-                <span className="px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 text-[10px] font-medium">
-                  Billing & Invoicing
-                </span>
-                <span className="px-2 py-0.5 rounded bg-gray-800 text-gray-400 text-[10px]">
-                  Support Ticket
-                </span>
-              </div>
-            </div>
-
-            {/* Quick Metrics Bar */}
-            <div className="grid grid-cols-3 gap-2 pt-1 text-center text-xs">
-              <div className="p-2 rounded-lg bg-gray-800/40">
-                <span className="text-[10px] text-gray-400 uppercase font-semibold">Triage Time</span>
-                <p className="text-sm font-bold text-emerald-400 mt-0.5">-75%</p>
-              </div>
-              <div className="p-2 rounded-lg bg-gray-800/40">
-                <span className="text-[10px] text-gray-400 uppercase font-semibold">Accuracy</span>
-                <p className="text-sm font-bold text-indigo-400 mt-0.5">99.4%</p>
-              </div>
-              <div className="p-2 rounded-lg bg-gray-800/40">
-                <span className="text-[10px] text-gray-400 uppercase font-semibold">Grounded AI</span>
-                <p className="text-sm font-bold text-violet-400 mt-0.5">Zero Hallucination</p>
-              </div>
-            </div>
+          {/* Core Enterprise Architecture Pillars */}
+          <div className="space-y-3.5 pt-2 max-w-lg">
+            {[
+              {
+                icon: Layers,
+                title: "Unified Multi-Channel Ingestion Pipeline",
+                desc: "Ingest and normalize feedback streams across Support Tickets, App Store reviews, NPS surveys, and Sales notes.",
+              },
+              {
+                icon: Sparkles,
+                title: "Grounded Semantic Vector Intelligence",
+                desc: "RAG-driven plain English query engine strictly grounded in verified customer feedback with zero hallucination.",
+              },
+              {
+                icon: TrendingUp,
+                title: "Automated Theme Clustering & Spike Velocity",
+                desc: "Continuous statistical tracking of emerging topic surges and negative sentiment friction points.",
+              },
+              {
+                icon: ShieldCheck,
+                title: "Strict Multi-Tenant Row-Level Security",
+                desc: "Deterministic workspace isolation, role-based access control (RBAC), and SOC-2 Type II audit readiness.",
+              },
+            ].map((pillar, i) => {
+              const Icon = pillar.icon;
+              return (
+                <div
+                  key={i}
+                  className="p-3.5 rounded-xl bg-gray-900/60 border border-gray-800/80 flex items-start gap-3.5"
+                >
+                  <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 shrink-0 mt-0.5 border border-indigo-500/20">
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-gray-200">{pillar.title}</h3>
+                    <p className="text-[11px] text-gray-400 mt-0.5 leading-relaxed">{pillar.desc}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Security & Compliance Footer */}
         <div className="pt-6 border-t border-gray-800/60 flex items-center justify-between text-xs text-gray-500">
-          <div className="flex items-center space-x-2 text-emerald-400">
+          <div className="flex items-center space-x-2 text-emerald-400 font-medium">
             <ShieldCheck className="h-4 w-4 shrink-0" />
-            <span>Strict Multi-Tenant Isolation & Encryption</span>
+            <span>Dedicated Multi-Tenant Isolation & Encryption</span>
           </div>
-          <span className="font-mono text-[11px]">SOC2 Compliant</span>
+          <span className="font-mono text-[11px] text-gray-400">SOC2 Type II Ready</span>
         </div>
       </div>
 
