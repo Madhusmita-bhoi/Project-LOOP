@@ -12,10 +12,7 @@ import {
   Tag,
   ArrowRight,
   Info,
-  AlertTriangle,
-  CheckCircle2,
-  Lightbulb,
-  Zap,
+  ChevronDown,
 } from "lucide-react";
 
 interface Citation {
@@ -36,19 +33,14 @@ interface ChatMessage {
   timestamp: string;
 }
 
-function FormattedAnswer({ text }: { text: string }) {
+function FormattedAnswer({
+  text,
+  onCitationClick,
+}: {
+  text: string;
+  onCitationClick?: (num: string) => void;
+}) {
   const paragraphs = text.split("\n\n").filter(Boolean);
-
-  const scrollToCitation = (num: string) => {
-    const el = document.getElementById(`citation-${num}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-      el.classList.add("ring-2", "ring-indigo-400", "scale-[1.02]");
-      setTimeout(() => {
-        el.classList.remove("ring-2", "ring-indigo-400", "scale-[1.02]");
-      }, 2000);
-    }
-  };
 
   const renderInline = (str: string) => {
     // Clean up spacing around punctuation
@@ -61,9 +53,9 @@ function FormattedAnswer({ text }: { text: string }) {
         return (
           <button
             key={i}
-            onClick={() => scrollToCitation(num)}
+            onClick={() => onCitationClick && onCitationClick(num)}
             className="inline-flex items-center justify-center mx-1 px-1.5 py-0.2 rounded text-[11px] font-mono font-bold bg-indigo-950/70 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/40 transition cursor-pointer align-baseline shadow-xs"
-            title={`Jump to Citation #${num}`}
+            title={`View cited source #${num}`}
           >
             {num}
           </button>
@@ -122,6 +114,7 @@ function FormattedAnswer({ text }: { text: string }) {
 export default function AskLoopPage() {
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
+  const [expandedSources, setExpandedSources] = useState<Record<number, boolean>>({});
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
@@ -130,6 +123,24 @@ export default function AskLoopPage() {
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);
+
+  const toggleSources = (msgIdx: number) => {
+    setExpandedSources((prev) => ({ ...prev, [msgIdx]: !prev[msgIdx] }));
+  };
+
+  const handleCitationClick = (msgIdx: number, num: string) => {
+    setExpandedSources((prev) => ({ ...prev, [msgIdx]: true }));
+    setTimeout(() => {
+      const el = document.getElementById(`citation-${num}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.classList.add("ring-2", "ring-indigo-400", "scale-[1.02]");
+        setTimeout(() => {
+          el.classList.remove("ring-2", "ring-indigo-400", "scale-[1.02]");
+        }, 2000);
+      }
+    }, 150);
+  };
 
   const sampleQuestions = [
     "What are users saying about onboarding & team invites?",
@@ -223,7 +234,7 @@ export default function AskLoopPage() {
               key={i}
               onClick={() => handleAsk(sq)}
               disabled={loading}
-              className="text-xs px-3 py-1.5 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 hover:border-indigo-500/40 text-gray-300 hover:text-white transition flex items-center gap-1.5 text-left disabled:opacity-50"
+              className="text-xs px-3 py-1.5 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 hover:border-indigo-500/40 text-gray-300 hover:text-white transition flex items-center gap-1.5 text-left disabled:opacity-50 cursor-pointer"
             >
               <span>{sq}</span>
               <ArrowRight className="h-3 w-3 text-indigo-400 shrink-0" />
@@ -268,57 +279,78 @@ export default function AskLoopPage() {
 
             {/* Formatted Markdown/Text Body */}
             <div className="text-xs text-gray-200 leading-relaxed font-sans space-y-2">
-              <FormattedAnswer text={msg.content} />
+              <FormattedAnswer
+                text={msg.content}
+                onCitationClick={(num) => handleCitationClick(idx, num)}
+              />
             </div>
 
-            {/* Grounded Citation Source Cards */}
+            {/* Collapsible Grounded Citation Source Accordion */}
             {msg.citations && msg.citations.length > 0 && (
-              <div className="mt-5 pt-4 border-t border-gray-800/80 space-y-3">
-                <p className="text-[11px] font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Tag className="h-3.5 w-3.5" />
-                  <span>Cited Customer Feedback Context ({msg.citations.length} sources)</span>
-                </p>
+              <div className="mt-4 pt-3 border-t border-gray-800/60">
+                <button
+                  type="button"
+                  onClick={() => toggleSources(idx)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-900/80 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 text-xs text-gray-400 hover:text-gray-200 transition cursor-pointer"
+                >
+                  <Tag className="h-3 w-3 text-indigo-400" />
+                  <span className="font-medium">
+                    {expandedSources[idx]
+                      ? `Hide ${msg.citations.length} Cited Sources`
+                      : `View ${msg.citations.length} Cited Sources`}
+                  </span>
+                  <ChevronDown
+                    className={`h-3.5 w-3.5 text-gray-400 transition-transform duration-200 ${
+                      expandedSources[idx] ? "rotate-180 text-indigo-400" : ""
+                    }`}
+                  />
+                </button>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                  {msg.citations.map((c, cIdx) => (
-                    <div
-                      id={`citation-${cIdx + 1}`}
-                      key={c.id}
-                      className="p-3 rounded-xl bg-gray-900/90 border border-gray-800 space-y-2 hover:border-indigo-500/50 hover:bg-gray-850 transition"
-                    >
-                      <div className="flex items-center justify-between text-[10px]">
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-indigo-400 bg-indigo-950/70 border border-indigo-500/30 px-1.5 py-0.5 rounded">
-                            #{cIdx + 1}
-                          </span>
-                          <span className="px-1.5 py-0.5 rounded bg-gray-800 text-gray-300 font-medium">
-                            {c.channel}
-                          </span>
-                        </div>
-                        <span
-                          className={`font-mono font-bold px-1.5 py-0.5 rounded-full ${
-                            c.sentiment === "POS"
-                              ? "bg-emerald-500/15 text-emerald-300"
-                              : c.sentiment === "NEG"
-                              ? "bg-rose-500/15 text-rose-300"
-                              : "bg-slate-500/15 text-slate-300"
-                          }`}
+                {/* Collapsible Source Cards Container */}
+                {expandedSources[idx] && (
+                  <div className="mt-3.5 space-y-2.5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                      {msg.citations.map((c, cIdx) => (
+                        <div
+                          id={`citation-${cIdx + 1}`}
+                          key={c.id}
+                          className="p-3 rounded-xl bg-gray-900/90 border border-gray-800 space-y-2 hover:border-indigo-500/50 hover:bg-gray-850 transition"
                         >
-                          {c.sentiment}
-                        </span>
-                      </div>
+                          <div className="flex items-center justify-between text-[10px]">
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-bold text-indigo-400 bg-indigo-950/70 border border-indigo-500/30 px-1.5 py-0.5 rounded">
+                                #{cIdx + 1}
+                              </span>
+                              <span className="px-1.5 py-0.5 rounded bg-gray-800 text-gray-300 font-medium">
+                                {c.channel}
+                              </span>
+                            </div>
+                            <span
+                              className={`font-mono font-bold px-1.5 py-0.5 rounded-full ${
+                                c.sentiment === "POS"
+                                  ? "bg-emerald-500/15 text-emerald-300"
+                                  : c.sentiment === "NEG"
+                                  ? "bg-rose-500/15 text-rose-300"
+                                  : "bg-slate-500/15 text-slate-300"
+                              }`}
+                            >
+                              {c.sentiment}
+                            </span>
+                          </div>
 
-                      <p className="text-gray-300 text-[11px] leading-relaxed">
-                        "{c.content}"
-                      </p>
+                          <p className="text-gray-300 text-[11px] leading-relaxed">
+                            "{c.content}"
+                          </p>
 
-                      <div className="flex items-center justify-between text-[10px] text-gray-500 pt-1 border-t border-gray-800/60 font-mono">
-                        <span className="truncate">{c.customerLabel || "Customer"}</span>
-                        <span>Relevance: {Math.round(c.similarityScore * 100)}%</span>
-                      </div>
+                          <div className="flex items-center justify-between text-[10px] text-gray-500 pt-1 border-t border-gray-800/60 font-mono">
+                            <span className="truncate">{c.customerLabel || "Customer"}</span>
+                            <span>Relevance: {Math.round(c.similarityScore * 100)}%</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
