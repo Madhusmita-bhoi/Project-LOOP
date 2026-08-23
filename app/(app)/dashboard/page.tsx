@@ -487,6 +487,75 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Live Recent Feedback Stream */}
+      <div className="glass-panel p-5 rounded-2xl border border-gray-800/80 space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+            <h3 className="text-sm font-bold text-gray-100">Live Feedback Ingestion Feed</h3>
+            <span className="text-[10px] font-mono text-gray-500 px-2 py-0.5 rounded-full bg-gray-800/80 border border-gray-700/50">
+              Auto-Classified
+            </span>
+          </div>
+
+          <Link
+            href="/inbox"
+            className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-semibold"
+          >
+            <span>Open Feedback Inbox</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {data?.recentFeedbacks && data.recentFeedbacks.length > 0 ? (
+            data.recentFeedbacks.slice(0, 3).map((item: any) => (
+              <Link
+                key={item.id}
+                href="/inbox"
+                className="p-3.5 rounded-xl bg-gray-900/80 hover:bg-gray-800/90 border border-gray-800 hover:border-indigo-500/40 transition flex flex-col justify-between space-y-2 group shadow-md"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-[10px] mb-1.5">
+                    <span className="px-2 py-0.5 rounded bg-gray-800 text-gray-300 font-medium">
+                      {item.channel}
+                    </span>
+                    <span
+                      className={`font-mono font-bold px-1.5 py-0.2 rounded-full text-[9px] ${
+                        item.sentiment === "POS"
+                          ? "bg-emerald-500/15 text-emerald-300"
+                          : item.sentiment === "NEG"
+                          ? "bg-rose-500/15 text-rose-300"
+                          : "bg-slate-500/15 text-slate-300"
+                      }`}
+                    >
+                      {item.sentiment} {Math.abs(item.sentimentScore).toFixed(2)}
+                    </span>
+                  </div>
+                  <p className="text-gray-300 text-xs line-clamp-2 leading-relaxed">
+                    "{item.content}"
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between text-[10px] text-gray-500 pt-1.5 border-t border-gray-800/60 font-mono">
+                  <span className="truncate">{item.customerLabel || "Customer"}</span>
+                  <span>
+                    {new Date(item.createdAt).toLocaleDateString([], {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full py-6 text-center text-xs text-gray-500">
+              No recent feedback available
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

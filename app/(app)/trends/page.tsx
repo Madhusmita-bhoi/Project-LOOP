@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import {
   TrendingUp,
@@ -16,6 +17,9 @@ import {
   AlertTriangle,
   Smile,
   Calendar,
+  Sparkles,
+  ArrowUpRight,
+  SlidersHorizontal,
 } from "lucide-react";
 
 export default function TrendsPage() {
@@ -30,6 +34,10 @@ export default function TrendsPage() {
   const [themeFeedbacks, setThemeFeedbacks] = useState<any[]>([]);
   const [drillLoading, setDrillLoading] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
+
+  // Search & Sorting
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"volume" | "friction" | "spike">("volume");
 
   // New Theme Form
   const [themeForm, setThemeForm] = useState({
@@ -95,6 +103,23 @@ export default function TrendsPage() {
     }
   };
 
+  const filteredThemes = themes
+    .filter((t) =>
+      searchQuery
+        ? t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (t.description && t.description.toLowerCase().includes(searchQuery.toLowerCase()))
+        : true
+    )
+    .sort((a, b) => {
+      if (sortBy === "friction") {
+        return (b.sentimentBreakdown?.neg || 0) - (a.sentimentBreakdown?.neg || 0);
+      }
+      if (sortBy === "spike") {
+        return (b.growthRate || 0) - (a.growthRate || 0);
+      }
+      return (b.count || 0) - (a.count || 0);
+    });
+
   const spikingThemes = themes.filter((t) => t.isSpiking);
 
   return (
@@ -110,7 +135,7 @@ export default function TrendsPage() {
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Period Selector */}
           <div className="flex items-center bg-gray-900/90 border border-gray-800 rounded-xl p-1 text-xs">
             <Calendar className="h-3.5 w-3.5 text-gray-400 ml-2 mr-1" />
@@ -136,11 +161,47 @@ export default function TrendsPage() {
           <button
             disabled={isViewer}
             onClick={() => setCreateModalOpen(true)}
-            className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 disabled:opacity-40 transition"
+            className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 disabled:opacity-40 transition cursor-pointer"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>New Theme</span>
           </button>
+        </div>
+      </div>
+
+      {/* Search & Sorting Toolbar */}
+      <div className="glass-panel p-3.5 rounded-2xl border border-gray-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <div className="relative w-full sm:w-80">
+          <Search className="h-4 w-4 absolute left-3 top-2.5 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search themes by name or description..."
+            className="w-full pl-9 pr-3 py-1.5 bg-gray-900/90 border border-gray-700/80 rounded-xl text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-2 text-gray-400 hover:text-white"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <SlidersHorizontal className="h-3.5 w-3.5 text-gray-400" />
+          <span className="text-gray-400 text-[11px] font-semibold">Sort By:</span>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as any)}
+            className="bg-gray-900 border border-gray-700/80 text-gray-300 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          >
+            <option value="volume">Highest Volume</option>
+            <option value="friction">Critical Friction (Negative)</option>
+            <option value="spike">Fastest Spiking %</option>
+          </select>
         </div>
       </div>
 
@@ -180,16 +241,22 @@ export default function TrendsPage() {
       {/* Themes Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {loading ? (
-          <div className="col-span-full py-16 text-center text-gray-400">
+          <div className="col-span-full py-16 text-center text-gray-400 glass-panel rounded-2xl">
             <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2 text-indigo-400" />
             <p className="text-xs">Computing theme clusters and growth velocity...</p>
           </div>
-        ) : themes.length === 0 ? (
-          <div className="col-span-full py-16 text-center text-gray-400">
-            <p className="text-sm font-semibold">No themes registered</p>
+        ) : filteredThemes.length === 0 ? (
+          <div className="col-span-full py-16 text-center text-gray-400 glass-panel rounded-2xl">
+            <p className="text-sm font-semibold text-gray-200">No themes match your search query</p>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="mt-2 text-xs text-indigo-400 hover:text-indigo-300 font-semibold"
+            >
+              Clear search filter
+            </button>
           </div>
         ) : (
-          themes.map((theme) => {
+          filteredThemes.map((theme) => {
             const total = theme.recentCount || theme.count || 1;
             const posPct = Math.round(((theme.sentimentBreakdown?.pos || 0) / total) * 100);
             const negPct = Math.round(((theme.sentimentBreakdown?.neg || 0) / total) * 100);
@@ -199,7 +266,7 @@ export default function TrendsPage() {
               <div
                 key={theme.id}
                 onClick={() => handleDrillDown(theme)}
-                className="glass-panel glass-panel-hover p-5 rounded-2xl border border-gray-800/80 cursor-pointer flex flex-col justify-between"
+                className="glass-panel glass-panel-hover p-5 rounded-2xl border border-gray-800/80 cursor-pointer flex flex-col justify-between group shadow-lg"
               >
                 <div>
                   {/* Top Badge & Spike Indicator */}
@@ -279,9 +346,22 @@ export default function TrendsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] text-indigo-400 pt-1 font-semibold">
-                    <span>Drill into feedback items</span>
-                    <ChevronRight className="h-4 w-4" />
+                  {/* Bottom Actions */}
+                  <div className="flex items-center justify-between text-[11px] pt-1 font-semibold">
+                    <span className="text-indigo-400 group-hover:text-indigo-300 flex items-center gap-1 transition">
+                      <span>Inspect feedback items</span>
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </span>
+
+                    <Link
+                      href={`/ask`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="px-2 py-0.5 rounded-md bg-indigo-950/70 hover:bg-indigo-600 border border-indigo-500/30 text-indigo-300 hover:text-white transition flex items-center gap-1 text-[10px]"
+                      title="Ask LOOP Q&A"
+                    >
+                      <Sparkles className="h-2.5 w-2.5" />
+                      <span>Ask AI</span>
+                    </Link>
                   </div>
                 </div>
               </div>

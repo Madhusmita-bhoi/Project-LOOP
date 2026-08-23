@@ -20,6 +20,8 @@ import {
   Plus,
   X,
   Trash2,
+  Copy,
+  Check,
 } from "lucide-react";
 import { VoCReportContent } from "@/lib/types";
 
@@ -34,6 +36,7 @@ export default function ReportsPage() {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [generateModalOpen, setGenerateModalOpen] = useState(false);
+  const [copiedReport, setCopiedReport] = useState(false);
 
   const [periodDays, setPeriodDays] = useState(30);
   const [customTitle, setCustomTitle] = useState("");
@@ -102,7 +105,7 @@ export default function ReportsPage() {
         }
       }
     } catch (e) {
-      alert("Failed to delete report");
+      console.error("Failed to delete report", e);
     }
   };
 
@@ -119,6 +122,27 @@ export default function ReportsPage() {
     window.print();
   };
 
+  const handleCopyReport = () => {
+    if (!reportContent || !activeReport) return;
+    const text = [
+      `# ${activeReport.title}`,
+      `Generated on: ${new Date(activeReport.createdAt).toLocaleDateString()}`,
+      `\n## Executive Summary\n${reportContent.executiveSummary}`,
+      `\n## Critical Friction Points\n` +
+        reportContent.criticalFrictionPoints
+          ?.map((p: any) => `- **${p.area}** - Severity: ${p.severity}: ${p.description}`)
+          .join("\n"),
+      `\n## Strategic Action Items\n` +
+        reportContent.strategicActionItems
+          ?.map((a: any) => `- **${a.action}** [${a.priority}] - Owner: ${a.teamOwner}`)
+          .join("\n"),
+    ].join("\n");
+
+    navigator.clipboard.writeText(text);
+    setCopiedReport(true);
+    setTimeout(() => setCopiedReport(false), 2000);
+  };
+
   return (
     <div className="space-y-6 pb-12">
       {/* Page Header */}
@@ -132,22 +156,42 @@ export default function ReportsPage() {
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-2">
           {activeReport && (
-            <button
-              onClick={handlePrint}
-              className="px-3.5 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition"
-              title="Print / Save as PDF"
-            >
-              <Printer className="h-3.5 w-3.5 text-indigo-400" />
-              <span>Export PDF</span>
-            </button>
+            <>
+              <button
+                onClick={handleCopyReport}
+                className="px-3.5 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition"
+                title="Copy Markdown Report"
+              >
+                {copiedReport ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="text-emerald-400">Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3.5 w-3.5 text-indigo-400" />
+                    <span>Copy Text</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={handlePrint}
+                className="px-3.5 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition"
+                title="Print / Save as PDF"
+              >
+                <Printer className="h-3.5 w-3.5 text-indigo-400" />
+                <span>Export PDF</span>
+              </button>
+            </>
           )}
 
           <button
             disabled={isViewer}
             onClick={() => setGenerateModalOpen(true)}
-            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-semibold shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 disabled:opacity-40 transition"
+            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-semibold shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 disabled:opacity-40 transition cursor-pointer"
           >
             <Sparkles className="h-3.5 w-3.5" />
             <span>Generate New Report</span>

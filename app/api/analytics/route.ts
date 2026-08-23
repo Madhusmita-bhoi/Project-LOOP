@@ -169,6 +169,22 @@ export async function GET(req: Request) {
       value,
     }));
 
+    // Fetch 5 latest feedback items for live activity ticker
+    const recentFeedbacks = await prisma.feedback.findMany({
+      where: { workspaceId },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: {
+        id: true,
+        content: true,
+        customerLabel: true,
+        channel: true,
+        sentiment: true,
+        sentimentScore: true,
+        createdAt: true,
+      },
+    });
+
     return NextResponse.json({
       stats: {
         totalFeedback: totalCurrent,
@@ -186,6 +202,7 @@ export async function GET(req: Request) {
         topThemes,
         channelDistribution,
       },
+      recentFeedbacks,
     });
   } catch (error: any) {
     console.error("GET /api/analytics error:", error);

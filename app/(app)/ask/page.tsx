@@ -13,6 +13,9 @@ import {
   ArrowRight,
   Info,
   ChevronDown,
+  Copy,
+  Check,
+  RotateCcw,
 } from "lucide-react";
 
 interface Citation {
@@ -101,6 +104,7 @@ export default function AskLoopPage() {
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
   const [expandedSources, setExpandedSources] = useState<Record<number, boolean>>({});
+  const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
@@ -114,18 +118,23 @@ export default function AskLoopPage() {
     setExpandedSources((prev) => ({ ...prev, [msgIdx]: !prev[msgIdx] }));
   };
 
-  const handleCitationClick = (msgIdx: number, num: string) => {
-    setExpandedSources((prev) => ({ ...prev, [msgIdx]: true }));
-    setTimeout(() => {
-      const el = document.getElementById(`citation-${num}`);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-        el.classList.add("ring-2", "ring-indigo-400", "scale-[1.02]");
-        setTimeout(() => {
-          el.classList.remove("ring-2", "ring-indigo-400", "scale-[1.02]");
-        }, 2000);
-      }
-    }, 150);
+  const handleCopyAnswer = (idx: number, text: string) => {
+    const clean = text.replace(/\[#?\d+\]/g, "").trim();
+    navigator.clipboard.writeText(clean);
+    setCopiedIdx(idx);
+    setTimeout(() => setCopiedIdx(null), 2000);
+  };
+
+  const handleClearChat = () => {
+    setMessages([
+      {
+        role: "assistant",
+        content:
+          "Hello! I am **Ask LOOP**, your grounded AI customer intelligence assistant.\n\nAsk me anything in plain English about what your customers are saying, complaining about, or requesting. Every answer I generate is 100% grounded in your workspace's actual ingested feedback with direct source citations.",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
+    setExpandedSources({});
   };
 
   const sampleQuestions = [
@@ -202,9 +211,21 @@ export default function AskLoopPage() {
           </p>
         </div>
 
-        <div className="flex items-center space-x-2 text-xs text-emerald-400 bg-emerald-950/30 border border-emerald-500/30 px-3 py-1.5 rounded-xl">
-          <ShieldCheck className="h-4 w-4 shrink-0" />
-          <span>Tenant Isolated & Anti-Hallucination Grounded</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center space-x-2 text-xs text-emerald-400 bg-emerald-950/30 border border-emerald-500/30 px-3 py-1.5 rounded-xl">
+            <ShieldCheck className="h-4 w-4 shrink-0" />
+            <span>Anti-Hallucination Grounded</span>
+          </div>
+
+          <button
+            onClick={handleClearChat}
+            disabled={messages.length <= 1 || loading}
+            className="px-3 py-1.5 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 disabled:opacity-40 transition cursor-pointer"
+            title="Reset Conversation"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span>Clear</span>
+          </button>
         </div>
       </div>
 
@@ -260,15 +281,34 @@ export default function AskLoopPage() {
                   </span>
                 )}
               </div>
-              <span className="text-[10px] text-gray-500 font-mono">{msg.timestamp}</span>
+
+              <div className="flex items-center space-x-2">
+                {msg.role === "assistant" && (
+                  <button
+                    onClick={() => handleCopyAnswer(idx, msg.content)}
+                    className="p-1 rounded-md hover:bg-gray-800 text-gray-400 hover:text-gray-200 transition flex items-center gap-1 text-[10px]"
+                    title="Copy Answer"
+                  >
+                    {copiedIdx === idx ? (
+                      <>
+                        <Check className="h-3 w-3 text-emerald-400" />
+                        <span className="text-emerald-400">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3 w-3" />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+                )}
+                <span className="text-[10px] text-gray-500 font-mono">{msg.timestamp}</span>
+              </div>
             </div>
 
             {/* Formatted Markdown/Text Body */}
             <div className="text-xs text-gray-200 leading-relaxed font-sans space-y-2">
-              <FormattedAnswer
-                text={msg.content}
-                onCitationClick={(num) => handleCitationClick(idx, num)}
-              />
+              <FormattedAnswer text={msg.content} />
             </div>
 
             {/* Collapsible Grounded Citation Source Accordion */}

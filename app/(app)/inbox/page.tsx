@@ -21,6 +21,10 @@ import {
   SlidersHorizontal,
   FileSpreadsheet,
   Download,
+  LayoutGrid,
+  Table as TableIcon,
+  Copy,
+  Check,
 } from "lucide-react";
 
 export default function InboxPage() {
@@ -28,6 +32,10 @@ export default function InboxPage() {
   const user = session?.user as any;
   const userRole = user?.role || "VIEWER";
   const isViewer = userRole === "VIEWER";
+
+  // View Mode: 'table' vs 'cards'
+  const [viewMode, setViewMode] = useState<"table" | "cards">("table");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   // Data & Pagination State
   const [feedbackList, setFeedbackList] = useState<any[]>([]);
@@ -278,6 +286,43 @@ export default function InboxPage() {
     document.body.removeChild(link);
   };
 
+  // Export Current Filtered Feedback to CSV
+  const exportCurrentViewCsv = () => {
+    if (feedbackList.length === 0) return;
+    const headers = ["ID", "Content", "Customer", "Channel", "Sentiment", "SentimentScore", "FeatureArea", "Status", "CreatedAt"];
+    const rows = feedbackList.map((f) => [
+      `"${f.id}"`,
+      `"${(f.content || "").replace(/"/g, '""')}"`,
+      `"${(f.customerLabel || "").replace(/"/g, '""')}"`,
+      `"${f.channel}"`,
+      `"${f.sentiment}"`,
+      f.sentimentScore || 0,
+      `"${f.featureArea || ""}"`,
+      `"${f.status}"`,
+      `"${f.createdAt}"`,
+    ]);
+
+    const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `loop_feedback_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setActionSuccessMessage(`Exported ${feedbackList.length} feedback records to CSV!`);
+    setTimeout(() => setActionSuccessMessage(null), 3500);
+  };
+
+  // Handle Quick Copy
+  const handleCopy = (id: string, text: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   return (
     <div className="space-y-5 pb-12">
       {/* Toast Notification */}
@@ -300,13 +345,42 @@ export default function InboxPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* View Mode Toggle */}
+          <div className="flex items-center bg-gray-900 border border-gray-800 rounded-xl p-1 text-xs">
+            <button
+              onClick={() => setViewMode("table")}
+              className={`px-2.5 py-1 rounded-lg font-medium transition flex items-center gap-1.5 ${
+                viewMode === "table"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "text-gray-400 hover:text-gray-200"
+              }`}
+              title="Table View"
+            >
+              <TableIcon className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Table</span>
+            </button>
+            <button
+              onClick={() => setViewMode("cards")}
+              className={`px-2.5 py-1 rounded-lg font-medium transition flex items-center gap-1.5 ${
+                viewMode === "cards"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "text-gray-400 hover:text-gray-200"
+              }`}
+              title="Cards View"
+            >
+              <LayoutGrid className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Cards</span>
+            </button>
+          </div>
+
           <button
-            onClick={downloadSampleCsv}
-            className="px-3 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition"
-            title="Download Template CSV"
+            onClick={exportCurrentViewCsv}
+            disabled={feedbackList.length === 0}
+            className="px-3 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition disabled:opacity-40"
+            title="Export filtered records to CSV"
           >
-            <Download className="h-3.5 w-3.5 text-gray-400" />
-            <span className="hidden sm:inline">Sample CSV</span>
+            <Download className="h-3.5 w-3.5 text-indigo-400" />
+            <span className="hidden sm:inline">Export CSV</span>
           </button>
 
           <button
@@ -317,7 +391,7 @@ export default function InboxPage() {
               setCsvPreview([]);
               setCsvModalOpen(true);
             }}
-            className="px-3.5 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-700/80 text-gray-200 text-xs font-semibold flex items-center gap-1.5 disabled:opacity-40 transition"
+            className="px-3.5 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-700/80 text-gray-200 text-xs font-semibold flex items-center gap-1.5 disabled:opacity-40 transition cursor-pointer"
           >
             <Upload className="h-3.5 w-3.5 text-indigo-400" />
             <span>Import CSV</span>
@@ -326,7 +400,7 @@ export default function InboxPage() {
           <button
             disabled={isViewer}
             onClick={() => setSingleModalOpen(true)}
-            className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 disabled:opacity-40 transition"
+            className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 disabled:opacity-40 transition cursor-pointer"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Feedback</span>
@@ -450,80 +524,203 @@ export default function InboxPage() {
         </div>
       </div>
 
-      {/* Feedback Data Table */}
-      <div className="glass-panel rounded-2xl border border-gray-800/80 overflow-hidden shadow-xl">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-gray-800 bg-[#0d121f] text-gray-400 uppercase text-[10px] tracking-wider font-semibold">
-                <th className="py-3 px-4">Feedback & Customer</th>
-                <th className="py-3 px-3">Channel</th>
-                <th className="py-3 px-3">Sentiment</th>
-                <th className="py-3 px-3">Themes</th>
-                <th className="py-3 px-3">Status</th>
-                <th className="py-3 px-4 text-right">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-800/60">
-              {loading ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-gray-400">
-                    <div className="flex items-center justify-center space-x-2">
-                      <RefreshCw className="h-4 w-4 animate-spin text-indigo-400" />
-                      <span>Loading feedback stream...</span>
-                    </div>
-                  </td>
+      {/* Feedback Stream Container (Table vs Card View) */}
+      {viewMode === "table" ? (
+        <div className="glass-panel rounded-2xl border border-gray-800/80 overflow-hidden shadow-xl">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-gray-800 bg-[#0d121f] text-gray-400 uppercase text-[10px] tracking-wider font-semibold">
+                  <th className="py-3 px-4">Feedback & Customer</th>
+                  <th className="py-3 px-3">Channel</th>
+                  <th className="py-3 px-3">Sentiment</th>
+                  <th className="py-3 px-3">Themes</th>
+                  <th className="py-3 px-3">Status</th>
+                  <th className="py-3 px-4 text-right">Date</th>
                 </tr>
-              ) : feedbackList.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-gray-400">
-                    <p className="text-sm font-medium text-gray-300">No feedback matching your filters</p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Try clearing filters or simulate a live channel pull from the sidebar.
-                    </p>
-                  </td>
-                </tr>
-              ) : (
-                feedbackList.map((item) => (
-                  <tr
-                    key={item.id}
-                    onClick={() => {
-                      setSelectedItem(item);
-                      setDrawerOpen(true);
-                    }}
-                    className="hover:bg-indigo-950/20 cursor-pointer transition group"
-                  >
-                    {/* Content & Customer */}
-                    <td className="py-3.5 px-4 max-w-md">
-                      <p className="text-gray-200 line-clamp-2 font-normal leading-relaxed">
-                        {item.content}
-                      </p>
-                      <div className="flex items-center gap-2 mt-1.5 text-[11px] text-gray-400">
-                        <span className="font-medium text-gray-300 truncate">
-                          {item.customerLabel || "Anonymous Customer"}
-                        </span>
-                        {item.sourceRef && (
-                          <span className="font-mono text-[10px] text-indigo-400/80 bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-900/40">
-                            {item.sourceRef}
-                          </span>
-                        )}
-                        {item.featureArea && (
-                          <span className="text-[10px] text-gray-400">
-                            • Area: <strong className="text-gray-300">{item.featureArea}</strong>
-                          </span>
-                        )}
+              </thead>
+              <tbody className="divide-y divide-gray-800/60">
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} className="py-12 text-center text-gray-400">
+                      <div className="flex items-center justify-center space-x-2">
+                        <RefreshCw className="h-4 w-4 animate-spin text-indigo-400" />
+                        <span>Loading feedback stream...</span>
                       </div>
                     </td>
+                  </tr>
+                ) : feedbackList.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-12 text-center text-gray-400">
+                      <p className="text-sm font-medium text-gray-300">No feedback matching your filters</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Try clearing filters or simulate a live channel pull from the sidebar.
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  feedbackList.map((item) => (
+                    <tr
+                      key={item.id}
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setDrawerOpen(true);
+                      }}
+                      className="hover:bg-indigo-950/20 cursor-pointer transition group"
+                    >
+                      {/* Content & Customer */}
+                      <td className="py-3.5 px-4 max-w-md">
+                        <p className="text-gray-200 line-clamp-2 font-normal leading-relaxed">
+                          {item.content}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1.5 text-[11px] text-gray-400">
+                          <span className="font-medium text-gray-300 truncate">
+                            {item.customerLabel || "Anonymous Customer"}
+                          </span>
+                          {item.sourceRef && (
+                            <span className="font-mono text-[10px] text-indigo-400/80 bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-900/40">
+                              {item.sourceRef}
+                            </span>
+                          )}
+                          {item.featureArea && (
+                            <span className="text-[10px] text-gray-400">
+                              • Area: <strong className="text-gray-300">{item.featureArea}</strong>
+                            </span>
+                          )}
+                        </div>
+                      </td>
 
-                    {/* Channel */}
-                    <td className="py-3.5 px-3 whitespace-nowrap">
-                      <span className="px-2 py-1 rounded-md text-[11px] font-medium bg-gray-800/80 text-gray-300 border border-gray-700/50">
+                      {/* Channel */}
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <span className="px-2 py-1 rounded-md text-[11px] font-medium bg-gray-800/80 text-gray-300 border border-gray-700/50">
+                          {item.channel}
+                        </span>
+                      </td>
+
+                      {/* Sentiment */}
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
+                            item.sentiment === "POS"
+                              ? "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"
+                              : item.sentiment === "NEG"
+                              ? "bg-rose-500/15 text-rose-300 border border-rose-500/30"
+                              : "bg-slate-500/15 text-slate-300 border border-slate-500/30"
+                          }`}
+                        >
+                          {item.sentiment === "POS" ? "POS +" : item.sentiment === "NEG" ? "NEG -" : "NEU ~"}
+                          {Math.abs(item.sentimentScore).toFixed(2)}
+                        </span>
+                      </td>
+
+                      {/* Themes */}
+                      <td className="py-3.5 px-3">
+                        <div className="flex flex-wrap gap-1 max-w-[200px]">
+                          {item.themes && item.themes.length > 0 ? (
+                            item.themes.map((ft: any) => (
+                              <span
+                                key={ft.theme.id}
+                                className="px-2 py-0.5 rounded text-[10px] font-medium truncate"
+                                style={{
+                                  backgroundColor: `${ft.theme.color}20`,
+                                  color: ft.theme.color,
+                                  borderColor: `${ft.theme.color}40`,
+                                }}
+                              >
+                                {ft.theme.name}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-gray-600 text-[10px] italic">Unassigned</span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Status */}
+                      <td
+                        className="py-3.5 px-3 whitespace-nowrap"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <select
+                          disabled={isViewer}
+                          value={item.status}
+                          onChange={(e) => handleStatusChange(item.id, e.target.value)}
+                          className={`text-[10px] font-semibold rounded-md px-2 py-1 border transition bg-transparent focus:outline-none ${
+                            item.status === "NEW"
+                              ? "border-blue-500/40 text-blue-300 bg-blue-500/10"
+                              : item.status === "TRIAGED"
+                              ? "border-purple-500/40 text-purple-300 bg-purple-500/10"
+                              : item.status === "ACTIONED"
+                              ? "border-emerald-500/40 text-emerald-300 bg-emerald-500/10"
+                              : "border-gray-600 text-gray-400 bg-gray-800/40"
+                          }`}
+                        >
+                          <option value="NEW" className="bg-gray-900 text-gray-200">
+                            NEW
+                          </option>
+                          <option value="TRIAGED" className="bg-gray-900 text-gray-200">
+                            TRIAGED
+                          </option>
+                          <option value="ACTIONED" className="bg-gray-900 text-gray-200">
+                            ACTIONED
+                          </option>
+                          <option value="CLOSED" className="bg-gray-900 text-gray-200">
+                            CLOSED
+                          </option>
+                        </select>
+                      </td>
+
+                      {/* Date */}
+                      <td className="py-3.5 px-4 text-right whitespace-nowrap text-gray-500 font-mono text-[11px]">
+                        {new Date(item.createdAt).toLocaleDateString([], {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        /* Cards Grid View */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {loading ? (
+            <div className="col-span-full py-12 text-center text-gray-400 glass-panel rounded-2xl">
+              <RefreshCw className="h-5 w-5 animate-spin text-indigo-400 mx-auto mb-2" />
+              <span>Loading feedback stream...</span>
+            </div>
+          ) : feedbackList.length === 0 ? (
+            <div className="col-span-full py-12 text-center text-gray-400 glass-panel rounded-2xl">
+              <p className="text-sm font-medium text-gray-300">No feedback matching your filters</p>
+              <p className="text-xs text-gray-500 mt-1">Try clearing filters or simulate new items.</p>
+            </div>
+          ) : (
+            feedbackList.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => {
+                  setSelectedItem(item);
+                  setDrawerOpen(true);
+                }}
+                className="glass-panel p-4 rounded-2xl border border-gray-800/80 hover:border-indigo-500/40 hover:bg-gray-850/60 transition cursor-pointer flex flex-col justify-between space-y-3 group shadow-lg"
+              >
+                <div>
+                  {/* Top Bar */}
+                  <div className="flex items-center justify-between text-[11px] mb-2.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="px-2 py-0.5 rounded-md font-medium bg-gray-800/90 text-gray-300 border border-gray-700/50">
                         {item.channel}
                       </span>
-                    </td>
-
-                    {/* Sentiment */}
-                    <td className="py-3.5 px-3 whitespace-nowrap">
+                      {item.sourceRef && (
+                        <span className="font-mono text-[10px] text-indigo-400 bg-indigo-950/60 px-1.5 py-0.5 rounded border border-indigo-900/50">
+                          {item.sourceRef}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1.5">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
                           item.sentiment === "POS"
@@ -533,70 +730,82 @@ export default function InboxPage() {
                             : "bg-slate-500/15 text-slate-300 border border-slate-500/30"
                         }`}
                       >
-                        {item.sentiment === "POS" ? "POS +" : item.sentiment === "NEG" ? "NEG -" : "NEU ~"}
-                        {Math.abs(item.sentimentScore).toFixed(2)}
+                        {item.sentiment} {Math.abs(item.sentimentScore).toFixed(2)}
                       </span>
-                    </td>
-
-                    {/* Themes */}
-                    <td className="py-3.5 px-3">
-                      <div className="flex flex-wrap gap-1 max-w-[200px]">
-                        {item.themes && item.themes.length > 0 ? (
-                          item.themes.map((ft: any) => (
-                            <span
-                              key={ft.theme.id}
-                              className="px-2 py-0.5 rounded text-[10px] font-medium truncate"
-                              style={{
-                                backgroundColor: `${ft.theme.color}20`,
-                                color: ft.theme.color,
-                                border: `1px solid ${ft.theme.color}40`,
-                              }}
-                            >
-                              {ft.theme.name}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="text-[11px] text-gray-500">Unassigned</span>
-                        )}
-                      </div>
-                    </td>
-
-                    {/* Status Dropdown */}
-                    <td
-                      className="py-3.5 px-3 whitespace-nowrap"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <select
-                        disabled={isViewer}
-                        value={item.status}
-                        onChange={(e) => handleStatusChange(item.id, e.target.value)}
-                        className={`text-[11px] font-semibold rounded-lg px-2 py-1 border focus:outline-none transition cursor-pointer disabled:cursor-not-allowed ${
-                          item.status === "ACTIONED"
-                            ? "bg-emerald-950/50 text-emerald-300 border-emerald-700/50"
-                            : item.status === "REVIEWED"
-                            ? "bg-blue-950/50 text-blue-300 border-blue-700/50"
-                            : "bg-amber-950/50 text-amber-300 border-amber-700/50"
-                        }`}
+                      <button
+                        onClick={(e) => handleCopy(item.id, item.content, e)}
+                        className="p-1 rounded hover:bg-gray-800 text-gray-500 hover:text-gray-300 transition"
+                        title="Copy Quote"
                       >
-                        <option value="NEW">NEW</option>
-                        <option value="REVIEWED">REVIEWED</option>
-                        <option value="ACTIONED">ACTIONED</option>
-                      </select>
-                    </td>
+                        {copiedId === item.id ? (
+                          <Check className="h-3.5 w-3.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="h-3.5 w-3.5" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
 
-                    {/* Date */}
-                    <td className="py-3.5 px-4 text-right whitespace-nowrap text-gray-400 text-[11px] font-mono">
-                      {new Date(item.createdAt).toLocaleDateString("en-US", {
+                  {/* Feedback Text */}
+                  <p className="text-gray-200 text-xs leading-relaxed line-clamp-3">
+                    "{item.content}"
+                  </p>
+                </div>
+
+                {/* Bottom Themes & Status */}
+                <div className="pt-2.5 border-t border-gray-800/70 space-y-2 text-[10px]">
+                  <div className="flex items-center justify-between text-gray-400">
+                    <span className="truncate font-medium text-gray-300">
+                      {item.customerLabel || "Anonymous Customer"}
+                    </span>
+                    <span className="font-mono text-gray-500">
+                      {new Date(item.createdAt).toLocaleDateString([], {
                         month: "short",
                         day: "numeric",
                       })}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-1">
+                      {item.themes && item.themes.length > 0 ? (
+                        item.themes.slice(0, 2).map((ft: any) => (
+                          <span
+                            key={ft.theme.id}
+                            className="px-1.5 py-0.2 rounded text-[9px] font-medium"
+                            style={{
+                              backgroundColor: `${ft.theme.color}20`,
+                              color: ft.theme.color,
+                            }}
+                          >
+                            {ft.theme.name}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-gray-600 italic">No theme</span>
+                      )}
+                    </div>
+
+                    <span
+                      className={`font-semibold px-2 py-0.5 rounded text-[9px] ${
+                        item.status === "NEW"
+                          ? "bg-blue-500/10 text-blue-300"
+                          : item.status === "TRIAGED"
+                          ? "bg-purple-500/10 text-purple-300"
+                          : item.status === "ACTIONED"
+                          ? "bg-emerald-500/10 text-emerald-300"
+                          : "bg-gray-800 text-gray-400"
+                      }`}
+                    >
+                      {item.status}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
+      )}
 
         {/* Pagination Bar */}
         <div className="p-4 border-t border-gray-800 bg-[#0c101c] flex items-center justify-between text-xs text-gray-400">
