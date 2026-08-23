@@ -29,7 +29,11 @@ import {
   RefreshCw,
   Layers,
   Inbox,
+  ShieldCheck,
+  Zap,
+  Activity,
 } from "lucide-react";
+import AudioBriefingButton from "@/components/AudioBriefingButton";
 
 export default function DashboardPage() {
   const [days, setDays] = useState(30);
@@ -58,6 +62,11 @@ export default function DashboardPage() {
 
   const stats = data?.stats;
   const charts = data?.charts;
+
+  const executiveBriefingText =
+    stats?.netSentimentScore >= 0.2
+      ? `Overall customer sentiment is positive at +${stats?.netSentimentScore} with high delight in platform performance. Priority focus should be resolving team invite friction during onboarding and 504 PDF download timeouts on billing.`
+      : `Customer friction rate is elevated with ${stats?.negativePercentage}% negative sentiment. Critical engineering priorities include billing PDF generation reliability and SAML SSO support for enterprise deals.`;
 
   return (
     <div className="space-y-6 pb-12">
@@ -115,11 +124,44 @@ export default function DashboardPage() {
 
           <button
             onClick={fetchAnalytics}
-            className="p-2 rounded-xl bg-gray-900/90 border border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800 transition"
+            className="p-2 rounded-xl bg-gray-900/90 border border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800 transition cursor-pointer"
             title="Refresh Data"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin text-indigo-400" : ""}`} />
           </button>
+        </div>
+      </div>
+
+      {/* AI Executive Intelligence Briefing Banner */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-950/60 via-violet-950/40 to-slate-900/80 border border-indigo-500/30 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-start gap-3.5">
+          <div className="p-2.5 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white shrink-0 shadow-lg shadow-indigo-500/30">
+            <Sparkles className="h-5 w-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-300">
+                AI Executive Intelligence Synthesis ({days}D Period)
+              </span>
+              <span className="px-2 py-0.2 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                Auto-Generated
+              </span>
+            </div>
+            <p className="text-xs text-gray-200 mt-1 leading-relaxed max-w-3xl">
+              {executiveBriefingText}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+          <AudioBriefingButton text={executiveBriefingText} label="Listen to Briefing" />
+          <Link
+            href="/ask"
+            className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-500/20 flex items-center gap-1.5 transition"
+          >
+            <span>Ask Follow-up</span>
+            <ArrowRight className="h-3 w-3" />
+          </Link>
         </div>
       </div>
 

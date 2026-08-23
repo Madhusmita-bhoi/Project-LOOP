@@ -17,6 +17,7 @@ import {
   Check,
   RotateCcw,
 } from "lucide-react";
+import AudioBriefingButton from "@/components/AudioBriefingButton";
 
 interface Citation {
   id: string;
@@ -284,23 +285,26 @@ export default function AskLoopPage() {
 
               <div className="flex items-center space-x-2">
                 {msg.role === "assistant" && (
-                  <button
-                    onClick={() => handleCopyAnswer(idx, msg.content)}
-                    className="p-1 rounded-md hover:bg-gray-800 text-gray-400 hover:text-gray-200 transition flex items-center gap-1 text-[10px]"
-                    title="Copy Answer"
-                  >
-                    {copiedIdx === idx ? (
-                      <>
-                        <Check className="h-3 w-3 text-emerald-400" />
-                        <span className="text-emerald-400">Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-3 w-3" />
-                        <span>Copy</span>
-                      </>
-                    )}
-                  </button>
+                  <>
+                    <AudioBriefingButton text={msg.content} label="Listen" />
+                    <button
+                      onClick={() => handleCopyAnswer(idx, msg.content)}
+                      className="px-2 py-1 rounded-md bg-gray-900/80 hover:bg-gray-800 border border-gray-800 text-gray-400 hover:text-gray-200 transition flex items-center gap-1 text-[11px] font-semibold cursor-pointer"
+                      title="Copy Answer"
+                    >
+                      {copiedIdx === idx ? (
+                        <>
+                          <Check className="h-3 w-3 text-emerald-400" />
+                          <span className="text-emerald-400">Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-3 w-3" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
+                  </>
                 )}
                 <span className="text-[10px] text-gray-500 font-mono">{msg.timestamp}</span>
               </div>

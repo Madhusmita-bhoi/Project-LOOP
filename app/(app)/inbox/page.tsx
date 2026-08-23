@@ -430,8 +430,90 @@ export default function InboxPage() {
           )}
         </div>
 
-        {/* Row 2: Dropdown Multi-filters */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-xs">
+        {/* Row 2: Quick Filter Preset Chips */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+          <span className="text-[10px] font-semibold text-gray-500 uppercase mr-1">
+            Quick Views:
+          </span>
+          <button
+            onClick={() => {
+              setSearch("");
+              setChannel("ALL");
+              setSentiment("ALL");
+              setStatus("ALL");
+              setThemeId("ALL");
+            }}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition cursor-pointer ${
+              sentiment === "ALL" && status === "ALL" && themeId === "ALL" && channel === "ALL"
+                ? "bg-indigo-600 text-white shadow-xs"
+                : "bg-gray-900/80 hover:bg-gray-800 text-gray-400 hover:text-gray-200 border border-gray-800"
+            }`}
+          >
+            All Items ({pagination.totalCount})
+          </button>
+          <button
+            onClick={() => {
+              setSentiment("NEG");
+              setStatus("ALL");
+            }}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition flex items-center gap-1 cursor-pointer ${
+              sentiment === "NEG"
+                ? "bg-rose-600 text-white shadow-xs"
+                : "bg-gray-900/80 hover:bg-gray-800 text-rose-300 hover:text-rose-200 border border-rose-500/30"
+            }`}
+          >
+            <AlertCircle className="h-3 w-3" />
+            <span>Critical Friction</span>
+          </button>
+          <button
+            onClick={() => {
+              setSentiment("POS");
+              setStatus("ALL");
+            }}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition flex items-center gap-1 cursor-pointer ${
+              sentiment === "POS"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "bg-gray-900/80 hover:bg-gray-800 text-emerald-300 hover:text-emerald-200 border border-emerald-500/30"
+            }`}
+          >
+            <Sparkles className="h-3 w-3" />
+            <span>Positive Delight</span>
+          </button>
+          <button
+            onClick={() => {
+              setStatus("NEW");
+              setSentiment("ALL");
+            }}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition flex items-center gap-1 cursor-pointer ${
+              status === "NEW"
+                ? "bg-blue-600 text-white shadow-xs"
+                : "bg-gray-900/80 hover:bg-gray-800 text-blue-300 hover:text-blue-200 border border-blue-500/30"
+            }`}
+          >
+            <Clock className="h-3 w-3" />
+            <span>Needs Triage</span>
+          </button>
+          {themes.slice(0, 3).map((t) => (
+            <button
+              key={t.id}
+              onClick={() => {
+                setThemeId(t.id);
+                setSentiment("ALL");
+                setStatus("ALL");
+              }}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition cursor-pointer truncate max-w-[140px] ${
+                themeId === t.id
+                  ? "bg-indigo-600 text-white shadow-xs"
+                  : "bg-gray-900/80 hover:bg-gray-800 text-gray-400 hover:text-gray-200 border border-gray-800"
+              }`}
+            >
+              {t.name}
+            </button>
+          ))}
+        </div>
+
+        {/* Row 3: Dropdown Multi-filters */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-xs pt-1 border-t border-gray-800/60">
           {/* Channel */}
           <div>
             <label className="block text-[10px] uppercase font-semibold text-gray-400 mb-1">
@@ -440,7 +522,7 @@ export default function InboxPage() {
             <select
               value={channel}
               onChange={(e) => setChannel(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
             >
               <option value="ALL">All Channels</option>
               <option value="Support ticket">Support tickets</option>
@@ -459,7 +541,7 @@ export default function InboxPage() {
             <select
               value={sentiment}
               onChange={(e) => setSentiment(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
             >
               <option value="ALL">All Sentiments</option>
               <option value="POS">Positive</option>
@@ -476,12 +558,13 @@ export default function InboxPage() {
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
             >
               <option value="ALL">All Statuses</option>
               <option value="NEW">NEW</option>
-              <option value="REVIEWED">REVIEWED</option>
+              <option value="TRIAGED">TRIAGED</option>
               <option value="ACTIONED">ACTIONED</option>
+              <option value="CLOSED">CLOSED</option>
             </select>
           </div>
 
@@ -493,7 +576,7 @@ export default function InboxPage() {
             <select
               value={themeId}
               onChange={(e) => setThemeId(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full bg-gray-900 border border-gray-700/80 text-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
             >
               <option value="ALL">All Themes</option>
               {themes.map((t) => (
@@ -516,7 +599,7 @@ export default function InboxPage() {
                 setDateFrom("");
                 setDateTo("");
               }}
-              className="w-full py-1.5 px-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition font-medium text-center"
+              className="w-full py-1.5 px-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition font-medium text-center cursor-pointer"
             >
               Clear Filters
             </button>

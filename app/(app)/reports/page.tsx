@@ -23,6 +23,7 @@ import {
   Copy,
   Check,
 } from "lucide-react";
+import AudioBriefingButton from "@/components/AudioBriefingButton";
 import { VoCReportContent } from "@/lib/types";
 
 export default function ReportsPage() {
@@ -159,9 +160,19 @@ export default function ReportsPage() {
         <div className="flex flex-wrap items-center gap-2">
           {activeReport && (
             <>
+              <AudioBriefingButton
+                text={
+                  reportContent
+                    ? `${activeReport.title}. ${reportContent.executiveSummary}`
+                    : activeReport.title
+                }
+                label="Listen to Briefing"
+                className="py-2"
+              />
+
               <button
                 onClick={handleCopyReport}
-                className="px-3.5 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition"
+                className="px-3.5 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                 title="Copy Markdown Report"
               >
                 {copiedReport ? (
@@ -179,7 +190,7 @@ export default function ReportsPage() {
 
               <button
                 onClick={handlePrint}
-                className="px-3.5 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition"
+                className="px-3.5 py-2 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                 title="Print / Save as PDF"
               >
                 <Printer className="h-3.5 w-3.5 text-indigo-400" />

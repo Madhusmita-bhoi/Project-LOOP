@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut, signIn } from "next-auth/react";
@@ -21,7 +21,9 @@ import {
   Layers,
   ChevronDown,
   UserCheck,
+  Search,
 } from "lucide-react";
+import CommandPalette from "./CommandPalette";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -30,10 +32,23 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [simulating, setSimulating] = useState(false);
   const [simMessage, setSimMessage] = useState<string | null>(null);
+  const [commandOpen, setCommandOpen] = useState(false);
 
   const user = session?.user as any;
   const userRole = user?.role || "VIEWER";
   const workspaceName = user?.workspaceName || "Acme CloudScale Inc.";
+
+  // Global Command+K Listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setCommandOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const navItems = [
     { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -92,6 +107,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="h-screen w-full bg-[#0b0f19] text-gray-100 flex flex-col md:flex-row overflow-hidden">
+      {/* Global Command Palette Modal */}
+      <CommandPalette isOpen={commandOpen} onClose={() => setCommandOpen(false)} />
+
       {/* Top Mobile Bar */}
       <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-800/80 bg-[#111827]/90 backdrop-blur shrink-0 z-50">
         <div className="flex items-center space-x-2.5">
@@ -102,12 +120,21 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             LOOP
           </span>
         </div>
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 rounded-lg bg-gray-800 text-gray-400 hover:text-white"
-        >
-          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setCommandOpen(true)}
+            className="p-2 rounded-lg bg-gray-800 text-gray-300 hover:text-white"
+            title="Open Command Palette"
+          >
+            <Search className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 rounded-lg bg-gray-800 text-gray-400 hover:text-white"
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Sidebar */}
@@ -117,8 +144,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         } md:flex flex-col w-full md:w-64 h-full border-r border-gray-800/70 bg-[#0f1422]/95 backdrop-blur shrink-0 z-40 overflow-hidden select-none`}
       >
         {/* Workspace Brand Header */}
-        <div className="p-5 border-b border-gray-800/70">
-          <div className="flex items-center space-x-3 mb-4">
+        <div className="p-4 border-b border-gray-800/70 space-y-3">
+          <div className="flex items-center space-x-3">
             <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/30">
               ∞
             </div>
@@ -134,17 +161,31 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Active Tenant / Workspace Card */}
-          <div className="flex items-center justify-between p-2.5 rounded-lg bg-gray-800/40 border border-gray-700/50">
+          <div className="flex items-center justify-between p-2 rounded-lg bg-gray-800/40 border border-gray-700/50">
             <div className="flex items-center space-x-2 truncate">
               <Building2 className="h-4 w-4 text-indigo-400 shrink-0" />
               <span className="text-xs font-semibold text-gray-200 truncate">
                 {workspaceName}
               </span>
             </div>
-            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
               Active
             </span>
           </div>
+
+          {/* Quick Search / Command Bar Trigger */}
+          <button
+            onClick={() => setCommandOpen(true)}
+            className="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-gray-900/90 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 text-xs text-gray-400 hover:text-gray-200 transition group cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <Search className="h-3.5 w-3.5 text-gray-500 group-hover:text-indigo-400 transition" />
+              <span>Search or Command...</span>
+            </div>
+            <span className="font-mono text-[10px] text-gray-400 bg-gray-800 px-1.5 py-0.5 rounded border border-gray-700">
+              ⌘K
+            </span>
+          </button>
         </div>
 
         {/* Navigation links */}
