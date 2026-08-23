@@ -16,6 +16,7 @@ import {
   Copy,
   Check,
   RotateCcw,
+  User,
 } from "lucide-react";
 import AudioBriefingButton from "@/components/AudioBriefingButton";
 
@@ -271,7 +272,11 @@ export default function AskLoopPage() {
                       : "bg-gradient-to-tr from-violet-600 to-indigo-600 text-white"
                   }`}
                 >
-                  {msg.role === "user" ? "U" : "∞"}
+                  {msg.role === "user" ? (
+                    <User className="h-3 w-3" />
+                  ) : (
+                    <Sparkles className="h-3 w-3" />
+                  )}
                 </div>
                 <span className="font-bold text-gray-200">
                   {msg.role === "user" ? "You" : "Ask LOOP Engine"}
