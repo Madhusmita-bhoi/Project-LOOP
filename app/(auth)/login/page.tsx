@@ -13,6 +13,7 @@ import {
   EyeOff,
   RefreshCw,
   ShieldCheck,
+  Users,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -21,7 +22,29 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [activeRole, setActiveRole] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+
+  const accountRoles = [
+    {
+      id: "ADMIN",
+      label: "Admin",
+      email: "admin@loop.dev",
+      permission: "Full Workspace Control",
+    },
+    {
+      id: "ANALYST",
+      label: "Analyst",
+      email: "analyst@loop.dev",
+      permission: "Triage, Query & VoC Digests",
+    },
+    {
+      id: "VIEWER",
+      label: "Viewer",
+      email: "viewer@loop.dev",
+      permission: "Read-Only Dashboard Audit",
+    },
+  ];
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +71,13 @@ export default function LoginPage() {
     }
   };
 
+  const handleSelectRole = (role: typeof accountRoles[0]) => {
+    setActiveRole(role.id);
+    setEmail(role.email);
+    setPassword("Password123!");
+    setError(null);
+  };
+
   return (
     <div className="min-h-screen bg-[#070913] text-gray-100 flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
       {/* Ambient Gradient Mesh */}
@@ -71,6 +101,44 @@ export default function LoginPage() {
 
         {/* Auth Glass Panel */}
         <div className="bg-[#0e1322]/90 backdrop-blur-xl border border-gray-800/80 rounded-2xl p-6 sm:p-7 shadow-2xl shadow-black/80 space-y-4">
+          {/* Account Role Buttons */}
+          <div>
+            <div className="flex items-center justify-between text-[11px] text-gray-400 mb-2">
+              <span className="font-semibold uppercase tracking-wider text-gray-300 flex items-center gap-1.5">
+                <Users className="h-3.5 w-3.5 text-indigo-400" />
+                Select Account Role:
+              </span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-1.5 p-1 bg-gray-900/90 rounded-xl border border-gray-800">
+              {accountRoles.map((role) => {
+                const isActive = activeRole === role.id;
+                return (
+                  <button
+                    key={role.id}
+                    type="button"
+                    onClick={() => handleSelectRole(role)}
+                    className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition cursor-pointer text-center ${
+                      isActive
+                        ? "bg-indigo-600 text-white shadow-sm"
+                        : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
+                    }`}
+                  >
+                    {role.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {activeRole && (
+              <div className="mt-2 text-center animate-fadeIn">
+                <span className="text-[11px] font-medium text-indigo-300 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-900/50 inline-block">
+                  {accountRoles.find((r) => r.id === activeRole)?.permission}
+                </span>
+              </div>
+            )}
+          </div>
+
           {error && (
             <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-800/60 text-rose-300 text-xs flex items-center gap-2">
               <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
@@ -79,7 +147,7 @@ export default function LoginPage() {
           )}
 
           {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} autoComplete="off" className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-gray-300 mb-1.5">
                 Work Email Address
@@ -89,8 +157,15 @@ export default function LoginPage() {
                 <input
                   type="email"
                   required
+                  autoComplete="new-password"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    const matching = accountRoles.find(
+                      (r) => r.email.toLowerCase() === e.target.value.toLowerCase().trim()
+                    );
+                    setActiveRole(matching ? matching.id : "");
+                  }}
                   placeholder="name@company.com"
                   className="w-full pl-10 pr-4 py-2.5 bg-gray-900/90 border border-gray-750 rounded-xl text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition"
                 />
@@ -108,6 +183,7 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   required
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
