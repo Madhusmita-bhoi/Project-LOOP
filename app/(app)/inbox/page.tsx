@@ -683,165 +683,201 @@ export default function InboxPage() {
               </tbody>
             </table>
           </div>
+
+          {/* Table Pagination Bar */}
+          <div className="p-4 border-t border-gray-800 bg-[#0c101c] flex items-center justify-between text-xs text-gray-400">
+            <div>
+              Showing{" "}
+              <span className="font-semibold text-gray-200">
+                {pagination.totalCount === 0 ? 0 : (pagination.page - 1) * pagination.limit + 1}
+              </span>{" "}
+              to{" "}
+              <span className="font-semibold text-gray-200">
+                {Math.min(pagination.page * pagination.limit, pagination.totalCount)}
+              </span>{" "}
+              of <span className="font-semibold text-gray-200">{pagination.totalCount}</span> items
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <button
+                disabled={pagination.page <= 1 || loading}
+                onClick={() => fetchFeedback(pagination.page - 1)}
+                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 disabled:opacity-40 transition cursor-pointer"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <span className="text-gray-300 font-mono">
+                Page {pagination.page} / {pagination.totalPages || 1}
+              </span>
+              <button
+                disabled={pagination.page >= pagination.totalPages || loading}
+                onClick={() => fetchFeedback(pagination.page + 1)}
+                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 disabled:opacity-40 transition cursor-pointer"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         </div>
       ) : (
         /* Cards Grid View */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {loading ? (
-            <div className="col-span-full py-12 text-center text-gray-400 glass-panel rounded-2xl">
-              <RefreshCw className="h-5 w-5 animate-spin text-indigo-400 mx-auto mb-2" />
-              <span>Loading feedback stream...</span>
-            </div>
-          ) : feedbackList.length === 0 ? (
-            <div className="col-span-full py-12 text-center text-gray-400 glass-panel rounded-2xl">
-              <p className="text-sm font-medium text-gray-300">No feedback matching your filters</p>
-              <p className="text-xs text-gray-500 mt-1">Try clearing filters or simulate new items.</p>
-            </div>
-          ) : (
-            feedbackList.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => {
-                  setSelectedItem(item);
-                  setDrawerOpen(true);
-                }}
-                className="glass-panel p-4 rounded-2xl border border-gray-800/80 hover:border-indigo-500/40 hover:bg-gray-850/60 transition cursor-pointer flex flex-col justify-between space-y-3 group shadow-lg"
-              >
-                <div>
-                  {/* Top Bar */}
-                  <div className="flex items-center justify-between text-[11px] mb-2.5">
-                    <div className="flex items-center gap-1.5">
-                      <span className="px-2 py-0.5 rounded-md font-medium bg-gray-800/90 text-gray-300 border border-gray-700/50">
-                        {item.channel}
-                      </span>
-                      {item.sourceRef && (
-                        <span className="font-mono text-[10px] text-indigo-400 bg-indigo-950/60 px-1.5 py-0.5 rounded border border-indigo-900/50">
-                          {item.sourceRef}
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {loading ? (
+              <div className="col-span-full py-12 text-center text-gray-400 glass-panel rounded-2xl">
+                <RefreshCw className="h-5 w-5 animate-spin text-indigo-400 mx-auto mb-2" />
+                <span>Loading feedback stream...</span>
+              </div>
+            ) : feedbackList.length === 0 ? (
+              <div className="col-span-full py-12 text-center text-gray-400 glass-panel rounded-2xl">
+                <p className="text-sm font-medium text-gray-300">No feedback matching your filters</p>
+                <p className="text-xs text-gray-500 mt-1">Try clearing filters or simulate new items.</p>
+              </div>
+            ) : (
+              feedbackList.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => {
+                    setSelectedItem(item);
+                    setDrawerOpen(true);
+                  }}
+                  className="glass-panel p-4 rounded-2xl border border-gray-800/80 hover:border-indigo-500/40 hover:bg-gray-850/60 transition cursor-pointer flex flex-col justify-between space-y-3 group shadow-lg"
+                >
+                  <div>
+                    {/* Top Bar */}
+                    <div className="flex items-center justify-between text-[11px] mb-2.5">
+                      <div className="flex items-center gap-1.5">
+                        <span className="px-2 py-0.5 rounded-md font-medium bg-gray-800/90 text-gray-300 border border-gray-700/50">
+                          {item.channel}
                         </span>
-                      )}
+                        {item.sourceRef && (
+                          <span className="font-mono text-[10px] text-indigo-400 bg-indigo-950/60 px-1.5 py-0.5 rounded border border-indigo-900/50">
+                            {item.sourceRef}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
+                            item.sentiment === "POS"
+                              ? "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"
+                              : item.sentiment === "NEG"
+                              ? "bg-rose-500/15 text-rose-300 border border-rose-500/30"
+                              : "bg-slate-500/15 text-slate-300 border border-slate-500/30"
+                          }`}
+                        >
+                          {item.sentiment} {Math.abs(item.sentimentScore).toFixed(2)}
+                        </span>
+                        <button
+                          onClick={(e) => handleCopy(item.id, item.content, e)}
+                          className="p-1 rounded hover:bg-gray-800 text-gray-500 hover:text-gray-300 transition cursor-pointer"
+                          title="Copy Quote"
+                        >
+                          {copiedId === item.id ? (
+                            <Check className="h-3.5 w-3.5 text-emerald-400" />
+                          ) : (
+                            <Copy className="h-3.5 w-3.5" />
+                          )}
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1.5">
+
+                    {/* Feedback Text */}
+                    <p className="text-gray-200 text-xs leading-relaxed line-clamp-3">
+                      "{item.content}"
+                    </p>
+                  </div>
+
+                  {/* Bottom Themes & Status */}
+                  <div className="pt-2.5 border-t border-gray-800/70 space-y-2 text-[10px]">
+                    <div className="flex items-center justify-between text-gray-400">
+                      <span className="truncate font-medium text-gray-300">
+                        {item.customerLabel || "Anonymous Customer"}
+                      </span>
+                      <span className="font-mono text-gray-500">
+                        {new Date(item.createdAt).toLocaleDateString([], {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap gap-1">
+                        {item.themes && item.themes.length > 0 ? (
+                          item.themes.slice(0, 2).map((ft: any) => (
+                            <span
+                              key={ft.theme.id}
+                              className="px-1.5 py-0.2 rounded text-[9px] font-medium"
+                              style={{
+                                backgroundColor: `${ft.theme.color}20`,
+                                color: ft.theme.color,
+                              }}
+                            >
+                              {ft.theme.name}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-gray-600 italic">No theme</span>
+                        )}
+                      </div>
+
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
-                          item.sentiment === "POS"
-                            ? "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"
-                            : item.sentiment === "NEG"
-                            ? "bg-rose-500/15 text-rose-300 border border-rose-500/30"
-                            : "bg-slate-500/15 text-slate-300 border border-slate-500/30"
+                        className={`font-semibold px-2 py-0.5 rounded text-[9px] ${
+                          item.status === "NEW"
+                            ? "bg-blue-500/10 text-blue-300"
+                            : item.status === "TRIAGED"
+                            ? "bg-purple-500/10 text-purple-300"
+                            : item.status === "ACTIONED"
+                            ? "bg-emerald-500/10 text-emerald-300"
+                            : "bg-gray-800 text-gray-400"
                         }`}
                       >
-                        {item.sentiment} {Math.abs(item.sentimentScore).toFixed(2)}
+                        {item.status}
                       </span>
-                      <button
-                        onClick={(e) => handleCopy(item.id, item.content, e)}
-                        className="p-1 rounded hover:bg-gray-800 text-gray-500 hover:text-gray-300 transition"
-                        title="Copy Quote"
-                      >
-                        {copiedId === item.id ? (
-                          <Check className="h-3.5 w-3.5 text-emerald-400" />
-                        ) : (
-                          <Copy className="h-3.5 w-3.5" />
-                        )}
-                      </button>
                     </div>
                   </div>
-
-                  {/* Feedback Text */}
-                  <p className="text-gray-200 text-xs leading-relaxed line-clamp-3">
-                    "{item.content}"
-                  </p>
                 </div>
+              ))
+            )}
+          </div>
 
-                {/* Bottom Themes & Status */}
-                <div className="pt-2.5 border-t border-gray-800/70 space-y-2 text-[10px]">
-                  <div className="flex items-center justify-between text-gray-400">
-                    <span className="truncate font-medium text-gray-300">
-                      {item.customerLabel || "Anonymous Customer"}
-                    </span>
-                    <span className="font-mono text-gray-500">
-                      {new Date(item.createdAt).toLocaleDateString([], {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </div>
+          {/* Cards Pagination Bar */}
+          <div className="glass-panel p-4 rounded-2xl border border-gray-800/80 flex items-center justify-between text-xs text-gray-400">
+            <div>
+              Showing{" "}
+              <span className="font-semibold text-gray-200">
+                {pagination.totalCount === 0 ? 0 : (pagination.page - 1) * pagination.limit + 1}
+              </span>{" "}
+              to{" "}
+              <span className="font-semibold text-gray-200">
+                {Math.min(pagination.page * pagination.limit, pagination.totalCount)}
+              </span>{" "}
+              of <span className="font-semibold text-gray-200">{pagination.totalCount}</span> items
+            </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-1">
-                      {item.themes && item.themes.length > 0 ? (
-                        item.themes.slice(0, 2).map((ft: any) => (
-                          <span
-                            key={ft.theme.id}
-                            className="px-1.5 py-0.2 rounded text-[9px] font-medium"
-                            style={{
-                              backgroundColor: `${ft.theme.color}20`,
-                              color: ft.theme.color,
-                            }}
-                          >
-                            {ft.theme.name}
-                          </span>
-                        ))
-                      ) : (
-                        <span className="text-gray-600 italic">No theme</span>
-                      )}
-                    </div>
-
-                    <span
-                      className={`font-semibold px-2 py-0.5 rounded text-[9px] ${
-                        item.status === "NEW"
-                          ? "bg-blue-500/10 text-blue-300"
-                          : item.status === "TRIAGED"
-                          ? "bg-purple-500/10 text-purple-300"
-                          : item.status === "ACTIONED"
-                          ? "bg-emerald-500/10 text-emerald-300"
-                          : "bg-gray-800 text-gray-400"
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
+            <div className="flex items-center space-x-2">
+              <button
+                disabled={pagination.page <= 1 || loading}
+                onClick={() => fetchFeedback(pagination.page - 1)}
+                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 disabled:opacity-40 transition cursor-pointer"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <span className="text-gray-300 font-mono">
+                Page {pagination.page} / {pagination.totalPages || 1}
+              </span>
+              <button
+                disabled={pagination.page >= pagination.totalPages || loading}
+                onClick={() => fetchFeedback(pagination.page + 1)}
+                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 disabled:opacity-40 transition cursor-pointer"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         </div>
       )}
-
-        {/* Pagination Bar */}
-        <div className="p-4 border-t border-gray-800 bg-[#0c101c] flex items-center justify-between text-xs text-gray-400">
-          <div>
-            Showing{" "}
-            <span className="font-semibold text-gray-200">
-              {pagination.totalCount === 0 ? 0 : (pagination.page - 1) * pagination.limit + 1}
-            </span>{" "}
-            to{" "}
-            <span className="font-semibold text-gray-200">
-              {Math.min(pagination.page * pagination.limit, pagination.totalCount)}
-            </span>{" "}
-            of <span className="font-semibold text-gray-200">{pagination.totalCount}</span> items
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button
-              disabled={pagination.page <= 1 || loading}
-              onClick={() => fetchFeedback(pagination.page - 1)}
-              className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 disabled:opacity-40 transition"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <span className="text-gray-300 font-mono">
-              Page {pagination.page} / {pagination.totalPages || 1}
-            </span>
-            <button
-              disabled={pagination.page >= pagination.totalPages || loading}
-              onClick={() => fetchFeedback(pagination.page + 1)}
-              className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 disabled:opacity-40 transition"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* Slide-over Detail Drawer */}
       {drawerOpen && selectedItem && (
