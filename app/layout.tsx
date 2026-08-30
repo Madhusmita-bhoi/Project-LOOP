@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Transform multi-channel customer feedback into classified themes, trends, grounded Q&A, and Voice-of-Customer intelligence.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: {
