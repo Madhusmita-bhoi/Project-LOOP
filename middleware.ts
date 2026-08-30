@@ -4,6 +4,7 @@ export default withAuth({
   pages: {
     signIn: "/login",
   },
+  secret: process.env.NEXTAUTH_SECRET || "project_loop_super_secret_session_jwt_key_2026",
 });
 
 export const config = {
