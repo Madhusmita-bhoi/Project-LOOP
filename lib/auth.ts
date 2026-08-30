@@ -26,10 +26,50 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Email and password are required");
         }
 
-        const user = await prisma.user.findUnique({
+        let user = await prisma.user.findUnique({
           where: { email: credentials.email.toLowerCase().trim() },
           include: { workspace: true },
         });
+
+        // Auto-provision demo users if not present in fresh production DB
+        if (!user) {
+          const emailLower = credentials.email.toLowerCase().trim();
+          const demoRoles: Record<string, { name: string; role: Role }> = {
+            "admin@loop.dev": { name: "Alex Rivera (Admin)", role: "ADMIN" },
+            "analyst@loop.dev": { name: "Jordan Lee (Analyst)", role: "ANALYST" },
+            "viewer@loop.dev": { name: "Taylor Smith (Viewer)", role: "VIEWER" },
+          };
+
+          if (demoRoles[emailLower] && credentials.password === "Password123!") {
+            let ws = await prisma.workspace.findFirst({
+              where: { slug: "acme-cloudscale" },
+            });
+            if (!ws) {
+              ws = await prisma.workspace.create({
+                data: {
+                  id: "ws_demo_acme_cloudscale",
+                  name: "Acme CloudScale Inc.",
+                  slug: "acme-cloudscale",
+                },
+              });
+            }
+
+            const passwordHash = await bcrypt.hash("Password123!", 10);
+
+            user = await prisma.user.upsert({
+              where: { email: emailLower },
+              update: { passwordHash, role: demoRoles[emailLower].role, workspaceId: ws.id },
+              create: {
+                name: demoRoles[emailLower].name,
+                email: emailLower,
+                passwordHash,
+                role: demoRoles[emailLower].role,
+                workspaceId: ws.id,
+              },
+              include: { workspace: true },
+            });
+          }
+        }
 
         if (!user || !user.passwordHash) {
           throw new Error("Invalid email or password");

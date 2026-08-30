@@ -53,6 +53,31 @@ export default function LoginPage() {
     }
   };
 
+  const handleDemoLogin = async (demoEmail: string) => {
+    setLoading(true);
+    setError(null);
+    setEmail(demoEmail);
+    setPassword("Password123!");
+
+    try {
+      const res = await signIn("credentials", {
+        email: demoEmail,
+        password: "Password123!",
+        redirect: false,
+      });
+
+      if (res?.error) {
+        setError(res.error || "Authentication failed. Please try again.");
+      } else {
+        window.location.href = "/dashboard";
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to sign in.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-3 sm:p-5 lg:p-8 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
       {/* High-Precision Architectural Grid Pattern */}
@@ -282,16 +307,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   disabled={loading}
-                  onClick={async () => {
-                    setLoading(true);
-                    setEmail("admin@loop.dev");
-                    setPassword("Password123!");
-                    await signIn("credentials", {
-                      email: "admin@loop.dev",
-                      password: "Password123!",
-                      callbackUrl: "/dashboard",
-                    });
-                  }}
+                  onClick={() => handleDemoLogin("admin@loop.dev")}
                   className="py-2 px-2.5 rounded-xl bg-indigo-950/60 hover:bg-indigo-900/80 border border-indigo-700/50 text-indigo-200 text-xs font-semibold text-center transition hover:border-indigo-400 cursor-pointer flex flex-col items-center justify-center gap-0.5 shadow-sm"
                 >
                   <span className="font-bold text-white">Admin</span>
@@ -301,16 +317,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   disabled={loading}
-                  onClick={async () => {
-                    setLoading(true);
-                    setEmail("analyst@loop.dev");
-                    setPassword("Password123!");
-                    await signIn("credentials", {
-                      email: "analyst@loop.dev",
-                      password: "Password123!",
-                      callbackUrl: "/dashboard",
-                    });
-                  }}
+                  onClick={() => handleDemoLogin("analyst@loop.dev")}
                   className="py-2 px-2.5 rounded-xl bg-violet-950/60 hover:bg-violet-900/80 border border-violet-700/50 text-violet-200 text-xs font-semibold text-center transition hover:border-violet-400 cursor-pointer flex flex-col items-center justify-center gap-0.5 shadow-sm"
                 >
                   <span className="font-bold text-white">Analyst</span>
@@ -320,16 +327,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   disabled={loading}
-                  onClick={async () => {
-                    setLoading(true);
-                    setEmail("viewer@loop.dev");
-                    setPassword("Password123!");
-                    await signIn("credentials", {
-                      email: "viewer@loop.dev",
-                      password: "Password123!",
-                      callbackUrl: "/dashboard",
-                    });
-                  }}
+                  onClick={() => handleDemoLogin("viewer@loop.dev")}
                   className="py-2 px-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-gray-700 text-gray-200 text-xs font-semibold text-center transition hover:border-gray-500 cursor-pointer flex flex-col items-center justify-center gap-0.5 shadow-sm"
                 >
                   <span className="font-bold text-white">Viewer</span>
