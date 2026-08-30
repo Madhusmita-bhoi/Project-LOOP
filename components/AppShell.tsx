@@ -125,50 +125,69 @@ export default function AppShell({
       {/* Global Command Palette Modal */}
       <CommandPalette isOpen={commandOpen} onClose={() => setCommandOpen(false)} />
 
-      {/* Top Mobile Bar */}
-      <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-800/80 bg-[#111827]/90 backdrop-blur shrink-0 z-50">
+      {/* Top Mobile Navigation Bar */}
+      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-800/80 bg-[#0f1422]/95 backdrop-blur-md shrink-0 z-30">
         <div className="flex items-center space-x-2.5">
           <LoopLogo size="sm" />
-          <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-gray-200 to-indigo-300 bg-clip-text text-transparent">
-            LOOP
+          <span className="text-base font-bold tracking-tight text-white">LOOP</span>
+          <span className="text-[9px] uppercase font-semibold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            {userRole}
           </span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1.5">
           <button
             onClick={() => setCommandOpen(true)}
-            className="p-2 rounded-lg bg-gray-800 text-gray-300 hover:text-white"
+            className="p-2 rounded-xl bg-gray-800/70 border border-gray-700/60 text-gray-300 hover:text-white transition"
             title="Open Command Palette"
           >
             <Search className="h-4 w-4" />
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg bg-gray-800 text-gray-400 hover:text-white"
+            className="p-2 rounded-xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-300 hover:text-white transition"
+            aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Sidebar */}
+      {/* Mobile Drawer Overlay Backdrop */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className="md:hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-40 animate-fadeIn"
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Responsive Sidebar (Slide-Over on Mobile, Static on Desktop) */}
       <aside
-        className={`${
-          mobileMenuOpen ? "flex" : "hidden"
-        } md:flex flex-col w-full md:w-64 h-full border-r border-gray-800/70 bg-[#0f1422]/95 backdrop-blur shrink-0 z-40 overflow-hidden select-none`}
+        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:w-64 flex flex-col h-full border-r border-gray-800/70 bg-[#0f1422] md:bg-[#0f1422]/95 backdrop-blur shrink-0 overflow-hidden select-none shadow-2xl md:shadow-none ${
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         {/* Workspace Brand Header */}
         <div className="p-4 border-b border-gray-800/70 space-y-3">
-          <div className="flex items-center space-x-3">
-            <LoopLogo size="md" />
-            <div>
-              <div className="flex items-center space-x-1.5">
-                <span className="text-lg font-bold tracking-tight text-white">LOOP</span>
-                <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                  AI v1.0
-                </span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <LoopLogo size="md" />
+              <div>
+                <div className="flex items-center space-x-1.5">
+                  <span className="text-lg font-bold tracking-tight text-white">LOOP</span>
+                  <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                    AI v1.0
+                  </span>
+                </div>
+                <p className="text-xs text-gray-400">Customer Feedback Intel</p>
               </div>
-              <p className="text-xs text-gray-400">Customer Feedback Intel</p>
             </div>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="md:hidden p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
 
           {/* Active Tenant / Workspace Card */}

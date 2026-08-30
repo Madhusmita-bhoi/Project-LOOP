@@ -83,7 +83,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-3 sm:p-5 lg:p-8 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-3 sm:p-5 lg:p-8 relative overflow-y-auto selection:bg-indigo-500 selection:text-white">
       {/* High-Precision Architectural Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b18_1px,transparent_1px),linear-gradient(to_bottom,#1e293b18_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
@@ -91,8 +91,8 @@ export default function SignUpPage() {
       <div className="absolute top-[12%] left-[5%] w-[850px] h-[850px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[10%] w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Split Container: Perfectly sized to fit within viewport height without scrolling */}
-      <div className="w-full max-w-[1540px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-2 px-4 sm:px-8 lg:px-12 gap-8 lg:gap-12 max-h-[calc(100vh-2rem)]">
+      {/* Split Container: Responsive on all viewports */}
+      <div className="w-full max-w-[1540px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 py-6 px-4 sm:px-8 lg:px-12 gap-8 lg:gap-12">
         
         {/* LEFT COLUMN: Pinned to the Left with Scaled-Up Sizing */}
         <div className="w-full lg:max-w-[630px] space-y-4 text-left shrink-0">

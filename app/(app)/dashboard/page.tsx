@@ -82,7 +82,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Global Controls */}
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Period Selector */}
           <div className="flex items-center bg-gray-900/90 border border-gray-800 rounded-xl p-1 text-xs">
             <Calendar className="h-3.5 w-3.5 text-gray-400 ml-2 mr-1" />
