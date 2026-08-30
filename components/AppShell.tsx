@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, signIn } from "next-auth/react";
 import {
   LayoutDashboard,
   Inbox,
@@ -20,11 +20,19 @@ import {
   RefreshCw,
   Layers,
   Search,
+  ChevronDown,
+  UserCheck,
 } from "lucide-react";
 import CommandPalette from "./CommandPalette";
 import LoopLogo from "./LoopLogo";
 
-export default function AppShell({ children }: { children: React.ReactNode }) {
+export default function AppShell({
+  children,
+  initialSession,
+}: {
+  children: React.ReactNode;
+  initialSession?: any;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -33,9 +41,30 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [simMessage, setSimMessage] = useState<string | null>(null);
   const [commandOpen, setCommandOpen] = useState(false);
 
-  const user = session?.user as any;
-  const userRole = user?.role || "VIEWER";
+  const activeSession = session || initialSession;
+  const user = activeSession?.user as any;
+  const userRole = user?.role || "ADMIN";
   const workspaceName = user?.workspaceName || "Acme CloudScale Inc.";
+  const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
+  const [switchingRole, setSwitchingRole] = useState(false);
+
+  const handleSwitchRole = async (targetEmail: string) => {
+    if (switchingRole) return;
+    setSwitchingRole(true);
+    try {
+      await signIn("credentials", {
+        email: targetEmail,
+        password: "Password123!",
+        redirect: false,
+      });
+      setRoleDropdownOpen(false);
+      window.location.reload();
+    } catch (err) {
+      console.error("Failed to switch demo role", err);
+    } finally {
+      setSwitchingRole(false);
+    }
+  };
 
   // Global Command+K Listener
   useEffect(() => {
@@ -84,16 +113,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     }
   };
 
-  if (status === "loading") {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0b0f19]">
-        <div className="flex items-center space-x-3 text-indigo-400">
-          <RefreshCw className="h-6 w-6 animate-spin" />
-          <span className="text-sm font-medium tracking-wide">Loading workspace session...</span>
-        </div>
-      </div>
-    );
-  }
+  // Safe redirect if genuinely unauthenticated
+  useEffect(() => {
+    if (!activeSession && status === "unauthenticated") {
+      window.location.href = "/login";
+    }
+  }, [activeSession, status]);
 
   return (
     <div className="h-screen w-full bg-[#0b0f19] text-gray-100 flex flex-col md:flex-row overflow-hidden">
@@ -300,17 +325,80 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <Building2 className="h-4 w-4 text-indigo-400" />
             <span className="font-semibold text-gray-200">{workspaceName}</span>
             <span className="text-gray-600">/</span>
-            <span
-              className={`px-2 py-0.5 rounded font-mono text-[10px] font-bold uppercase tracking-wider ${
-                userRole === "ADMIN"
-                  ? "bg-purple-500/15 text-purple-300 border border-purple-500/30"
-                  : userRole === "ANALYST"
-                  ? "bg-blue-500/15 text-blue-300 border border-blue-500/30"
-                  : "bg-amber-500/15 text-amber-300 border border-amber-500/30"
-              }`}
-            >
-              {userRole} Session
-            </span>
+            
+            {/* Interactive RBAC Switcher Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
+                className={`px-2.5 py-1 rounded-lg font-mono text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition border cursor-pointer ${
+                  userRole === "ADMIN"
+                    ? "bg-purple-500/15 text-purple-300 border-purple-500/40 hover:bg-purple-500/25"
+                    : userRole === "ANALYST"
+                    ? "bg-blue-500/15 text-blue-300 border-blue-500/40 hover:bg-blue-500/25"
+                    : "bg-amber-500/15 text-amber-300 border-amber-500/40 hover:bg-amber-500/25"
+                }`}
+                title="Click to Switch Demo RBAC Role"
+              >
+                <span>{switchingRole ? "Switching..." : `${userRole} Role`}</span>
+                <ChevronDown className="h-3 w-3 opacity-70" />
+              </button>
+
+              {roleDropdownOpen && (
+                <div className="absolute left-0 mt-1.5 w-56 rounded-xl bg-[#0f1424] border border-gray-700 shadow-2xl p-1.5 z-50 animate-fadeIn space-y-1">
+                  <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800">
+                    Switch Active RBAC Role:
+                  </div>
+
+                  <button
+                    onClick={() => handleSwitchRole("admin@loop.dev")}
+                    disabled={userRole === "ADMIN" || switchingRole}
+                    className={`w-full px-2.5 py-1.5 rounded-lg text-left text-xs font-semibold flex items-center justify-between transition ${
+                      userRole === "ADMIN"
+                        ? "bg-purple-950/60 text-purple-300 border border-purple-800/60"
+                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                    }`}
+                  >
+                    <div>
+                      <span className="block font-bold">Admin Role</span>
+                      <span className="text-[10px] text-gray-400 font-normal">Full settings & RBAC control</span>
+                    </div>
+                    {userRole === "ADMIN" && <UserCheck className="h-3.5 w-3.5 text-purple-400" />}
+                  </button>
+
+                  <button
+                    onClick={() => handleSwitchRole("analyst@loop.dev")}
+                    disabled={userRole === "ANALYST" || switchingRole}
+                    className={`w-full px-2.5 py-1.5 rounded-lg text-left text-xs font-semibold flex items-center justify-between transition ${
+                      userRole === "ANALYST"
+                        ? "bg-blue-950/60 text-blue-300 border border-blue-800/60"
+                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                    }`}
+                  >
+                    <div>
+                      <span className="block font-bold">Analyst Role</span>
+                      <span className="text-[10px] text-gray-400 font-normal">Ingest, triage & VoC reports</span>
+                    </div>
+                    {userRole === "ANALYST" && <UserCheck className="h-3.5 w-3.5 text-blue-400" />}
+                  </button>
+
+                  <button
+                    onClick={() => handleSwitchRole("viewer@loop.dev")}
+                    disabled={userRole === "VIEWER" || switchingRole}
+                    className={`w-full px-2.5 py-1.5 rounded-lg text-left text-xs font-semibold flex items-center justify-between transition ${
+                      userRole === "VIEWER"
+                        ? "bg-amber-950/60 text-amber-300 border border-amber-800/60"
+                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                    }`}
+                  >
+                    <div>
+                      <span className="block font-bold">Viewer Role</span>
+                      <span className="text-[10px] text-gray-400 font-normal">Read-only exploration</span>
+                    </div>
+                    {userRole === "VIEWER" && <UserCheck className="h-3.5 w-3.5 text-amber-400" />}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center space-x-3 text-gray-400 text-[11px]">

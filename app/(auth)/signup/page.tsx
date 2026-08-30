@@ -71,10 +71,9 @@ export default function SignUpPage() {
       });
 
       if (signInRes?.error) {
-        router.push("/login");
+        window.location.href = "/login";
       } else {
-        router.push("/dashboard");
-        router.refresh();
+        window.location.href = "/dashboard";
       }
     } catch (err: any) {
       setError(err.message || "Failed to complete signup");

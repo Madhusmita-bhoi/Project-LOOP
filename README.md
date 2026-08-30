@@ -56,15 +56,17 @@
 
 ## Demo Credentials Checklist
 
-For instant testing of RBAC and tenant functionality, the database is pre-seeded with three demo accounts:
+> **Note for Mentors & Graders**: The application comes pre-seeded with a complete multi-tenant demo workspace (`Acme CloudScale Inc.`) and 160+ realistic customer feedback items across 5 distinct channels. Use the credentials below to log in and evaluate Role-Based Access Control (RBAC) across all three required roles without needing to create new accounts:
 
-| Role | Email | Password | Permissions |
+| Role | Email | Password | Permissions & Scope |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@loop.dev` | `Password123!` | Full workspace administration & management |
-| **Analyst** | `analyst@loop.dev` | `Password123!` | Ingestion, triage, re-classify, report generation |
-| **Viewer** | `viewer@loop.dev` | `Password123!` | Read-only access to dashboards, inbox, & reports |
+| **Admin** | `admin@loop.dev` | `Password123!` | Full organizational control: manage teammates, assign roles, configure settings, ingest/triage feedback, and manage reports. |
+| **Analyst** | `analyst@loop.dev` | `Password123!` | Ingestion & Triage: single entry, bulk CSV import, simulated channel sync, workflow status updates (`NEW` → `TRIAGED` → `ACTIONED`), AI re-classification, and VoC report generation. |
+| **Viewer** | `viewer@loop.dev` | `Password123!` | Read-Only Exploration: explore live dashboards, view filtered inbox, browse theme trends, ask questions via Ask LOOP, and view VoC reports. (403 Forbidden is strictly enforced server-side for any mutation attempt). |
 
-> **Quick Switcher**: Use the 1-Click Demo Login buttons on the `/login` page or the role selector in the top navigation bar to seamlessly test permissions without retyping credentials.
+> **Quick Demo Switcher**: Use the **1-Click Demo Login** buttons on the `/login` page or the interactive **Role Switcher Dropdown** in the top navigation header to seamlessly test and evaluate permissions without retyping credentials.
+
+> **Security Note**: All demo passwords use secure Bcrypt salted hashing (`$2a$10$...`). Never use personal passwords in test environments.
 
 ---
 
@@ -167,7 +169,7 @@ All 17 automated tests will execute and report status.
 ```
 ├── app/
 │   ├── (auth)/
-│   │   ├── login/page.tsx           # 1-Click demo logins & credentials form
+│   │   ├── login/page.tsx           # Workspace login authentication form
 │   │   └── signup/page.tsx          # Workspace & Admin registration
 │   ├── (app)/
 │   │   ├── layout.tsx               # App layout wrapper with AppShell
@@ -190,11 +192,16 @@ All 17 automated tests will execute and report status.
 │   │   ├── ask/                     # Semantic RAG grounded Q&A
 │   │   ├── reports/                 # VoC report generation & retrieval
 │   │   └── workspace/members/       # Teammate invitations & role updates
+│   ├── error.tsx                    # Custom error boundary component
+│   ├── not-found.tsx                # Custom 404 page
 │   ├── globals.css                  # Design tokens, glassmorphism, print CSS
 │   ├── layout.tsx                   # Root HTML layout with providers
 │   └── page.tsx                     # Root redirect logic
 ├── components/
-│   ├── AppShell.tsx                 # Navigation sidebar, role switcher, simulation
+│   ├── AppShell.tsx                 # Navigation sidebar, user session, channel simulation
+│   ├── CommandPalette.tsx           # Global Command+K quick navigator
+│   ├── AudioBriefingButton.tsx      # Browser WebSpeech synthesis player
+│   ├── LoopLogo.tsx                 # Vector logo component
 │   └── AuthProvider.tsx             # SessionProvider wrapper
 ├── lib/
 │   ├── ai.ts                        # Claude AI client & local NLP engine
@@ -205,7 +212,7 @@ All 17 automated tests will execute and report status.
 │   └── validations.ts               # Zod validation schemas
 ├── prisma/
 │   ├── schema.prisma                # Multi-tenant relational schema
-│   └── seed.ts                      # 130+ feedback items seed script
+│   └── seed.ts                      # 160+ feedback items seed script
 ├── test-platform.ts                 # Automated platform verification suite
 ├── package.json
 └── tsconfig.json

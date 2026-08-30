@@ -12,5 +12,5 @@ export default async function AppLayout({
     redirect("/login");
   }
 
-  return <AppShell>{children}</AppShell>;
+  return <AppShell initialSession={session}>{children}</AppShell>;
 }

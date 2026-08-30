@@ -44,8 +44,7 @@ export default function LoginPage() {
       if (res?.error) {
         setError(res.error || "Invalid email or password. Please verify your credentials.");
       } else {
-        router.push("/dashboard");
-        router.refresh();
+        window.location.href = "/dashboard";
       }
     } catch (err: any) {
       setError(err.message || "Authentication failed. Please check your network connection.");
@@ -270,8 +269,77 @@ export default function LoginPage() {
               </button>
             </form>
 
+            {/* 1-Click Quick Demo Access */}
+            <div className="pt-3 border-t border-gray-800/80 space-y-2">
+              <div className="flex items-center justify-between text-xs text-gray-400 font-medium">
+                <span className="flex items-center gap-1 text-indigo-400">
+                  <Zap className="h-3.5 w-3.5" />
+                  1-Click Demo Logins:
+                </span>
+                <span className="text-[10px] text-gray-500">Seed Workspace</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={async () => {
+                    setLoading(true);
+                    setEmail("admin@loop.dev");
+                    setPassword("Password123!");
+                    await signIn("credentials", {
+                      email: "admin@loop.dev",
+                      password: "Password123!",
+                      callbackUrl: "/dashboard",
+                    });
+                  }}
+                  className="py-2 px-2.5 rounded-xl bg-indigo-950/60 hover:bg-indigo-900/80 border border-indigo-700/50 text-indigo-200 text-xs font-semibold text-center transition hover:border-indigo-400 cursor-pointer flex flex-col items-center justify-center gap-0.5 shadow-sm"
+                >
+                  <span className="font-bold text-white">Admin</span>
+                  <span className="text-[10px] text-indigo-300/80">Full Access</span>
+                </button>
+
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={async () => {
+                    setLoading(true);
+                    setEmail("analyst@loop.dev");
+                    setPassword("Password123!");
+                    await signIn("credentials", {
+                      email: "analyst@loop.dev",
+                      password: "Password123!",
+                      callbackUrl: "/dashboard",
+                    });
+                  }}
+                  className="py-2 px-2.5 rounded-xl bg-violet-950/60 hover:bg-violet-900/80 border border-violet-700/50 text-violet-200 text-xs font-semibold text-center transition hover:border-violet-400 cursor-pointer flex flex-col items-center justify-center gap-0.5 shadow-sm"
+                >
+                  <span className="font-bold text-white">Analyst</span>
+                  <span className="text-[10px] text-violet-300/80">Triage & AI</span>
+                </button>
+
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={async () => {
+                    setLoading(true);
+                    setEmail("viewer@loop.dev");
+                    setPassword("Password123!");
+                    await signIn("credentials", {
+                      email: "viewer@loop.dev",
+                      password: "Password123!",
+                      callbackUrl: "/dashboard",
+                    });
+                  }}
+                  className="py-2 px-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-gray-700 text-gray-200 text-xs font-semibold text-center transition hover:border-gray-500 cursor-pointer flex flex-col items-center justify-center gap-0.5 shadow-sm"
+                >
+                  <span className="font-bold text-white">Viewer</span>
+                  <span className="text-[10px] text-gray-400">Read-Only</span>
+                </button>
+              </div>
+            </div>
+
             {/* Registration Link */}
-            <div className="pt-3.5 text-center text-xs sm:text-sm text-gray-400 border-t border-gray-800/80">
+            <div className="pt-2 text-center text-xs sm:text-sm text-gray-400">
               <span>New organization? </span>
               <Link
                 href="/signup"
