@@ -83,37 +83,37 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-3 sm:p-4 lg:p-6 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
-      {/* High-Precision Architectural Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b18_1px,transparent_1px),linear-gradient(to_bottom,#1e293b18_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+    <div className="h-screen w-full bg-[#050711] text-gray-100 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
+      {/* Architectural Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
       {/* Layered Atmospheric Ambient Glows */}
-      <div className="absolute top-[12%] left-[5%] w-[650px] max-w-full h-[650px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[10%] w-[550px] max-w-full h-[550px] bg-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-[15%] left-[10%] w-[550px] max-w-full h-[550px] bg-gradient-to-tr from-indigo-600/20 via-violet-600/15 to-transparent rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[12%] w-[450px] max-w-full h-[450px] bg-blue-600/15 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* Split Container: Single Screen Non-Scrollable */}
-      <div className="w-full max-w-[1360px] mx-auto flex flex-col lg:flex-row justify-between items-center relative z-10 px-4 sm:px-6 lg:px-8 gap-6 lg:gap-10">
+      {/* Main Centered Container */}
+      <div className="w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-center relative z-10 px-4 gap-10 lg:gap-16">
         
         {/* LEFT COLUMN: Shown on Desktop */}
-        <div className="hidden lg:block w-full lg:max-w-[560px] space-y-3.5 text-left shrink-0">
+        <div className="hidden lg:block w-full max-w-[480px] space-y-4 text-left shrink-0">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-inner">
             <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
             <span>Multi-Tenant Architecture</span>
           </div>
 
-          <div className="space-y-1.5">
-            <h1 className="text-3xl lg:text-[38px] font-black tracking-tight leading-[1.12] text-white">
+          <div className="space-y-2">
+            <h1 className="text-3xl lg:text-4xl font-black tracking-tight leading-[1.15] text-white">
               Launch Your Dedicated{" "}
               <span className="bg-gradient-to-r from-indigo-400 via-violet-300 to-indigo-200 bg-clip-text text-transparent">
                 Intelligence Workspace
               </span>
             </h1>
-            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xl">
+            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
               Strict row-level multi-tenant isolation, automated sentiment clustering, and team-wide role-based access.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 pt-0.5">
+          <div className="flex flex-wrap items-center gap-5 text-xs text-gray-400 pt-1">
             <div className="flex items-center gap-2">
               <Activity className="h-4 w-4 text-emerald-400" />
               <span>Multi-Source Ingestion</span>
@@ -125,21 +125,22 @@ export default function SignUpPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Centered Non-Scrollable Registration Card */}
-        <div className="w-full max-w-sm sm:max-w-md lg:max-w-[460px] mx-auto animate-fadeIn shrink-0">
-          <div className="text-center mb-2.5">
-            <div className="mb-1.5">
-              <LoopLogo size="md" />
+        {/* RIGHT COLUMN: Centered Registration Card */}
+        <div className="w-full max-w-[430px] shrink-0 animate-fadeIn">
+          <div className="bg-[#0b101e]/90 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/40 rounded-2xl p-6 shadow-[0_20px_70px_-15px_rgba(0,0,0,0.9),0_0_40px_-10px_rgba(99,102,241,0.2)] transition-all duration-300 space-y-3">
+            {/* Integrated Header */}
+            <div className="text-center pb-1">
+              <div className="flex justify-center mb-2">
+                <LoopLogo size="md" />
+              </div>
+              <h2 className="text-xl font-black tracking-tight text-white">
+                Create Workspace
+              </h2>
+              <p className="text-xs text-gray-400 mt-0.5 font-medium">
+                Establish your dedicated feedback environment
+              </p>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-              Create Workspace
-            </h2>
-            <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 font-medium">
-              Establish your dedicated feedback environment
-            </p>
-          </div>
 
-          <div className="bg-[#0b101e]/90 backdrop-blur-2xl border border-gray-800/90 hover:border-indigo-500/40 rounded-2xl p-5 sm:p-6 shadow-2xl transition-all duration-300 space-y-3">
             {error && (
               <div className="p-2.5 rounded-xl bg-rose-950/70 border border-rose-800/80 text-rose-300 text-xs flex items-center gap-2 animate-fadeIn">
                 <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
