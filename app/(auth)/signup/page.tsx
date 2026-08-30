@@ -113,40 +113,6 @@ export default function SignUpPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-0.5">
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <Layers className="h-3.5 w-3.5 text-indigo-400" />
-                  Shared Data Stream
-                </span>
-                <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-800/50">
-                  Synced
-                </span>
-              </div>
-              <div className="text-xl font-bold text-white tracking-tight">Admin & Analyst Sync</div>
-              <p className="text-xs text-gray-400 mt-0.5">
-                Teammates share the same feedback and reports in real time.
-              </p>
-            </div>
-
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-                  Row-Level Isolation
-                </span>
-                <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">
-                  AES-256
-                </span>
-              </div>
-              <div className="text-xl font-bold text-white tracking-tight">Enterprise Security</div>
-              <p className="text-xs text-gray-400 mt-0.5">
-                Zero crosstalk across different company instances.
-              </p>
-            </div>
-          </div>
-
           <div className="flex flex-wrap items-center gap-5 text-xs text-gray-400 pt-0.5">
             <div className="flex items-center gap-2">
               <Activity className="h-4 w-4 text-emerald-400" />

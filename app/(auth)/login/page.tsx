@@ -111,43 +111,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Scaled-Up Feature Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-0.5">
-            {/* Card 1: Live CSAT */}
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <Activity className="h-3.5 w-3.5 text-emerald-400" />
-                  Live CSAT Pulse
-                </span>
-                <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">
-                  +6.4%
-                </span>
-              </div>
-              <div className="text-[26px] font-black text-white tracking-tight">94.2%</div>
-              <p className="text-xs text-gray-400 mt-0.5">
-                Real-time multi-channel sentiment velocity across customer touchpoints.
-              </p>
-            </div>
-
-            {/* Card 2: Grounded RAG AI Search */}
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0b101e]/80 border border-gray-800/80 backdrop-blur-xl hover:border-indigo-500/30 transition-all duration-300 shadow-md">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <Zap className="h-3.5 w-3.5 text-indigo-400" />
-                  Vector RAG Speed
-                </span>
-                <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-800/50">
-                  42ms
-                </span>
-              </div>
-              <div className="text-[26px] font-black text-white tracking-tight">100% Grounded</div>
-              <p className="text-xs text-gray-400 mt-0.5">
-                Zero hallucinations with transparent citation provenance.
-              </p>
-            </div>
-          </div>
-
           {/* Scaled-Up Live Ingestion Stream */}
           <div className="py-2.5 px-4 rounded-xl bg-[#0a0e1c]/90 border border-indigo-900/40 backdrop-blur-xl flex items-center justify-between gap-3 text-xs shadow-sm">
             <div className="flex items-center gap-2.5 min-w-0">
