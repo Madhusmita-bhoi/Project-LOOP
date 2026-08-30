@@ -1,14 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
 
-export async function middleware(req: NextRequest) {
-  const secret = process.env.NEXTAUTH_SECRET || "project_loop_super_secret_session_jwt_key_2026";
-  
-  const token = await getToken({
-    req,
-    secret,
-  });
+export function middleware(req: NextRequest) {
+  const sessionToken =
+    req.cookies.get("next-auth.session-token")?.value ||
+    req.cookies.get("__Secure-next-auth.session-token")?.value;
 
   const { pathname } = req.nextUrl;
 
@@ -21,13 +17,13 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/reports") ||
     pathname.startsWith("/settings");
 
-  if (!token && isProtectedRoute) {
+  if (!sessionToken && isProtectedRoute) {
     const url = new URL("/login", req.url);
     url.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(url);
   }
 
-  if (token && isAuthRoute) {
+  if (sessionToken && isAuthRoute) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
